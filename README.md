@@ -50,5 +50,9 @@ The system exposes the following API endpoints:
 - **Bus Stop Lookup**: `POST http://localhost:5002/bus_stop_lookup`
 
 API documentation is available at:
+- All services: `http://localhost:5000/apidocs/`
 - Directions service: `http://localhost:5001/apidocs`
 - Bus Stop service: `http://localhost:5002/apidocs`
+
+## Note for macOS Users
+If you are using macOS, port 5000 might be used by AirDrop and Handoff.To disable these features, go to System Settings > General > AirDrop and Handoff, and disable both AirDrop and AirPlay Receiver.

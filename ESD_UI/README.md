@@ -61,33 +61,21 @@ singapore-journey-planner
 ```
 
 ## Setup Instructions
-1. **Clone the Repository**: 
-   ```
-   git clone <repository-url>
-   cd singapore-journey-planner
-   ```
-
-2. **Install Dependencies**: 
+1. **Install Dependencies**: 
    ```
    npm install
    ```
 
-3. **Run the Application**: 
+2. **Run the Application**: 
    ```
    npm run serve
    ```
 
-4. **Open in Browser**: Navigate to `http://localhost:8080` to view the application.
+3. **Open in Browser**: Navigate to `http://localhost:8080` to view the application.
 
 ## Technologies Used
 - **Vue.js**: For building the user interface.
 - **Bootstrap**: For responsive design and styling.
-- **Firebase**: For user authentication and data storage.
 - **Vue Router**: For managing application routes.
 - **Vuex**: For state management.
 
-## Contributing
-Contributions are welcome! Please open an issue or submit a pull request for any enhancements or bug fixes.
-
-## License
-This project is licensed under the MIT License. See the LICENSE file for details.

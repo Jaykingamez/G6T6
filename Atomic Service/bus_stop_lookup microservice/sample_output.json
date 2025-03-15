@@ -1,0 +1,32 @@
+{
+    "transit_details": [
+      {
+        "BusNumber": "89",
+        "BusStopCode": "77239",
+        "Description": "Blk 643"
+      },
+      {
+        "BusNumber": "53",
+        "BusStopCode": "77281",
+        "Description": "Blk 740"
+      },
+      {
+        "BusNumber": "53",
+        "BusStopCode": "77239",
+        "Description": "Blk 643"
+      },
+      {
+        "BusNumber": "3",
+        "BusStopCode": "77319",
+        "Description": "Opp Blks 771/772"
+      },
+      {
+        "TrainLine": "East West Line"
+      },
+      {
+        "BusNumber": "81",
+        "BusStopCode": "77281",
+        "Description": "Blk 740"
+      }
+    ]
+  }

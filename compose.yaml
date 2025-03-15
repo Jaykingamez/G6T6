@@ -1,0 +1,55 @@
+services:
+  bus_stop_lookup:
+    build:
+      context: "./Atomic Service/bus_stop_lookup microservice"
+      dockerfile: Dockerfile
+    image: bus_stop_lookup:1.0
+    container_name: bus_stop_lookup
+    ports:
+      - "5002:5002"
+    environment:
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+    depends_on:
+      redis:
+        condition: service_healthy
+    networks:
+      - app-network
+
+  directions:
+    build:
+      context: "./Atomic Service/directions microservice"
+      dockerfile: Dockerfile
+    image: kelvinpcw/directions:1.0
+    container_name: directions
+    ports:
+      - "5001:5000"  # Host port 5001 mapped to container port 5000
+    environment:
+      - dbURL=mysql+mysqlconnector://is213@host.docker.internal:3306/directions
+    env_file:
+      - .env  # Load from the parent directory (note: it's looking for .env file relative to the directory where docker-compose.yml)
+    networks:
+      - app-network
+
+  redis:
+    image: redis:latest
+    container_name: redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      retries: 5
+      start_period: 10s
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  redis_data:
+

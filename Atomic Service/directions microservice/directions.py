@@ -6,6 +6,7 @@ from pathlib import Path
 import requests
 from dotenv import load_dotenv
 from flasgger import Swagger
+from flask_cors import CORS
 
 # Load environment variables from .env file
 # load_dotenv()
@@ -15,6 +16,8 @@ load_dotenv(env_path)
 
 # Initialize Flask app
 app = Flask(__name__)
+CORS(app)
+
 
 # Get the Google Maps API Key from environment variables (secure practice)
 google_maps_api_key = os.environ.get('GOOGLE_MAPS_API_KEY')
@@ -28,7 +31,13 @@ app.config['SWAGGER'] = {
     'title': 'Google Maps Directions Microservice API',
     'version': 1.0,
     "openapi": "3.0.2",
-    'description': 'Gets directions between origin and destination using Google Maps Directions API'
+    'description': 'Gets directions between origin and destination using Google Maps Directions API',
+    'tags': [
+        {
+            'name': 'Directions',
+            'description': 'Endpoints related to getting directions'
+        }
+    ]
 }
 swagger = Swagger(app)
 
@@ -62,6 +71,8 @@ def get_directions():
     """
     Get directions between origin and destination
     ---
+    tags:
+      - Directions
     parameters:
         - name: origin
           in: query
@@ -141,4 +152,4 @@ def get_directions():
     return jsonify(directions)
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000, debug=True)
+    app.run(host='0.0.0.0', port=5001, debug=True)

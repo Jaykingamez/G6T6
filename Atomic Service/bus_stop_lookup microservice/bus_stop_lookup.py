@@ -185,9 +185,6 @@ def notify():
     "responses": {
         "200": {
             "description": "Transit details with nearest bus stop information"
-        },
-        "400": {
-            "description": "No public transport step found in route"
         }
     }
 })
@@ -198,9 +195,8 @@ def bus_stop_lookup():
     transit_details = extract_first_transit_details(routes)
     
     if not transit_details:
-        return jsonify({"error": "No public transport steps found"}), 400
+        return jsonify({"message": "No public transport steps found", "transit_details": []}), 200
     
     return jsonify({"transit_details": transit_details})
-
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5002, debug=True)

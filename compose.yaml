@@ -1,3 +1,5 @@
+version: "3.8"
+
 services:
   bus_stop_lookup:
     build:
@@ -23,13 +25,23 @@ services:
     image: kelvinpcw/directions:1.0
     container_name: directions
     ports:
-      - "5001:5000"  # Host port 5001 mapped to container port 5000
+      - "5001:5001"
     environment:
       - dbURL=mysql+mysqlconnector://is213@host.docker.internal:3306/directions
     env_file:
-      - .env  # Load from the parent directory (note: it's looking for .env file relative to the directory where docker-compose.yml)
+      - .env
     networks:
       - app-network
+
+  composite_service:
+    build: ./Composite Service/api_gateway
+    ports:
+      - "5000:5000"
+    depends_on:
+      - bus_stop_lookup
+      - directions
+    networks:
+      - app-network  # Add this line to connect to the app-network
 
   redis:
     image: redis:latest
@@ -52,4 +64,3 @@ networks:
 
 volumes:
   redis_data:
-

@@ -4,6 +4,11 @@
 import json
 import os
 import stripe
+import logging
+
+# Configure logging
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 stripe.api_key = os.getenv('STRIPE_API_KEY')
 endpoint_secret = os.getenv('ENDPOINT_SECRET')
@@ -44,16 +49,27 @@ def webhook():
     # Handle the event
     if event and event['type'] == 'payment_intent.succeeded':
         payment_intent = event['data']['object']  # contains a stripe.PaymentIntent
-        print('Payment for {} succeeded'.format(payment_intent['amount']))
-        # Then define and call a method to handle the successful payment intent.
-        # handle_payment_intent_succeeded(payment_intent)
+        logger.info('Payment for {} succeeded'.format(payment_intent['amount']))
+        logger.info(f'Full payment intent data: {payment_intent}')
     elif event['type'] == 'payment_method.attached':
-        payment_method = event['data']['object']  # contains a stripe.PaymentMethod
-        # Then define and call a method to handle the successful attachment of a PaymentMethod.
-        # handle_payment_method_attached(payment_method)
+        payment_method = event['data']['object']
+        logger.info(f'Payment method attached: {payment_method}')
     else:
         # Unexpected event type
-        print('Unhandled event type {}'.format(event['type']))
+        logger.info('Unhandled event type {}'.format(event['type']))
+        
+    # if event and event['type'] == 'payment_intent.succeeded':
+    #     payment_intent = event['data']['object']  # contains a stripe.PaymentIntent
+    #     print('Payment for {} succeeded'.format(payment_intent['amount']))
+    #     # Then define and call a method to handle the successful payment intent.
+    #     # handle_payment_intent_succeeded(payment_intent)
+    # elif event['type'] == 'payment_method.attached':
+    #     payment_method = event['data']['object']  # contains a stripe.PaymentMethod
+    #     # Then define and call a method to handle the successful attachment of a PaymentMethod.
+    #     # handle_payment_method_attached(payment_method)
+    # else:
+    #     # Unexpected event type
+    #     print('Unhandled event type {}'.format(event['type']))
 
     return jsonify(success=True)
 

@@ -4,14 +4,17 @@
 import json
 import os
 import stripe
+
+stripe.api_key = os.getenv('STRIPE_API_KEY')
+endpoint_secret = os.getenv('ENDPOINT_SECRET')
 # This is your test secret API key.
-stripe.api_key = 'sk_test_51R2ZQrJeAtLoMNXrspahfMSPaE5uXm3rINc5PI7fLCNiQ1YDmQHijVBFPaD1zzvXSJNoGn0hGYOL718NUtgp5SfM00v6CGYJpm'
+# stripe.api_key = 'sk_test_51R2ZQrJeAtLoMNXrspahfMSPaE5uXm3rINc5PI7fLCNiQ1YDmQHijVBFPaD1zzvXSJNoGn0hGYOL718NUtgp5SfM00v6CGYJpm'
 
 # Replace this endpoint secret with your endpoint's unique secret
 # If you are testing with the CLI, find the secret by running 'stripe listen'
 # If you are using an endpoint defined with the API or dashboard, look in your webhook settings
 # at https://dashboard.stripe.com/webhooks
-endpoint_secret = 'whsec_4bf549624d8a635413af3157cc5fb44eea3c06da07390f55c285d45e3b25de64'
+# endpoint_secret = 'whsec_4bf549624d8a635413af3157cc5fb44eea3c06da07390f55c285d45e3b25de64'
 from flask import Flask, jsonify, request
 
 app = Flask(__name__)
@@ -56,4 +59,4 @@ def webhook():
 
 
 if __name__ == '__main__':
-    app.run(port=4243, debug=True)
+    app.run(host='0.0.0.0', port=4243, debug=True)

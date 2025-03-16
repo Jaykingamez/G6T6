@@ -11,7 +11,7 @@ stripe.api_key = 'sk_test_51R2ZQrJeAtLoMNXrspahfMSPaE5uXm3rINc5PI7fLCNiQ1YDmQHij
 # If you are testing with the CLI, find the secret by running 'stripe listen'
 # If you are using an endpoint defined with the API or dashboard, look in your webhook settings
 # at https://dashboard.stripe.com/webhooks
-endpoint_secret = 'whsec_...'
+endpoint_secret = 'whsec_4bf549624d8a635413af3157cc5fb44eea3c06da07390f55c285d45e3b25de64'
 from flask import Flask, jsonify, request
 
 app = Flask(__name__)
@@ -53,3 +53,7 @@ def webhook():
         print('Unhandled event type {}'.format(event['type']))
 
     return jsonify(success=True)
+
+
+if __name__ == '__main__':
+    app.run(port=4243, debug=True)

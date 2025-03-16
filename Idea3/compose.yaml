@@ -1,0 +1,25 @@
+volumes:
+  rabbitmq_data:
+    name: G6T6_rabbitmq_data
+
+networks:
+  G6T6-net:
+    driver: bridge
+    name: G6T6-net
+
+services:
+
+  ####################################
+  # RabbitMQ: The messaging broker   
+  ####################################
+  rabbitmq:
+    image: rabbitmq:3-management
+    hostname: G6T6-rabbit
+    restart: always
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    volumes: 
+      - rabbitmq_data:/var/lib/rabbitmq
+    networks:
+      - G6T6-net

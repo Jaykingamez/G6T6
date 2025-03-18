@@ -95,7 +95,7 @@ export default {
 
       try {
         console.log('Sending payment request...'); // Debug log
-        const response = await axios.post('/api/create-payment-intent', {
+        const response = await axios.post('http://127.0.0.1:5008/makepayment', {
           amount: Math.round(this.amount * 100), // Convert to cents
         });
 

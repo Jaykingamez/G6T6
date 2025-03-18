@@ -5,6 +5,8 @@ import Register from '../views/Register.vue';
 import JourneyPlanner from '../views/JourneyPlanner.vue';
 import SavedJourneys from '../views/SavedJourneys.vue';
 import Profile from '../views/Profile.vue';
+import PaymentSuccess from '../views/PaymentSuccess.vue';
+import TestPayment from '../views/TestPayment.vue';
 
 const routes = [
   {
@@ -36,6 +38,16 @@ const routes = [
     path: '/profile',
     name: 'Profile',
     component: Profile,
+  },
+  {
+    path: '/payment-success',
+    name: 'PaymentSuccess',
+    component: PaymentSuccess,
+  },
+  {
+    path: '/test-payment',
+    name: 'TestPayment',
+    component: TestPayment,
   },
 ];
 

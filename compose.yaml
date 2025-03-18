@@ -63,14 +63,14 @@ services:
     networks:
       - app-network  # Add this line to connect to the app-network
 
-  payment:
+  make_payment:
     build:
-      context: ./Composite Service/payment  # Path to the payment service directory
-      dockerfile: Dockerfile                 # Name of the Dockerfile
+      context: ./Idea2/payment service  # Path to the directory containing make_payment.py and Dockerfile
+      dockerfile: Dockerfile               # Name of the Dockerfile
     ports:
-      - "3000:3000"                          # Map port 3000 of the container to port 3001 on the host
-    environment:
-      - STRIPE_SECRET_KEY=${STRIPE_SECRET_KEY}
+      - "5008:5008"                        # Map port 5008 of the container to port 5008 on the host
+    # environment:
+    #   - STRIPE_SECRET_KEY=${STRIPE_SECRET_KEY}
 
   redis:
     image: redis:latest

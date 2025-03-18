@@ -63,6 +63,15 @@ services:
     networks:
       - app-network  # Add this line to connect to the app-network
 
+  payment:
+    build:
+      context: ./Composite Service/payment  # Path to the payment service directory
+      dockerfile: Dockerfile                 # Name of the Dockerfile
+    ports:
+      - "3000:3000"                          # Map port 3000 of the container to port 3001 on the host
+    environment:
+      - STRIPE_SECRET_KEY=${STRIPE_SECRET_KEY}
+
   redis:
     image: redis:latest
     container_name: redis

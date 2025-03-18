@@ -15,7 +15,7 @@ Project consists of the following microservices:
 5. **Bus Tracking Service** - Fetches real-time transport timing from the LTA API
 6. **Bus Fare Calculation Service** - Computes the fare for bus ride ✅
 7. **Train Fare Calculation Service** - Computes the fare for train ✅
-8. **Emission Service** - Calculates carbon footprint for journeys
+8. **Emission Service** - Calculates carbon footprint for journeys ✅
 
 
 

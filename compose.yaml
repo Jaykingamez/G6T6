@@ -53,6 +53,17 @@ services:
     networks:
       - app-network
 
+  emission:
+    build:
+      context: "./Atomic Service/emission microservice"
+      dockerfile: Dockerfile
+    image: kelvinpcw/emission:1.0
+    container_name: emission
+    ports:
+      - "5005:5005"
+    networks:
+      - app-network
+
   composite_service:
     build: ./Composite Service/api_gateway
     ports:

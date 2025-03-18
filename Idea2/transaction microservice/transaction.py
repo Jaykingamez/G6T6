@@ -1,24 +1,59 @@
 #!/usr/bin/env python3
 
-import os
+from datetime import datetime
 from flask import Flask, request, jsonify
 from flask_cors import CORS
+from flask_sqlalchemy import SQLAlchemy
+from os import environ
+import os
 
 app = Flask(__name__)
+
 CORS(app)
 
-# Simulated transaction data
-transactions = [
-    {"id": 1, "amount": 100.0, "description": "Test transaction"},
-    {"id": 2, "amount": 200.0, "description": "Another test transaction"}
-]
+app.config["SQLALCHEMY_DATABASE_URI"] = (
+     environ.get("dbURL") or "mysql+mysqlconnector://root@localhost:3306/transactions"
+)
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.config['SQLALCHEMY_ENGINE_OPTIONS'] = {'pool_recycle': 299}
+
+db = SQLAlchemy(app)
+
+class Transaction(db.Model):
+    __tablename__ = 'transactions'
+    TransactionId = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    UserId = db.Column(db.Integer, nullable=False)
+    CardId = db.Column(db.Integer, nullable=False)
+    Amount = db.Column(db.Numeric(10, 2), nullable=False)
+    PaymentMethod = db.Column(db.Enum('STRIPE', 'PAYPAL'), nullable=True)
+    Status = db.Column(db.Enum('SUCCESS', 'FAILED', 'PENDING'), nullable=False, default='PENDING')
+    PreviousBalance = db.Column(db.Numeric(10, 2), nullable=False)
+    NewBalance = db.Column(db.Numeric(10, 2), nullable=False)
+    PaymentId = db.Column(db.Integer, nullable=False)
+    CreatedAt = db.Column(db.TIMESTAMP, server_default=db.func.now())
+    UpdatedAt = db.Column(db.TIMESTAMP, server_default=db.func.now(), onupdate=db.func.now())
+
+    def serialize(self):
+        return {
+            'TransactionId': self.TransactionId,
+            'UserId': self.UserId,
+            'CardId': self.CardId,
+            'Amount': float(self.Amount),
+            'PaymentMethod': self.PaymentMethod,
+            'Status': self.Status,
+            'PreviousBalance': float(self.PreviousBalance),
+            'NewBalance': float(self.NewBalance),
+            'PaymentId': self.PaymentId,
+            'CreatedAt': self.CreatedAt.isoformat(),
+            'UpdatedAt': self.UpdatedAt.isoformat()
+        }
 
 # CREATE
 @app.route("/transactions", methods=['POST'])
 def createTransaction():
     if request.is_json:
-        transaction = request.get_json()
-        result = processCreateTransaction(transaction)
+        transaction_data = request.get_json()
+        result = processCreateTransaction(transaction_data)
         return jsonify(result), result["code"]
     else:
         data = request.get_data()
@@ -31,22 +66,39 @@ def createTransaction():
 # READ
 @app.route("/transactions", methods=['GET'])
 def getTransactions():
-    return jsonify(transactions), 200
+    transactions = Transaction.query.all()
+    return jsonify([t.serialize() for t in transactions]), 200
 
-def processCreateTransaction(transaction):
+def processCreateTransaction(transaction_data):
     print("Creating a new transaction:")
-    print(transaction)
-    # Simulate success
-    code = 201
-    message = 'Simulated success in transaction creation.'
-    transactions.append(transaction)
-    return {
-        'code': code,
-        'data': transaction,
-        'message': message
-    }
+    print(transaction_data)
+    try:
+        new_transaction = Transaction(
+            UserId=transaction_data['UserId'],
+            CardId=transaction_data['CardId'],
+            Amount=transaction_data['Amount'],
+            PaymentMethod=transaction_data['PaymentMethod'],
+            Status=transaction_data['Status'],
+            PreviousBalance=transaction_data['PreviousBalance'],
+            NewBalance=transaction_data['NewBalance'],
+            PaymentId=transaction_data['PaymentId']
+        )
+        db.session.add(new_transaction)
+        db.session.commit()
+        return {
+            'code': 201,
+            'data': new_transaction.serialize(),
+            'message': 'Transaction created successfully.'
+        }
+    except Exception as e:
+        db.session.rollback()
+        return {
+            'code': 500,
+            'data': str(e),
+            'message': 'An error occurred while creating the transaction.'
+        }
 
 if __name__ == "__main__":
     print("This is flask " + os.path.basename(__file__) +
           ": transaction management ...")
-    app.run(host='0.0.0.0', port=5002, debug=True)
+    app.run(host='0.0.0.0', port=5006, debug=True)

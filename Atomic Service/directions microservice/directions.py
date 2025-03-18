@@ -141,7 +141,9 @@ def get_directions():
         optional_params['avoid'] = avoid
     
     # Add alternatives parameter (convert string to boolean for Google Maps API)
-    optional_params['alternatives'] = alternatives.lower() == 'true'
+    if alternatives:
+        optional_params['alternatives'] = 'true' if alternatives.lower() == 'true' else 'false'
+
     
     # Call the function to get directions
     directions = get_google_maps_directions(origin, destination, **optional_params)

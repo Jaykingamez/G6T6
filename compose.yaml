@@ -92,29 +92,8 @@ services:
     ports:
       - "5201:5201"
     environment:
-      - dbURL=mysql+mysqlconnector://root:root@user-db:3306/users
-    depends_on:
-      user-db:
-        condition: service_healthy
-    networks:
-      - app-network
-
-  user-db:
-    image: mysql:8.0
-    platform: linux/arm64/v8  # For M1/M2 Mac compatibility
-    container_name: user-db
-    environment:
-      MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: users
-    volumes:
-      - ./Idea2/user microservice/user.sql:/docker-entrypoint-initdb.d/user.sql
-    ports:
-      - "3307:3306"
-    healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-proot"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
+      # Connect to MySQL running on the host machine via host.docker.internal
+      - dbURL=mysql+mysqlconnector://root:root@host.docker.internal:3307/users
     networks:
       - app-network
 

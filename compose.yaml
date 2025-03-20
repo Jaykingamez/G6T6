@@ -83,6 +83,45 @@ services:
     # environment:
     #   - STRIPE_SECRET_KEY=${STRIPE_SECRET_KEY}
 
+  user:
+    build:
+      context: "./Idea2/user microservice"
+      dockerfile: Dockerfile
+    image: smartTransport/users:1.0
+    container_name: users
+    ports:
+      - "5201:5201"
+    environment:
+      - dbURL=mysql+mysqlconnector://is213@host.docker.internal:3306/users
+    networks:
+      - app-network
+
+  card:
+    build:
+      context: "./Idea2/card microservice"
+      dockerfile: Dockerfile
+    image: smartTransport/cards:1.0
+    container_name: cards
+    ports:
+      - "5203:5203"
+    environment:
+      - dbURL=mysql+mysqlconnector://is213@host.docker.internal:3306/cards
+    networks:
+      - app-network
+  
+  transaction:
+    build:
+      context: "./Idea2/transaction microservice"
+      dockerfile: Dockerfile
+    image: smartTransport/transactions:1.0
+    container_name: transactions
+    ports:
+      - "5203:5203"
+    environment:
+      - dbURL=mysql+mysqlconnector://is213@host.docker.internal:3306/transactions
+    networks:
+      - app-network
+
   redis:
     image: redis:latest
     container_name: redis
@@ -97,6 +136,7 @@ services:
       start_period: 10s
     networks:
       - app-network
+  
   saved_routes:
     build:
       context: "./Atomic Service/saved_routes microservice"  
@@ -114,6 +154,18 @@ services:
         condition: service_healthy  
     networks:
       - app-network
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    hostname: G6T6-rabbit
+    restart: always
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    volumes: 
+      - rabbitmq_data:/var/lib/rabbitmq
+    networks:
+      - G6T6-net
 
   mongodb:
     image: mongo:6.0  
@@ -134,7 +186,12 @@ services:
 networks:
   app-network:
     driver: bridge
+  G6T6-net:
+    driver: bridge
+    name: G6T6-net
 
 volumes:
   redis_data:
   mongo-data:
+  rabbitmq_data:
+    name: G6T6_rabbitmq_data

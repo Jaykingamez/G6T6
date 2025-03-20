@@ -164,4 +164,4 @@ if __name__ == "__main__":
     with app.app_context():
         db.create_all()  # Create tables if they don't exist
     print("This is flask " + os.path.basename(__file__) + ": user management ...")
-    app.run(host='0.0.0.0', port=5001, debug=True)
+    app.run(host='0.0.0.0', port=5201, debug=True)

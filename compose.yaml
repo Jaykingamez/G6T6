@@ -97,6 +97,39 @@ services:
       start_period: 10s
     networks:
       - app-network
+  saved_routes:
+    build:
+      context: "./Atomic Service/saved_routes microservice"  
+      dockerfile: Dockerfile
+    container_name: saved_routes
+    ports:
+      - "5006:5006"
+    environment:
+      - MONGODB_HOST=mongodb  
+      - MONGODB_PORT=27017
+      - MONGODB_NAME=journey_planning
+      - MONGODB_COLLECTION=saved_routes
+    depends_on:
+      mongodb:
+        condition: service_healthy  
+    networks:
+      - app-network
+
+  mongodb:
+    image: mongo:6.0  
+    container_name: mongodb
+    restart: always
+    ports:
+      - "27017:27017"
+    networks:
+      - app-network
+    volumes:
+      - mongo-data:/data/db
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.runCommand('ping').ok"]
+      interval: 10s
+      retries: 5
+      start_period: 30s
 
 networks:
   app-network:
@@ -104,3 +137,4 @@ networks:
 
 volumes:
   redis_data:
+  mongo-data:

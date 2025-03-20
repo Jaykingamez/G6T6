@@ -6,13 +6,19 @@ from flask_cors import CORS
 from flask_sqlalchemy import SQLAlchemy
 from os import environ
 import os
+import logging
+
+# Configure logging
+logging.basicConfig(level=logging.DEBUG)
+logger = logging.getLogger(__name__)
 
 app = Flask(__name__)
 
 CORS(app)
 
+# Update the database configuration
 app.config["SQLALCHEMY_DATABASE_URI"] = (
-     environ.get("dbURL") or "mysql+mysqlconnector://root@localhost:3306/users"
+    environ.get("dbURL") or "mysql+mysqlconnector://root:root@user-db:3306/users"
 )
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_ENGINE_OPTIONS'] = {'pool_recycle': 299}
@@ -95,15 +101,38 @@ def deleteUser(user_id):
 
 def processCreateUser(data):
     try:
-        new_user = User(name=data['name'], email=data['email'])
+        # Debug logging
+        logger.debug(f"Received data: {data}")
+        
+        # Validate required fields
+        required_fields = ['FullName', 'Email', 'Phone']
+        for field in required_fields:
+            if field not in data:
+                logger.error(f"Missing field: {field}")
+                return {
+                    'code': 400,
+                    'data': None,
+                    'message': f'Missing required field: {field}'
+                }
+
+        # Create new user
+        new_user = User(
+            FullName=data['FullName'],
+            Email=data['Email'],
+            Phone=data['Phone']
+        )
+        
+        # Add and commit to database
         db.session.add(new_user)
         db.session.commit()
+        
         return {
             'code': 201,
             'data': new_user.serialize(),
             'message': 'User created successfully.'
         }
     except Exception as e:
+        logger.error(f"Error creating user: {str(e)}")
         db.session.rollback()
         return {
             'code': 500,
@@ -113,22 +142,35 @@ def processCreateUser(data):
 
 def processUpdateUser(user_id, data):
     try:
+        # Debug logging
+        print(f"Updating user {user_id} with data: {data}")
+        
         user = User.query.get(user_id)
-        if user:
-            user.name = data.get('name', user.name)
-            user.email = data.get('email', user.email)
-            db.session.commit()
+        if not user:
             return {
-                'code': 200,
-                'data': user.serialize(),
-                'message': 'User updated successfully.'
+                'code': 404,
+                'data': None,
+                'message': f'User {user_id} not found.'
             }
+
+        # Update only the provided fields
+        if 'FullName' in data:
+            user.FullName = data['FullName']
+        if 'Email' in data:
+            user.Email = data['Email']
+        if 'Phone' in data:
+            user.Phone = data['Phone']
+
+        db.session.commit()
+        
         return {
-            'code': 404,
-            'data': None,
-            'message': 'User not found.'
+            'code': 200,
+            'data': user.serialize(),
+            'message': 'User updated successfully.'
         }
+
     except Exception as e:
+        print(f"Error updating user: {str(e)}")
         db.session.rollback()
         return {
             'code': 500,
@@ -143,7 +185,7 @@ def processDeleteUser(user_id):
             db.session.delete(user)
             db.session.commit()
             return {
-                'code': 200,
+                'code': 200, 
                 'data': None,
                 'message': 'User deleted successfully.'
             }

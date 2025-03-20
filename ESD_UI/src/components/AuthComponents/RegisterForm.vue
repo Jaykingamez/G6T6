@@ -1,43 +1,114 @@
 <template>
-  <div class="container">
-    <h2 class="mt-5">Register</h2>
+  <div class="register-form">
     <form @submit.prevent="registerUser">
       <div class="mb-3">
-        <label for="username" class="form-label">Username</label>
-        <input type="text" class="form-control" id="username" v-model="username" required>
+        <label for="fullName" class="form-label">Full Name</label>
+        <input 
+          type="text" 
+          class="form-control" 
+          id="fullName" 
+          v-model="formData.fullName" 
+          required
+        >
       </div>
+
       <div class="mb-3">
         <label for="email" class="form-label">Email address</label>
-        <input type="email" class="form-control" id="email" v-model="email" required>
+        <input 
+          type="email" 
+          class="form-control" 
+          id="email" 
+          v-model="formData.email" 
+          required
+        >
       </div>
+
       <div class="mb-3">
-        <label for="password" class="form-label">Password</label>
-        <input type="password" class="form-control" id="password" v-model="password" required>
+        <label for="phone" class="form-label">Phone Number</label>
+        <input 
+          type="tel" 
+          class="form-control" 
+          id="phone" 
+          v-model="formData.phone" 
+          required
+        >
       </div>
-      <button type="submit" class="btn btn-primary">Register</button>
+
+      <button type="submit" class="btn btn-primary" :disabled="isLoading">
+        {{ isLoading ? 'Registering...' : 'Register' }}
+      </button>
+
+      <div v-if="error" class="alert alert-danger mt-3">
+        {{ error }}
+      </div>
     </form>
-    <p class="mt-3">Already have an account? <router-link to="/login">Login here</router-link>.</p>
   </div>
 </template>
 
 <script>
+import axios from 'axios';
+
 export default {
+  name: 'RegisterForm',
   data() {
     return {
-      username: '',
-      email: '',
-      password: ''
+      formData: {
+        fullName: '',
+        email: '',
+        phone: ''
+      },
+      isLoading: false,
+      error: null
     };
   },
   methods: {
     async registerUser() {
-      // Logic for user registration using Firebase
+      this.isLoading = true;
+      this.error = null;
+      
       try {
-        // Call Firebase registration method here
-        // await firebase.auth().createUserWithEmailAndPassword(this.email, this.password);
-        // Optionally, save additional user info (like username) to Firestore
+        // Debug log the request payload
+        console.log('Sending registration data:', {
+          FullName: this.formData.fullName,
+          Email: this.formData.email,
+          Phone: this.formData.phone
+        });
+
+        const response = await axios.post('http://localhost:5201/users', {
+          FullName: this.formData.fullName,
+          Email: this.formData.email,
+          Phone: this.formData.phone
+        }, {
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+          },
+          withCredentials: false
+        });
+
+        console.log('Full response:', response); // Debug full response
+
+        if (response.data && response.data.code >= 200 && response.data.code < 300) {
+          this.$router.push({
+            path: '/login',
+            query: { registered: 'success' }
+          });
+        } else {
+          throw new Error(response.data?.message || 'Registration failed');
+        }
       } catch (error) {
-        console.error("Registration error:", error);
+        console.error('Full error details:', {
+          message: error.message,
+          response: error.response?.data,
+          status: error.response?.status,
+          headers: error.response?.headers
+        });
+        
+        this.error = error.response?.data?.message 
+          || error.message 
+          || 'Registration failed. Please check the console for details.';
+      } finally {
+        this.isLoading = false;
       }
     }
   }
@@ -45,8 +116,9 @@ export default {
 </script>
 
 <style scoped>
-.container {
+.register-form {
   max-width: 400px;
   margin: auto;
+  padding: 20px;
 }
 </style>

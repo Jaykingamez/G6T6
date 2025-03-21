@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <Navbar />
-    <main class="container py-4">
+    <main class="container px-0" style="width: 100%;">
       <router-view />
     </main>
     <Footer />

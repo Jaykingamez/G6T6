@@ -117,7 +117,7 @@ services:
     image: smartTransport/transactions:1.0
     container_name: transactions
     ports:
-      - "5203:5203"
+      - "5206:5206"
     environment:
       - dbURL=mysql+mysqlconnector://is213@host.docker.internal:3306/transactions
     networks:

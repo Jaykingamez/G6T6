@@ -12,7 +12,7 @@ Project consists of the following microservices:
 2. **Estimate Journey Costs** - Orchestrator that calculates total journey costs  
 3. **Direction Service** - Interacts with Google Maps Directions API to fetch route information ✅
 4. **Bus Stop Lookup Service** - Retrieves bus stop details from Redis ✅
-5. **Bus Tracking Service** - Fetches real-time transport timing from the LTA API
+5. **Bus Tracking Service** - Fetches real-time transport timing from the LTA API ✅
 6. **Bus Fare Calculation Service** - Computes the fare for bus ride ✅
 7. **Train Fare Calculation Service** - Computes the fare for train ✅
 8. **Emission Service** - Calculates carbon footprint for journeys ✅
@@ -57,8 +57,10 @@ The system exposes the following API endpoints:
 
 - **Directions**: `GET http://localhost:5001/directions`
 - **Bus Stop Lookup**: `POST http://localhost:5002/bus_stop_lookup`
+- **Bus Tracking**: `GET/POST http://localhost:5030/bus-tracking`
 - **Bus Fare**: `GET http://localhost:5003/bus-fare`
-- **Train Fare**: `GET http://localhost:5003/train-fare`
+- **Train Fare**: `GET http://localhost:5004/train-fare`
+- **Emission**: `GET http://localhost:5005/emission`
 
 API documentation is available at:
 - All services: `http://localhost:5000/apidocs/`

@@ -1,24 +1,27 @@
 <template>
-  <div class="container">
-    <h2 class="mt-5">Register</h2>
-    <register-form />
+  <div class="register-page">
+    <div class="row justify-content-center">
+      <div class="col-md-6 col-lg-5">
+        <register-form />
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
-import RegisterForm from '../components/AuthComponents/RegisterForm.vue';
+import RegisterForm from '@/components/AuthComponents/RegisterForm.vue'
 
 export default {
   name: 'Register',
   components: {
     RegisterForm
   }
-};
+}
 </script>
 
 <style scoped>
-.container {
-  max-width: 600px;
-  margin: auto;
+.register-page {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
 }
 </style>

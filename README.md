@@ -16,6 +16,14 @@ Project consists of the following microservices:
 6. **Bus Fare Calculation Service** - Computes the fare for bus ride ✅
 7. **Train Fare Calculation Service** - Computes the fare for train ✅
 8. **Emission Service** - Calculates carbon footprint for journeys ✅
+8. **User** - Stores User data with CRUD operation ✅
+9. **Card** - Stores Ez-Link Card data with CRUD operation ✅
+10. **Transcation** - Stores Transaction data with CR operation ✅
+11. **Notification** - Calls external API to send notification
+12. **Payment** - Calls external API to payment gateway
+13. **Check Balance** - Orchestrator that retrieve user's card balance ✅
+14. **Top Up** - Orchestrator that top up user's card balance
+15. **Make Payment** - Orchestrator that process payment and update card balance
 
 
 

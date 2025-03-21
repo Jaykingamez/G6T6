@@ -101,4 +101,4 @@ def processCreateTransaction(transaction_data):
 if __name__ == "__main__":
     print("This is flask " + os.path.basename(__file__) +
           ": transaction management ...")
-    app.run(host='0.0.0.0', port=5006, debug=True)
+    app.run(host='0.0.0.0', port=5206, debug=True)

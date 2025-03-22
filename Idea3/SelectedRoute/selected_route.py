@@ -7,7 +7,7 @@ load_dotenv()
 
 app = Flask(__name__)
 app.config["SQLALCHEMY_DATABASE_URI"] = (
-    environ.get("dbURL") or "mysql+mysqlconnector://root@user-db:3306/selected_route"
+    environ.get("dbURL") or "mysql+mysqlconnector://root@localhost:3306/SelectedRoute"
 )
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_ENGINE_OPTIONS'] = {'pool_recycle': 299}

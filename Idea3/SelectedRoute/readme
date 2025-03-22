@@ -1,4 +1,0 @@
-Would be your own database uri
-dbURL = 'mysql+mysqlconnector://root@localhost:3306/SelectedRoute'
-
-set dbURL=your_own_db_uri

@@ -176,7 +176,7 @@ services:
     ports:
       - "5301:5301"
     environment:
-      - dbURL=""
+      - dbURL=mysql+mysqlconnector://root@user-db:3306/selected_route
 
   enable_notification:
     build:

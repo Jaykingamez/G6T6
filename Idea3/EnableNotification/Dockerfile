@@ -14,7 +14,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY enable_notification.py invokes.py amqp_lib.py ./
 
 # Expose the port the app runs on
-EXPOSE 5003
+EXPOSE 5302
 
 # Command to run the application
 CMD ["python", "enable_notification.py"]

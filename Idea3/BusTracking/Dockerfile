@@ -13,11 +13,8 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Copy the application code
 COPY bus_tracking.py .
 
-# Set environment variable for the API key
-ENV LTA_API_KEY="your_api_key_here"
-
 # Expose the port the app runs on
-EXPOSE 5002
+EXPOSE 5399
 
 # Command to run the application
 CMD ["python", "bus_tracking.py"]

@@ -18,10 +18,7 @@ RUN apt-get update && \
 COPY selected_route.py .
 
 # Expose the port the app runs on
-EXPOSE 5000
-
-# Set environment variable for database connection
-ENV dbURL="your_own_db_uri"
+EXPOSE 5301
 
 # Command to run the application
 CMD ["python", "selected_route.py"]

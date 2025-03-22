@@ -21,18 +21,17 @@
         </div>
 
         <div class="form-group mb-4">
-          <label for="phone" class="form-label">Phone Number</label>
+          <label for="password" class="form-label">Password</label>
           <div class="input-group input-group-lg hover-effect">
             <span class="input-group-text border-end-0">
-              <i class="bi bi-phone"></i>
+              <i class="bi bi-lock"></i>
             </span>
             <input
-              type="tel"
+              type="password"
               class="form-control border-start-0"
-              id="phone"
-              v-model="formData.phone"
-              placeholder="Enter your phone number"
-              pattern="[0-9]+"
+              id="password"
+              v-model="formData.password"
+              placeholder="Enter your password"
               required
             />
           </div>
@@ -62,8 +61,6 @@ export default {
     return {
       formData: {
         fullName: '',
-        phone: '',
-        email: '',
         password: ''
       },
       loading: false,
@@ -81,7 +78,7 @@ export default {
         const redirectPath = this.$route.query.redirect || '/';
         this.$router.push(redirectPath);
       } catch (error) {
-        this.error = 'Invalid credentials. Please try again.';
+        this.error = error.message || 'Invalid credentials. Please try again.';
         console.error('Login error:', error);
       } finally {
         this.loading = false;

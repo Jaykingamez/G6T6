@@ -38,7 +38,24 @@
         </div>
 
         <div class="form-group mb-4">
-          <label for="phone" class="form-label">Phone Number</label>
+          <label for="password" class="form-label">Password</label>
+          <div class="input-group input-group-lg hover-effect">
+            <span class="input-group-text border-end-0">
+              <i class="bi bi-lock"></i>
+            </span>
+            <input
+              type="password"
+              class="form-control border-start-0"
+              id="password"
+              v-model="formData.password"
+              placeholder="Choose a password"
+              required
+            />
+          </div>
+        </div>
+
+        <div class="form-group mb-4">
+          <label for="phone" class="form-label">Phone Number (Optional)</label>
           <div class="input-group input-group-lg hover-effect">
             <span class="input-group-text border-end-0">
               <i class="bi bi-phone"></i>
@@ -49,8 +66,7 @@
               id="phone"
               v-model="formData.phone"
               placeholder="Enter your phone number"
-              pattern="[0-9]+"
-              required
+              pattern="[0-9]*"
             />
           </div>
         </div>
@@ -74,8 +90,6 @@
 </template>
 
 <script>
-import axios from 'axios';
-
 export default {
   name: 'RegisterForm',
   data() {
@@ -83,6 +97,7 @@ export default {
       formData: {
         fullName: '',
         email: '',
+        password: '',
         phone: ''
       },
       isLoading: false,
@@ -95,46 +110,14 @@ export default {
       this.error = null;
       
       try {
-        // Debug log the request payload
-        console.log('Sending registration data:', {
-          FullName: this.formData.fullName,
-          Email: this.formData.email,
-          Phone: this.formData.phone
+        await this.$store.dispatch('auth/register', this.formData);
+        this.$router.push({
+          path: '/login',
+          query: { registered: 'success' }
         });
-
-        const response = await axios.post('http://localhost:5201/users', {
-          FullName: this.formData.fullName,
-          Email: this.formData.email,
-          Phone: this.formData.phone
-        }, {
-          headers: {
-            'Content-Type': 'application/json',
-            'Accept': 'application/json'
-          },
-          withCredentials: false
-        });
-
-        console.log('Full response:', response); // Debug full response
-
-        if (response.data && response.data.code >= 200 && response.data.code < 300) {
-          this.$router.push({
-            path: '/login',
-            query: { registered: 'success' }
-          });
-        } else {
-          throw new Error(response.data?.message || 'Registration failed');
-        }
       } catch (error) {
-        console.error('Full error details:', {
-          message: error.message,
-          response: error.response?.data,
-          status: error.response?.status,
-          headers: error.response?.headers
-        });
-        
-        this.error = error.response?.data?.message 
-          || error.message 
-          || 'Registration failed. Please check the console for details.';
+        console.error('Registration error:', error);
+        this.error = error.message || 'Registration failed. Please try again.';
       } finally {
         this.isLoading = false;
       }

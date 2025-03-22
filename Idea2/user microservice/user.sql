@@ -34,7 +34,8 @@ CREATE TABLE IF NOT EXISTS `users` (
   `UserId` int(11) NOT NULL AUTO_INCREMENT,
   `FullName` varchar(100) NOT NULL,
   `Email` varchar(255) NOT NULL UNIQUE,
-  `Phone` varchar(20) NOT NULL UNIQUE,
+  `Password` varchar(255) NOT NULL,
+  `Phone` varchar(20) UNIQUE,
   `CreatedAt` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `UpdatedAt` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`UserId`)
@@ -44,9 +45,9 @@ CREATE TABLE IF NOT EXISTS `users` (
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`UserId`, `FullName`, `Email`, `Phone`, `CreatedAt`, `UpdatedAt`) VALUES
-(1, 'John Doe', 'john@example.com', '1234567890', '2025-03-15 09:00:00', '2025-03-15 09:00:00'),
-(2, 'Jane Doe', 'jane@example.com', '9876543210', '2025-03-15 09:00:00', '2025-03-15 09:00:00');
+INSERT INTO `users` (`UserId`, `FullName`, `Email`, `Password`, `Phone`, `CreatedAt`, `UpdatedAt`) VALUES
+(1, 'John Doe', 'john@example.com', '$2b$12$LQv3c1yqBWVHxkd0LHAkCOYz6TtxMQJqhN8/LewFO5gYm/tQQh1SC', '1234567890', '2025-03-15 09:00:00', '2025-03-15 09:00:00'),
+(2, 'Jane Doe', 'jane@example.com', '$2b$12$LQv3c1yqBWVHxkd0LHAkCOYz6TtxMQJqhN8/LewFO5gYm/tQQh1SC', '9876543210', '2025-03-15 09:00:00', '2025-03-15 09:00:00');
 
 COMMIT;
 

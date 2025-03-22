@@ -40,11 +40,11 @@ export default {
         const response = await axios.post(`${API_URL}/users`, {
           FullName: userData.fullName,
           Email: userData.email,
-          Phone: userData.phone
+          Password: userData.password,
+          Phone: userData.phone || null // Send null if phone is empty
         });
 
         if (response.data.code === 201) {
-          commit('SET_USER', response.data.data);
           return response.data.data;
         } else {
           throw new Error(response.data.message || 'Registration failed');
@@ -63,21 +63,17 @@ export default {
       commit('CLEAR_ERROR');
       
       try {
-        // Get all users and find matching user
-        const response = await axios.get(`${API_URL}/users`);
-        const users = Array.isArray(response.data) ? response.data : [];
+        // Use the authenticate endpoint
+        const response = await axios.post(`${API_URL}/authenticate`, {
+          FullName: userData.fullName,
+          Password: userData.password
+        });
         
-        // Find user with matching full name and phone
-        const user = users.find(u => 
-          u.FullName.toLowerCase() === userData.fullName.toLowerCase() && 
-          u.Phone === userData.phone
-        );
-        
-        if (user) {
-          commit('SET_USER', user);
-          return user;
+        if (response.data.code === 200) {
+          commit('SET_USER', response.data.data);
+          return response.data.data;
         } else {
-          throw new Error('Invalid credentials');
+          throw new Error(response.data.message || 'Login failed');
         }
       } catch (error) {
         const errorMessage = error.response?.data?.message || error.message || 'Login failed';
@@ -87,43 +83,32 @@ export default {
         commit('SET_LOADING', false);
       }
     },
-    
-    async logout({ commit }) {
-      try {
-        commit('SET_USER', null); // This will also remove from localStorage
-      } catch (error) {
-        console.error('Logout error:', error);
-        throw new Error('Logout failed');
+
+    logout({ commit }) {
+      commit('SET_USER', null);
+    },
+
+    // Initialize auth state from localStorage
+    initAuth({ commit }) {
+      const user = localStorage.getItem('user');
+      if (user) {
+        commit('SET_USER', JSON.parse(user));
       }
     },
-    
-    checkAuthState({ commit }) {
+
+    // Check if the stored user still exists in the database
+    async checkAuthState({ commit, state }) {
+      if (!state.user) return;
+      
       try {
-        const savedUser = localStorage.getItem('user');
-        if (savedUser) {
-          const user = JSON.parse(savedUser);
-          // Verify user still exists in database
-          axios.get(`${API_URL}/users/${user.UserId}`)
-            .then(response => {
-              if (response.data.code === 200) {
-                commit('SET_USER', response.data.data);
-              } else {
-                // User no longer exists in database
-                commit('SET_USER', null);
-              }
-            })
-            .catch(() => {
-              // If error occurs, clear the stored user
-              commit('SET_USER', null);
-            });
+        const response = await axios.get(`${API_URL}/users/${state.user.UserId}`);
+        if (response.data.code !== 200) {
+          commit('SET_USER', null);
         }
       } catch (error) {
-        console.error('Error checking auth state:', error);
-        // If there's an error reading from localStorage, clear it
-        localStorage.removeItem('user');
         commit('SET_USER', null);
       }
-    },
+    }
   },
   getters: {
     isAuthenticated(state) {

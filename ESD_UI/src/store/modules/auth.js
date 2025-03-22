@@ -1,3 +1,8 @@
+import axios from 'axios';
+
+// Get the API URL from environment variables or use a default
+const API_URL = process.env.VUE_APP_USER_API_URL || 'http://localhost:5201';
+
 export default {
   namespaced: true,
   state: {
@@ -8,6 +13,12 @@ export default {
   mutations: {
     SET_USER(state, user) {
       state.user = user;
+      // Persist user data to localStorage when set
+      if (user) {
+        localStorage.setItem('user', JSON.stringify(user));
+      } else {
+        localStorage.removeItem('user');
+      }
     },
     SET_LOADING(state, loading) {
       state.loading = loading;
@@ -24,17 +35,24 @@ export default {
       commit('SET_LOADING', true);
       commit('CLEAR_ERROR');
       
-      // Simulate API delay
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
       try {
-        // Mock successful registration
-        const mockUser = { email: userData.email, id: 'mock-user-id' };
-        commit('SET_USER', mockUser);
-        return mockUser;
+        // Call user microservice to create new user
+        const response = await axios.post(`${API_URL}/users`, {
+          FullName: userData.fullName,
+          Email: userData.email,
+          Phone: userData.phone
+        });
+
+        if (response.data.code === 201) {
+          commit('SET_USER', response.data.data);
+          return response.data.data;
+        } else {
+          throw new Error(response.data.message || 'Registration failed');
+        }
       } catch (error) {
-        commit('SET_ERROR', 'Registration failed');
-        throw new Error('Registration failed');
+        const errorMessage = error.response?.data?.message || 'Registration failed';
+        commit('SET_ERROR', errorMessage);
+        throw new Error(errorMessage);
       } finally {
         commit('SET_LOADING', false);
       }
@@ -44,35 +62,66 @@ export default {
       commit('SET_LOADING', true);
       commit('CLEAR_ERROR');
       
-      // Simulate API delay
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
       try {
-        // Mock successful login
-        const mockUser = { email: userData.email, id: 'mock-user-id' };
-        commit('SET_USER', mockUser);
-        return mockUser;
+        // Get all users and find matching user
+        const response = await axios.get(`${API_URL}/users`);
+        const users = Array.isArray(response.data) ? response.data : [];
+        
+        // Find user with matching full name and phone
+        const user = users.find(u => 
+          u.FullName.toLowerCase() === userData.fullName.toLowerCase() && 
+          u.Phone === userData.phone
+        );
+        
+        if (user) {
+          commit('SET_USER', user);
+          return user;
+        } else {
+          throw new Error('Invalid credentials');
+        }
       } catch (error) {
-        commit('SET_ERROR', 'Login failed');
-        throw new Error('Login failed');
+        const errorMessage = error.response?.data?.message || error.message || 'Login failed';
+        commit('SET_ERROR', errorMessage);
+        throw new Error(errorMessage);
       } finally {
         commit('SET_LOADING', false);
       }
     },
     
     async logout({ commit }) {
-      // Simulate API delay
-      await new Promise(resolve => setTimeout(resolve, 500));
-      
-      // Mock successful logout
-      commit('SET_USER', null);
+      try {
+        commit('SET_USER', null); // This will also remove from localStorage
+      } catch (error) {
+        console.error('Logout error:', error);
+        throw new Error('Logout failed');
+      }
     },
     
     checkAuthState({ commit }) {
-      // Check if there's a user in localStorage
-      const savedUser = localStorage.getItem('user');
-      if (savedUser) {
-        commit('SET_USER', JSON.parse(savedUser));
+      try {
+        const savedUser = localStorage.getItem('user');
+        if (savedUser) {
+          const user = JSON.parse(savedUser);
+          // Verify user still exists in database
+          axios.get(`${API_URL}/users/${user.UserId}`)
+            .then(response => {
+              if (response.data.code === 200) {
+                commit('SET_USER', response.data.data);
+              } else {
+                // User no longer exists in database
+                commit('SET_USER', null);
+              }
+            })
+            .catch(() => {
+              // If error occurs, clear the stored user
+              commit('SET_USER', null);
+            });
+        }
+      } catch (error) {
+        console.error('Error checking auth state:', error);
+        // If there's an error reading from localStorage, clear it
+        localStorage.removeItem('user');
+        commit('SET_USER', null);
       }
     },
   },

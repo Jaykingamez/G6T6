@@ -77,7 +77,9 @@ export default {
 
       try {
         await this.$store.dispatch('auth/login', this.formData);
-        this.$router.push('/journey-planner');
+        // Check if there's a redirect URL in the query parameters
+        const redirectPath = this.$route.query.redirect || '/';
+        this.$router.push(redirectPath);
       } catch (error) {
         this.error = 'Invalid credentials. Please try again.';
         console.error('Login error:', error);

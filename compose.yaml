@@ -167,6 +167,27 @@ services:
     networks:
       - app-network
 
+  #IDEA3 - START
+  selected_route:
+    build:
+      context: "./Idea3/SelectedRoute/"  
+      dockerfile: Dockerfile
+    container_name: selected_route
+    ports:
+      - "5301:5301"
+    environment:
+      - dbURL=""
+
+  enable_notification:
+    build:
+      context: "./Idea3/EnableNotification/"  
+      dockerfile: Dockerfile
+    container_name: enable_notification
+    ports:
+      - "5302:5302"
+  #IDEA3 - END
+    
+
   rabbitmq:
     image: rabbitmq:3-management
     hostname: G6T6-rabbit

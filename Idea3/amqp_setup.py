@@ -1,19 +1,13 @@
 #!/usr/bin/env python3
 """
-A standalone script to create exchanges and queues on RabbitMQ for the bus tracking system.
+A standalone script to create the notification exchange and queue on RabbitMQ.
 """
 
 import pika
 
-# Configuration for tracking system
+# Configuration
 amqp_host = "localhost"
 amqp_port = 5672
-
-# Tracking exchange configuration
-tracking_exchange_name = "tracking_direct"
-tracking_exchange_type = "direct"
-tracking_queue = "Tracking"
-tracking_routing_key = "tracking"
 
 # Notification exchange configuration
 notification_exchange_name = "notification.direct"
@@ -62,21 +56,6 @@ def create_queue(channel, exchange_name, queue_name, routing_key):
         routing_key=routing_key
     )
 
-# Create tracking exchange and queue
-tracking_channel, tracking_connection = create_exchange(
-    hostname=amqp_host,
-    port=amqp_port,
-    exchange_name=tracking_exchange_name,
-    exchange_type=tracking_exchange_type,
-)
-
-create_queue(
-    channel=tracking_channel,
-    exchange_name=tracking_exchange_name,
-    queue_name=tracking_queue,
-    routing_key=tracking_routing_key,
-)
-
 # Create notification exchange and queue
 notification_channel, notification_connection = create_exchange(
     hostname=amqp_host,
@@ -92,8 +71,7 @@ create_queue(
     routing_key=notification_routing_key,
 )
 
-# Close connections
-print("Closing connections...")
-tracking_connection.close()
+# Close connection
+print("Closing connection...")
 notification_connection.close()
 print("Setup completed successfully!")

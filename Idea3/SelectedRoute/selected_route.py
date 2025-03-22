@@ -1,9 +1,12 @@
 from flask import Flask, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
+from os import environ
+from dotenv import load_dotenv
+
+load_dotenv()
 
 app = Flask(__name__)
-
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://root@localhost:3306/SelectedRoute'
+app.config['SQLALCHEMY_DATABASE_URI'] = environ.get('dbURL')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_ENGINE_OPTIONS'] = {'pool_recycle': 299}
 
@@ -15,18 +18,21 @@ class SelectedRoute(db.Model):
     RouteID = db.Column(db.Integer, primary_key=True, autoincrement=True)
     BusStopCode = db.Column(db.Integer, nullable=False)
     BusID = db.Column(db.String(11), nullable=False)
+    UserID = db.Column(db.Integer, nullable=False)
 
-    def __init__(self, BusStopCode, BusID, RouteID=None):
+    def __init__(self, BusStopCode, BusID, UserID, RouteID=None):
         self.BusStopCode = BusStopCode
         self.BusID = BusID
+        self.UserID = UserID
         if RouteID:
             self.RouteID = RouteID
 
     def json(self):
         return {
-            "RouteID": self.RouteID, 
-            "BusStopCode": self.BusStopCode, 
-            "BusID": self.BusID
+            "RouteID": self.RouteID,
+            "BusStopCode": self.BusStopCode,
+            "BusID": self.BusID,
+            "UserID": self.UserID
         }
 
 # Get all selected routes
@@ -114,6 +120,8 @@ def update_route(RouteID):
         route.BusStopCode = data['BusStopCode']
     if 'BusID' in data:
         route.BusID = data['BusID']
+    if 'UserID' in data:
+        route.UserID = data['UserID']
     
     try:
         db.session.commit()
@@ -166,4 +174,4 @@ def delete_route(RouteID):
     )
 
 if __name__ == '__main__':
-    app.run(port=5000, debug=True)
+    app.run(port=5301, debug=True)

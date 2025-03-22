@@ -185,6 +185,8 @@ services:
     container_name: enable_notification
     ports:
       - "5302:5302"
+    depends_on:
+      - rabbitmq
   #IDEA3 - END
     
 

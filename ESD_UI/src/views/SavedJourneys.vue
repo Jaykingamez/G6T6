@@ -2,7 +2,27 @@
   <div class="container mt-4 mb-5">
     <h1 class="text-center mb-4">My Saved Journeys</h1>
     
-    <div v-if="savedJourneys.length === 0" class="text-center mt-5">
+    <!-- Loading state -->
+    <div v-if="loading" class="text-center my-5">
+      <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Loading...</span>
+      </div>
+      <p class="mt-2">Loading your saved journeys...</p>
+    </div>
+    
+    <!-- Error state -->
+    <div v-else-if="error" class="alert alert-danger mx-auto mt-4" style="max-width: 600px;">
+      <i class="bi bi-exclamation-triangle-fill me-2"></i>
+      <strong>Error:</strong> {{ error }}
+      <div class="mt-3">
+        <button class="btn btn-sm btn-outline-danger" @click="retryFetch">
+          <i class="bi bi-arrow-clockwise me-1"></i> Retry
+        </button>
+      </div>
+    </div>
+    
+    <!-- Empty state -->
+    <div v-else-if="savedJourneys.length === 0" class="text-center mt-5">
       <div class="empty-state">
         <i class="bi bi-bookmark-heart" style="font-size: 3rem;"></i>
         <h3 class="mt-3">No saved journeys yet</h3>
@@ -13,6 +33,7 @@
       </div>
     </div>
     
+    <!-- Journey cards -->
     <div v-else>
       <div class="row">
         <div class="col-md-4 mb-4" v-for="journey in savedJourneys" :key="journey.id">
@@ -25,9 +46,10 @@
             </div>
             <div class="card-body">
               <h5 class="card-title">{{ journey.startPoint }} to {{ journey.endPoint }}</h5>
+              <p v-if="journey.routeName" class="text-muted">{{ journey.routeName }}</p>
               <ul class="list-unstyled">
                 <li><strong>Travel Time:</strong> {{ journey.travelTime }} mins</li>
-                <li><strong>Cost:</strong> ${{ journey.cost.toFixed(2) }}</li>
+                <li><strong>Cost:</strong> ${{ Number(journey.cost).toFixed(2) }}</li>
               </ul>
             </div>
             <div class="card-footer bg-white">
@@ -45,14 +67,17 @@
       </div>
     </div>
     
-    <!-- Confirmation Modal Placeholder -->
+    <!-- Confirmation Modal -->
     <div v-if="showDeleteConfirmation" class="modal-overlay">
       <div class="modal-content p-4 bg-white rounded shadow">
         <h4>Confirm Deletion</h4>
         <p>Are you sure you want to delete this saved journey?</p>
         <div class="d-flex justify-content-end">
-          <button class="btn btn-secondary me-2" @click="showDeleteConfirmation = false">Cancel</button>
-          <button class="btn btn-danger" @click="confirmDelete">Delete</button>
+          <button class="btn btn-secondary me-2" @click="cancelDelete">Cancel</button>
+          <button class="btn btn-danger" :disabled="deletingJourney" @click="confirmDelete">
+            <span v-if="deletingJourney" class="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span>
+            Delete
+          </button>
         </div>
       </div>
     </div>
@@ -60,7 +85,7 @@
 </template>
 
 <script>
-import { mapState } from 'vuex';
+import { mapState, mapGetters } from 'vuex';
 
 export default {
   name: 'SavedJourneys',
@@ -68,48 +93,37 @@ export default {
     return {
       showDeleteConfirmation: false,
       journeyToDelete: null,
-      // Mock data - would normally come from store
-      savedJourneys: [
-        {
-          id: '1',
-          startPoint: 'Changi Airport',
-          endPoint: 'Marina Bay Sands',
-          transportMode: 'MRT',
-          travelTime: 35,
-          cost: 2.50,
-          savedAt: '2023-03-01T08:30:00Z'
-        },
-        {
-          id: '2',
-          startPoint: 'Orchard Road',
-          endPoint: 'Sentosa',
-          transportMode: 'Bus',
-          travelTime: 45,
-          cost: 1.80,
-          savedAt: '2023-02-15T14:20:00Z'
-        },
-        {
-          id: '3',
-          startPoint: 'Jurong East',
-          endPoint: 'Changi Business Park',
-          transportMode: 'Taxi',
-          travelTime: 30,
-          cost: 22.50,
-          savedAt: '2023-02-28T18:45:00Z'
-        }
-      ]
+      deletingJourney: false
     };
+  },
+  computed: {
+    ...mapState({
+      loading: state => state.journeys.loading,
+      error: state => state.journeys.error,
+    }),
+    ...mapGetters({
+      savedJourneys: 'journeys/allSavedJourneys'
+    })
   },
   methods: {
     formatDate(dateString) {
-      const date = new Date(dateString);
-      return new Intl.DateTimeFormat('en-SG', {
-        day: '2-digit',
-        month: 'short',
-        year: 'numeric'
-      }).format(date);
+      if (!dateString) return 'Unknown date';
+      
+      try {
+        const date = new Date(dateString);
+        return new Intl.DateTimeFormat('en-SG', {
+          day: '2-digit',
+          month: 'short',
+          year: 'numeric'
+        }).format(date);
+      } catch (e) {
+        console.error('Date formatting error:', e);
+        return 'Invalid date';
+      }
     },
     getBadgeClass(transportMode) {
+      if (!transportMode) return 'bg-secondary text-white';
+      
       switch(transportMode.toLowerCase()) {
         case 'mrt':
           return 'bg-primary text-white';
@@ -134,16 +148,33 @@ export default {
       this.journeyToDelete = journeyId;
       this.showDeleteConfirmation = true;
     },
-    confirmDelete() {
-      // Would typically dispatch to store
-      this.savedJourneys = this.savedJourneys.filter(journey => journey.id !== this.journeyToDelete);
+    async confirmDelete() {
+      this.deletingJourney = true;
+      try {
+        await this.$store.dispatch('journeys/removeJourney', this.journeyToDelete);
+        this.$toast.success('Journey deleted successfully');
+      } catch (error) {
+        this.$toast.error('Failed to delete journey: ' + (error.message || 'Unknown error'));
+      } finally {
+        this.showDeleteConfirmation = false;
+        this.journeyToDelete = null;
+        this.deletingJourney = false;
+      }
+    },
+    cancelDelete() {
       this.showDeleteConfirmation = false;
       this.journeyToDelete = null;
+    },
+    retryFetch() {
+      this.fetchSavedJourneys();
+    },
+    fetchSavedJourneys() {
+      this.$store.dispatch('journeys/fetchSavedJourneys');
     }
   },
   mounted() {
-    // In a real app, would fetch saved journeys from store/API
-    // this.$store.dispatch('journeys/fetchSavedJourneys');
+    // Fetch saved journeys when component mounts
+    this.fetchSavedJourneys();
   }
 };
 </script>

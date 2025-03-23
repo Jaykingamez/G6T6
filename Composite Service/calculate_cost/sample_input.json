@@ -1,0 +1,3516 @@
+{
+    "geocoded_waypoints": [
+      {
+        "geocoder_status": "OK",
+        "place_id": "ChIJgRgsSZY92jERzSLKglE45G0",
+        "types": [
+          "postal_code"
+        ]
+      },
+      {
+        "geocoder_status": "OK",
+        "partial_match": true,
+        "place_id": "ChIJAQAAQKMZ2jERNUpXXj2oK9s",
+        "types": [
+          "establishment",
+          "point_of_interest"
+        ]
+      }
+    ],
+    "routes": [
+      {
+        "bounds": {
+          "northeast": {
+            "lat": 1.3797002,
+            "lng": 103.94306
+          },
+          "southwest": {
+            "lat": 1.2975474,
+            "lng": 103.8493159
+          }
+        },
+        "copyrights": "Powered by Google, \u00a92025 Google",
+        "legs": [
+          {
+            "arrival_time": {
+              "text": "7:43\u202fAM",
+              "time_zone": "Asia/Singapore",
+              "value": 1742773438
+            },
+            "departure_time": {
+              "text": "6:46\u202fAM",
+              "time_zone": "Asia/Singapore",
+              "value": 1742769995
+            },
+            "distance": {
+              "text": "18.7 km",
+              "value": 18712
+            },
+            "duration": {
+              "text": "57 mins",
+              "value": 3443
+            },
+            "end_address": "80 Stamford Rd, Singapore 178902",
+            "end_location": {
+              "lat": 1.2975474,
+              "lng": 103.8493585
+            },
+            "start_address": "Singapore 510767",
+            "start_location": {
+              "lat": 1.3756664,
+              "lng": 103.9356795
+            },
+            "steps": [
+              {
+                "distance": {
+                  "text": "0.2 km",
+                  "value": 198
+                },
+                "duration": {
+                  "text": "3 mins",
+                  "value": 155
+                },
+                "end_location": {
+                  "lat": 1.3758277,
+                  "lng": 103.9368724
+                },
+                "html_instructions": "Walk to Bet Blks 771/772",
+                "polyline": {
+                  "points": "}tkG_}jyRV_@T[DI@EAC?AEAqAu@KGIIUKFKf@y@"
+                },
+                "start_location": {
+                  "lat": 1.3756664,
+                  "lng": 103.9356795
+                },
+                "steps": [
+                  {
+                    "distance": {
+                      "text": "0.2 km",
+                      "value": 153
+                    },
+                    "duration": {
+                      "text": "2 mins",
+                      "value": 119
+                    },
+                    "end_location": {
+                      "lat": 1.3760747,
+                      "lng": 103.9365163
+                    },
+                    "html_instructions": "Head <b>southeast</b> toward <b>Pasir Ris Street 71</b>",
+                    "polyline": {
+                      "points": "}tkG_}jyRV_@T[DI@EAC?AEAqAu@KGIIUK"
+                    },
+                    "start_location": {
+                      "lat": 1.3756664,
+                      "lng": 103.9356795
+                    },
+                    "travel_mode": "WALKING"
+                  },
+                  {
+                    "distance": {
+                      "text": "45 m",
+                      "value": 45
+                    },
+                    "duration": {
+                      "text": "1 min",
+                      "value": 36
+                    },
+                    "end_location": {
+                      "lat": 1.3758277,
+                      "lng": 103.9368724
+                    },
+                    "html_instructions": "Turn <b>right</b> onto <b>Pasir Ris Street 71</b>",
+                    "maneuver": "turn-right",
+                    "polyline": {
+                      "points": "mwkGgbkyRFKf@y@"
+                    },
+                    "start_location": {
+                      "lat": 1.3760747,
+                      "lng": 103.9365163
+                    },
+                    "travel_mode": "WALKING"
+                  }
+                ],
+                "travel_mode": "WALKING"
+              },
+              {
+                "distance": {
+                  "text": "4.2 km",
+                  "value": 4169
+                },
+                "duration": {
+                  "text": "17 mins",
+                  "value": 1033
+                },
+                "end_location": {
+                  "lat": 1.357469,
+                  "lng": 103.940773
+                },
+                "html_instructions": "Bus towards Tampines International",
+                "polyline": {
+                  "points": "{ukGmdkyRGCm@`AYd@s@jAKGa@Wi@]mBgAEACC[U[UEAC?ECEC_@j@i@v@U\\ILa@j@m@x@SXW\\a@n@[d@q@~@CHELCLAL?J@JFRVPlAv@vA|@^R\\RFDTLnAz@~@b@^LrAd@RJhA`@fCx@TFx@XjBn@nAd@v@\\~Aj@d@NlA^bAVn@Nv@HXBp@Dd@BX@H?Z?f@AZAF?DATAF?@AN?b@GbAIn@Gj@Er@ErAQTE`@ApBQ\\ALAnAGTAtAClA?V?d@QFCHIFIDIDG?yBAiC@S?kB?I?Y?c@AI?Y?EAQGeACSGs@Gk@CIIe@Ia@CMMc@M_@M]?AGQAK?CAA@A@OBO?CHOFIFKbBkA@?^YZUZYTOb@YJI@ALITQHGRKTOFEROHCLGNIJETI\\IB?`@E@?b@ALATAb@?FAj@?v@@R?x@AB?dC@b@?t@?J?Z?N?l@?hA@@ECi@C}A@{A@QZ?J?h@?J?n@?xB?J?PAXCJEFCHIn@m@`AiALMPQzAuALMCC"
+                },
+                "start_location": {
+                  "lat": 1.37582,
+                  "lng": 103.936867
+                },
+                "transit_details": {
+                  "arrival_stop": {
+                    "location": {
+                      "lat": 1.357469,
+                      "lng": 103.940773
+                    },
+                    "name": "Opp Blk 519a"
+                  },
+                  "arrival_time": {
+                    "text": "7:06\u202fAM",
+                    "time_zone": "Asia/Singapore",
+                    "value": 1742771184
+                  },
+                  "departure_stop": {
+                    "location": {
+                      "lat": 1.37582,
+                      "lng": 103.936867
+                    },
+                    "name": "Bet Blks 771/772"
+                  },
+                  "departure_time": {
+                    "text": "6:49\u202fAM",
+                    "time_zone": "Asia/Singapore",
+                    "value": 1742770151
+                  },
+                  "headsign": "Tampines International",
+                  "headway": 900,
+                  "line": {
+                    "agencies": [
+                      {
+                        "name": "Go-Ahead Singapore",
+                        "phone": "011 65 6812 6458",
+                        "url": "https://www.go-aheadsingapore.com/en-sg/"
+                      }
+                    ],
+                    "color": "#55dd33",
+                    "name": "68",
+                    "text_color": "#000000",
+                    "vehicle": {
+                      "icon": "//maps.gstatic.com/mapfiles/transit/iw2/6/bus2.png",
+                      "name": "Bus",
+                      "type": "BUS"
+                    }
+                  },
+                  "num_stops": 12
+                },
+                "travel_mode": "TRANSIT"
+              },
+              {
+                "distance": {
+                  "text": "0.4 km",
+                  "value": 371
+                },
+                "duration": {
+                  "text": "5 mins",
+                  "value": 319
+                },
+                "end_location": {
+                  "lat": 1.35508,
+                  "lng": 103.94306
+                },
+                "html_instructions": "Walk to Tampines",
+                "polyline": {
+                  "points": "echG{|kyRr@q@FGFE@CPQ|@y@jAoAZ]|@_A^_@WYxCoA"
+                },
+                "start_location": {
+                  "lat": 1.357474,
+                  "lng": 103.9407783
+                },
+                "steps": [
+                  {
+                    "distance": {
+                      "text": "0.3 km",
+                      "value": 275
+                    },
+                    "duration": {
+                      "text": "4 mins",
+                      "value": 222
+                    },
+                    "end_location": {
+                      "lat": 1.3557263,
+                      "lng": 103.9425282
+                    },
+                    "html_instructions": "Head <b>southeast</b> on <b>Tampines Concourse</b> toward <b>Tampines Central 8</b><div style=\"font-size:0.9em\">Destination will be on the left</div>",
+                    "polyline": {
+                      "points": "echG{|kyRr@q@FGFE@CPQ|@y@jAoAZ]|@_A^_@"
+                    },
+                    "start_location": {
+                      "lat": 1.357474,
+                      "lng": 103.9407783
+                    },
+                    "travel_mode": "WALKING"
+                  },
+                  {
+                    "distance": {
+                      "text": "0.1 km",
+                      "value": 96
+                    },
+                    "duration": {
+                      "text": "2 mins",
+                      "value": 97
+                    },
+                    "end_location": {
+                      "lat": 1.35508,
+                      "lng": 103.94306
+                    },
+                    "html_instructions": "Take entrance <span class=\"location\">E</span>",
+                    "polyline": {
+                      "points": "aygGshlyRxCoA"
+                    },
+                    "start_location": {
+                      "lat": 1.3558534,
+                      "lng": 103.9426588
+                    },
+                    "travel_mode": "WALKING"
+                  }
+                ],
+                "travel_mode": "WALKING"
+              },
+              {
+                "distance": {
+                  "text": "13.8 km",
+                  "value": 13783
+                },
+                "duration": {
+                  "text": "23 mins",
+                  "value": 1380
+                },
+                "end_location": {
+                  "lat": 1.29886,
+                  "lng": 103.85038
+                },
+                "html_instructions": "Subway towards Bukit Panjang",
+                "polyline": {
+                  "points": "gtgGcklyRMN`B|AxUnX`Bf@lBH~V_AxBCvDCjOeAdRJ~Cr@vBpAnAvCx@xEh@jOT`C@~C?@@xJ|Cd^fDrMbAnWStBk@~Aa@dAiGfTc@|CHtBhFzPz@pGFf@`BzLhFxMlJ~IjG|IjA~DBJ|@~CjKx_@nC|OHb@Jd@nCbNY~IeCfLe@bCQz@aAzEw@fCArAb@fClAfBbO`KzDtLvJlTLVvSn`@nEnDdNvElBx@`B~An@|APl@?@rAbFp@tAzBjC~DrEjAhAdDnC`HdGdMdHbAb@tAt@@?nAv@`Al@t@^fE`CzAdANLtNzKdH~F@@DG"
+                },
+                "start_location": {
+                  "lat": 1.35508,
+                  "lng": 103.94306
+                },
+                "transit_details": {
+                  "arrival_stop": {
+                    "location": {
+                      "lat": 1.29886,
+                      "lng": 103.85038
+                    },
+                    "name": "Bencoolen"
+                  },
+                  "arrival_time": {
+                    "text": "7:40\u202fAM",
+                    "time_zone": "Asia/Singapore",
+                    "value": 1742773243
+                  },
+                  "departure_stop": {
+                    "location": {
+                      "lat": 1.35508,
+                      "lng": 103.94306
+                    },
+                    "name": "Tampines"
+                  },
+                  "departure_time": {
+                    "text": "7:17\u202fAM",
+                    "time_zone": "Asia/Singapore",
+                    "value": 1742771863
+                  },
+                  "headsign": "Bukit Panjang",
+                  "headway": 360,
+                  "line": {
+                    "agencies": [
+                      {
+                        "name": "SBS Transit",
+                        "phone": "011 65 1800 287 2727",
+                        "url": "http://www.sbstransit.com.sg/"
+                      }
+                    ],
+                    "color": "#0354a6",
+                    "name": "Downtown Line",
+                    "short_name": "DT",
+                    "text_color": "#ffffff",
+                    "vehicle": {
+                      "icon": "//maps.gstatic.com/mapfiles/transit/iw2/6/subway2.png",
+                      "name": "Subway",
+                      "type": "SUBWAY"
+                    }
+                  },
+                  "num_stops": 11
+                },
+                "travel_mode": "TRANSIT"
+              },
+              {
+                "distance": {
+                  "text": "0.2 km",
+                  "value": 191
+                },
+                "duration": {
+                  "text": "3 mins",
+                  "value": 194
+                },
+                "end_location": {
+                  "lat": 1.2975474,
+                  "lng": 103.8493585
+                },
+                "html_instructions": "Walk to 80 Stamford Rd, Singapore 178902",
+                "polyline": {
+                  "points": "{t|F{gzxRdDjD@AGGGLB@TPHIDDDBTN^GB?@?@?"
+                },
+                "start_location": {
+                  "lat": 1.29886,
+                  "lng": 103.85038
+                },
+                "steps": [
+                  {
+                    "distance": {
+                      "text": "0.1 km",
+                      "value": 132
+                    },
+                    "duration": {
+                      "text": "2 mins",
+                      "value": 133
+                    },
+                    "end_location": {
+                      "lat": 1.29803,
+                      "lng": 103.84952
+                    },
+                    "html_instructions": "Take exit <span class=\"location\">B</span>",
+                    "polyline": {
+                      "points": "{t|F{gzxRdDjD"
+                    },
+                    "start_location": {
+                      "lat": 1.29886,
+                      "lng": 103.85038
+                    },
+                    "travel_mode": "WALKING"
+                  },
+                  {
+                    "distance": {
+                      "text": "38 m",
+                      "value": 38
+                    },
+                    "duration": {
+                      "text": "1 min",
+                      "value": 41
+                    },
+                    "end_location": {
+                      "lat": 1.297753,
+                      "lng": 103.8493159
+                    },
+                    "html_instructions": "Head <b>southwest</b> on <b>Bencoolen St</b> toward <b>Bras Basah Rd</b>",
+                    "polyline": {
+                      "points": "so|FqbzxRGGGLB@TPHIDDDBTN"
+                    },
+                    "start_location": {
+                      "lat": 1.2980197,
+                      "lng": 103.8495304
+                    },
+                    "travel_mode": "WALKING"
+                  },
+                  {
+                    "distance": {
+                      "text": "21 m",
+                      "value": 21
+                    },
+                    "duration": {
+                      "text": "1 min",
+                      "value": 20
+                    },
+                    "end_location": {
+                      "lat": 1.2975474,
+                      "lng": 103.8493585
+                    },
+                    "html_instructions": "Slight <b>left</b><div style=\"font-size:0.9em\">Destination will be on the left</div>",
+                    "maneuver": "turn-slight-left",
+                    "polyline": {
+                      "points": "}m|FgazxR^GB?@?@?"
+                    },
+                    "start_location": {
+                      "lat": 1.297753,
+                      "lng": 103.8493159
+                    },
+                    "travel_mode": "WALKING"
+                  }
+                ],
+                "travel_mode": "WALKING"
+              }
+            ],
+            "traffic_speed_entry": [],
+            "via_waypoint": []
+          }
+        ],
+        "overview_polyline": {
+          "points": "}tkG_}jyRl@{@FOGG}BsAn@eAECgAfBs@jAKGkAu@sBiA_@Ya@WICEC_@j@_AtAk@x@{B`DmAdBIVEZ@VFRVPdDtBzAz@nAz@~@b@rBr@|Al@|C`AdDhAfCbAdCz@pCv@n@Nv@HjAHdBDnBGxBSzAMr@ErAQv@GnCShEOdB?l@U\\e@AcG@_CAqAIwBW}BSgAQq@c@qAASD_@HSNUdBkAlByArBuAp@e@r@[v@Sb@EfAEnC?vE?`C?|@?hA@@EGgCBmB|A?fEAd@IPMpCwChBcBCEdAcAnAkAfBmB|A_BWYxCoAMN`B|AxUnX`Bf@lBH~V_AxBCvDCjOeAdRJ~Cr@vBpAnAvCx@xEh@jOT`C@~C@zJ|Cd^fDrMbAnWStBk@~Aa@dAiGfTc@|CHtBhFzPz@pGFf@`BzLhFxMlJ~IjG|InAjEhMxd@xC`QJd@nCbNY~IkDjPQz@aAzEw@fCArAb@fClAfBbO`KzDtLvJlTLVvSn`@nEnDdNvElBx@`B~An@|APn@rAbFp@tAzH~IjAhAdDnC`HdGdMdHxCxApAv@vBlAfE`CzAdAdOhLfH`GDGdDjDEIGLB@TPHIJHTN^GD?@?"
+        },
+        "summary": "",
+        "warnings": [
+          "Walking directions are in beta. Use caution \u2013 This route may be missing sidewalks or pedestrian paths."
+        ],
+        "waypoint_order": []
+      },
+      {
+        "bounds": {
+          "northeast": {
+            "lat": 1.3813749,
+            "lng": 103.9369112
+          },
+          "southwest": {
+            "lat": 1.2971398,
+            "lng": 103.8450285
+          }
+        },
+        "copyrights": "Powered by Google, \u00a92025 Google",
+        "legs": [
+          {
+            "arrival_time": {
+              "text": "7:42\u202fAM",
+              "time_zone": "Asia/Singapore",
+              "value": 1742773362
+            },
+            "departure_time": {
+              "text": "6:49\u202fAM",
+              "time_zone": "Asia/Singapore",
+              "value": 1742770149
+            },
+            "distance": {
+              "text": "17.4 km",
+              "value": 17441
+            },
+            "duration": {
+              "text": "54 mins",
+              "value": 3213
+            },
+            "end_address": "80 Stamford Rd, Singapore 178902",
+            "end_location": {
+              "lat": 1.2975474,
+              "lng": 103.8493585
+            },
+            "start_address": "Singapore 510767",
+            "start_location": {
+              "lat": 1.3756664,
+              "lng": 103.9356795
+            },
+            "steps": [
+              {
+                "distance": {
+                  "text": "0.5 km",
+                  "value": 538
+                },
+                "duration": {
+                  "text": "7 mins",
+                  "value": 433
+                },
+                "end_location": {
+                  "lat": 1.3783398,
+                  "lng": 103.9361642
+                },
+                "html_instructions": "Walk to Blk 740",
+                "polyline": {
+                  "points": "}tkG_}jyRV_@T[DI@EAC?AEAqAu@KGIIUKW`@s@jACDKGKG[Si@]sBkACA]UYSEAKE[d@g@x@UZJH@@EFCD"
+                },
+                "start_location": {
+                  "lat": 1.3756664,
+                  "lng": 103.9356795
+                },
+                "steps": [
+                  {
+                    "distance": {
+                      "text": "0.2 km",
+                      "value": 153
+                    },
+                    "duration": {
+                      "text": "2 mins",
+                      "value": 119
+                    },
+                    "end_location": {
+                      "lat": 1.3760747,
+                      "lng": 103.9365163
+                    },
+                    "html_instructions": "Head <b>southeast</b> toward <b>Pasir Ris Street 71</b>",
+                    "polyline": {
+                      "points": "}tkG_}jyRV_@T[DI@EAC?AEAqAu@KGIIUK"
+                    },
+                    "start_location": {
+                      "lat": 1.3756664,
+                      "lng": 103.9356795
+                    },
+                    "travel_mode": "WALKING"
+                  },
+                  {
+                    "distance": {
+                      "text": "77 m",
+                      "value": 77
+                    },
+                    "duration": {
+                      "text": "1 min",
+                      "value": 64
+                    },
+                    "end_location": {
+                      "lat": 1.3764733,
+                      "lng": 103.9359428
+                    },
+                    "html_instructions": "Turn <b>left</b> onto <b>Pasir Ris Street 71</b>",
+                    "maneuver": "turn-left",
+                    "polyline": {
+                      "points": "mwkGgbkyRW`@s@jACD"
+                    },
+                    "start_location": {
+                      "lat": 1.3760747,
+                      "lng": 103.9365163
+                    },
+                    "travel_mode": "WALKING"
+                  },
+                  {
+                    "distance": {
+                      "text": "0.2 km",
+                      "value": 193
+                    },
+                    "duration": {
+                      "text": "3 mins",
+                      "value": 154
+                    },
+                    "end_location": {
+                      "lat": 1.3779073,
+                      "lng": 103.9369112
+                    },
+                    "html_instructions": "Turn <b>right</b> onto <b>Pasir Ris Drive 10</b>",
+                    "maneuver": "turn-right",
+                    "polyline": {
+                      "points": "}ykGs~jyRKGKG[Si@]sBkACA]UYSEAKE"
+                    },
+                    "start_location": {
+                      "lat": 1.3764733,
+                      "lng": 103.9359428
+                    },
+                    "travel_mode": "WALKING"
+                  },
+                  {
+                    "distance": {
+                      "text": "89 m",
+                      "value": 89
+                    },
+                    "duration": {
+                      "text": "1 min",
+                      "value": 71
+                    },
+                    "end_location": {
+                      "lat": 1.3783604,
+                      "lng": 103.9362874
+                    },
+                    "html_instructions": "Turn <b>left</b> onto <b>Pasir Ris Dr 1</b>",
+                    "maneuver": "turn-left",
+                    "polyline": {
+                      "points": "}blGudkyR[d@g@x@UZ"
+                    },
+                    "start_location": {
+                      "lat": 1.3779073,
+                      "lng": 103.9369112
+                    },
+                    "travel_mode": "WALKING"
+                  },
+                  {
+                    "distance": {
+                      "text": "18 m",
+                      "value": 18
+                    },
+                    "duration": {
+                      "text": "1 min",
+                      "value": 19
+                    },
+                    "end_location": {
+                      "lat": 1.3782904,
+                      "lng": 103.9362294
+                    },
+                    "html_instructions": "Turn <b>left</b><div style=\"font-size:0.9em\">Take the stairs</div>",
+                    "maneuver": "turn-left",
+                    "polyline": {
+                      "points": "welGy`kyRJH@@"
+                    },
+                    "start_location": {
+                      "lat": 1.3783604,
+                      "lng": 103.9362874
+                    },
+                    "travel_mode": "WALKING"
+                  },
+                  {
+                    "distance": {
+                      "text": "8 m",
+                      "value": 8
+                    },
+                    "duration": {
+                      "text": "1 min",
+                      "value": 6
+                    },
+                    "end_location": {
+                      "lat": 1.3783398,
+                      "lng": 103.9361642
+                    },
+                    "html_instructions": "Turn <b>right</b><div style=\"font-size:0.9em\">Partial restricted usage road</div>",
+                    "maneuver": "turn-right",
+                    "polyline": {
+                      "points": "ielGm`kyREFCD"
+                    },
+                    "start_location": {
+                      "lat": 1.3782904,
+                      "lng": 103.9362294
+                    },
+                    "travel_mode": "WALKING"
+                  }
+                ],
+                "travel_mode": "WALKING"
+              },
+              {
+                "distance": {
+                  "text": "7.9 km",
+                  "value": 7920
+                },
+                "duration": {
+                  "text": "19 mins",
+                  "value": 1148
+                },
+                "end_location": {
+                  "lat": 1.3600754,
+                  "lng": 103.8853439
+                },
+                "html_instructions": "Bus towards Tampines",
+                "polyline": {
+                  "points": "yelGe`kyRMIa@j@m@x@SXW\\a@n@[d@q@~@CHELCLAL?J@JFRVPlAv@vA|@^R\\RFDTLnAz@~@b@^LrAd@RJhA`@fCx@TFITGL?B?@A@?@?@?B?VB\\@P?VCPGVMXO^GLGPANc@z@MV]r@[x@IPIVCHSn@Wv@Wx@Ql@CJI\\EHCHQZ_@pBy@tFg@xDWbB_@tBUbASt@[nA_@rA]fAEPGNk@`Bu@rBARAHEJMb@O\\Wl@Yp@MVMVKVq@bBy@jBWf@OTYb@WZMTMVCDIRC^?b@F`@Zl@b@`@lAx@fA`AfAfAt@|@f@t@T\\DDb@|@h@fAj@jAl@jAl@jAvApCd@`AXh@b@p@T\\h@p@JNZ^ZZd@`@b@\\b@Xj@^h@Xz@b@v@Vp@RlCn@zEjAhAXpCn@jATj@L`ARB?XFB?B@r@NfKfCn@NjB`@`Dr@TCJ?f@FjARrARF@r@LPDp@Rd@NdBp@hC`A^Nd@PNJXXl@z@@N@@@LBPBP?B@HNpBV|CHrAJ|@B`@Rj@DRL`@J\\BNDV@H@R@N@JBf@Bj@B^B^Lp@Ht@Dn@Fl@Dp@@JD|@Fx@Fp@@`@?BFz@Df@Dv@@HBb@@J@n@Ab@E^K`@CPAP?ZFx@Dx@Ff@@PBh@@DFvA@^Dd@FfA@h@Dh@Dn@Bb@BXU@k@Do@D[@o@DG@cAHc@BUBWBe@J[H[L]N_@PMFQHC@IFIFGDq@l@gA`AKHmAhAMLGb@AFAFCRbBfBx@~@TVPLRRHJFFjAlAbAdAn@r@XZRT\\^Z\\RPp@t@VVHJ^`@^b@`@`@BBPPLL\\^r@r@PNLLJJb@h@V\\PRHLt@`AFFXU"
+                },
+                "start_location": {
+                  "lat": 1.378372,
+                  "lng": 103.936188
+                },
+                "transit_details": {
+                  "arrival_stop": {
+                    "location": {
+                      "lat": 1.3600754,
+                      "lng": 103.8853439
+                    },
+                    "name": "Kovan Stn Exit C"
+                  },
+                  "arrival_time": {
+                    "text": "7:15\u202fAM",
+                    "time_zone": "Asia/Singapore",
+                    "value": 1742771732
+                  },
+                  "departure_stop": {
+                    "location": {
+                      "lat": 1.378372,
+                      "lng": 103.936188
+                    },
+                    "name": "Blk 740"
+                  },
+                  "departure_time": {
+                    "text": "6:56\u202fAM",
+                    "time_zone": "Asia/Singapore",
+                    "value": 1742770584
+                  },
+                  "headsign": "Tampines",
+                  "headway": 540,
+                  "line": {
+                    "agencies": [
+                      {
+                        "name": "SBS Transit",
+                        "phone": "011 65 1800 225 5663",
+                        "url": "https://www.sbstransit.com.sg/"
+                      }
+                    ],
+                    "color": "#55dd33",
+                    "name": "81",
+                    "text_color": "#000000",
+                    "vehicle": {
+                      "icon": "//maps.gstatic.com/mapfiles/transit/iw2/6/bus2.png",
+                      "name": "Bus",
+                      "type": "BUS"
+                    }
+                  },
+                  "num_stops": 8
+                },
+                "travel_mode": "TRANSIT"
+              },
+              {
+                "distance": {
+                  "text": "70 m",
+                  "value": 70
+                },
+                "duration": {
+                  "text": "1 min",
+                  "value": 71
+                },
+                "end_location": {
+                  "lat": 1.36018,
+                  "lng": 103.88506
+                },
+                "html_instructions": "Walk to Kovan",
+                "polyline": {
+                  "points": "qthG}bayRj@C]lA"
+                },
+                "start_location": {
+                  "lat": 1.3602452,
+                  "lng": 103.8854278
+                },
+                "steps": [
+                  {
+                    "distance": {
+                      "text": "24 m",
+                      "value": 24
+                    },
+                    "duration": {
+                      "text": "1 min",
+                      "value": 24
+                    },
+                    "end_location": {
+                      "lat": 1.360028,
+                      "lng": 103.8854506
+                    },
+                    "polyline": {
+                      "points": "qthG}bayRj@C"
+                    },
+                    "start_location": {
+                      "lat": 1.3602452,
+                      "lng": 103.8854278
+                    },
+                    "travel_mode": "WALKING"
+                  },
+                  {
+                    "distance": {
+                      "text": "46 m",
+                      "value": 46
+                    },
+                    "duration": {
+                      "text": "1 min",
+                      "value": 47
+                    },
+                    "end_location": {
+                      "lat": 1.36018,
+                      "lng": 103.88506
+                    },
+                    "html_instructions": "Take entrance <span class=\"location\">C</span>",
+                    "polyline": {
+                      "points": "eshGacayR]lA"
+                    },
+                    "start_location": {
+                      "lat": 1.360028,
+                      "lng": 103.8854506
+                    },
+                    "travel_mode": "WALKING"
+                  }
+                ],
+                "travel_mode": "WALKING"
+              },
+              {
+                "distance": {
+                  "text": "8.3 km",
+                  "value": 8345
+                },
+                "duration": {
+                  "text": "15 mins",
+                  "value": 900
+                },
+                "end_location": {
+                  "lat": 1.29971,
+                  "lng": 103.84549
+                },
+                "html_instructions": "Subway towards Harbourfront",
+                "polyline": {
+                  "points": "cthGs`ayREDRRfKtK^^bLxLrHjJlItJh@j@RPzIvIvApAhCpBp@h@fAt@xAbA|@n@f@\\`B|@tElBjCz@jCx@fDl@nABhCApA?xIFn@DnGXR@jBHnDXtJ|@bCRXFRDLBpDx@jH`BdFz@fC`@`J~Al@Rj@Pp@XtJvFfE|CnEbDxRrNfGnDx@r@LLXVpE~D~b@xe@LNBBpBfBxG|F`EpCpAp@^Pz@d@rGhDnBbAz@d@vEzCx@h@`IdFZTz@h@pCfBfFfDrEvC`A{A"
+                },
+                "start_location": {
+                  "lat": 1.36018,
+                  "lng": 103.88506
+                },
+                "transit_details": {
+                  "arrival_stop": {
+                    "location": {
+                      "lat": 1.29971,
+                      "lng": 103.84549
+                    },
+                    "name": "Dhoby Ghaut"
+                  },
+                  "arrival_time": {
+                    "text": "7:34\u202fAM",
+                    "time_zone": "Asia/Singapore",
+                    "value": 1742772883
+                  },
+                  "departure_stop": {
+                    "location": {
+                      "lat": 1.36018,
+                      "lng": 103.88506
+                    },
+                    "name": "Kovan"
+                  },
+                  "departure_time": {
+                    "text": "7:19\u202fAM",
+                    "time_zone": "Asia/Singapore",
+                    "value": 1742771983
+                  },
+                  "headsign": "Harbourfront",
+                  "headway": 180,
+                  "line": {
+                    "agencies": [
+                      {
+                        "name": "SBS Transit",
+                        "phone": "011 65 1800 287 2727",
+                        "url": "http://www.sbstransit.com.sg/"
+                      }
+                    ],
+                    "color": "#844184",
+                    "name": "North East Line",
+                    "short_name": "NE",
+                    "text_color": "#ffffff",
+                    "vehicle": {
+                      "icon": "//maps.gstatic.com/mapfiles/transit/iw2/6/subway2.png",
+                      "name": "Subway",
+                      "type": "SUBWAY"
+                    }
+                  },
+                  "num_stops": 7
+                },
+                "travel_mode": "TRANSIT"
+              },
+              {
+                "distance": {
+                  "text": "0.6 km",
+                  "value": 568
+                },
+                "duration": {
+                  "text": "8 mins",
+                  "value": 479
+                },
+                "end_location": {
+                  "lat": 1.2975474,
+                  "lng": 103.8493585
+                },
+                "html_instructions": "Walk to 80 Stamford Rd, Singapore 178902",
+                "polyline": {
+                  "points": "ez|FiiyxRGVfATFWHc@FSFKD@XHRw@b@iBPo@@EBIDIBGDOBM@M@M?U?E?G?A?A@?@?DAHAD??AD?D?PGCEDMDKBKFI`@e@BIHOV]V_@t@_A@?@ABA@?@?DEA??AA?NO?DHGLKACk@s@IIKI?GAA?AAACCCAAA"
+                },
+                "start_location": {
+                  "lat": 1.29971,
+                  "lng": 103.84549
+                },
+                "steps": [
+                  {
+                    "distance": {
+                      "text": "13 m",
+                      "value": 13
+                    },
+                    "duration": {
+                      "text": "1 min",
+                      "value": 14
+                    },
+                    "end_location": {
+                      "lat": 1.2997485,
+                      "lng": 103.8453723
+                    },
+                    "html_instructions": "Take exit <span class=\"location\">E</span>",
+                    "polyline": {
+                      "points": "ez|FiiyxRGV"
+                    },
+                    "start_location": {
+                      "lat": 1.29971,
+                      "lng": 103.84549
+                    },
+                    "travel_mode": "WALKING"
+                  },
+                  {
+                    "distance": {
+                      "text": "48 m",
+                      "value": 48
+                    },
+                    "duration": {
+                      "text": "1 min",
+                      "value": 38
+                    },
+                    "end_location": {
+                      "lat": 1.299195,
+                      "lng": 103.8457108
+                    },
+                    "html_instructions": "Head <b>east</b> on <b>Orchard Rd</b>",
+                    "polyline": {
+                      "points": "ex|F{gyxRFWHc@FSFKD@"
+                    },
+                    "start_location": {
+                      "lat": 1.2993924,
+                      "lng": 103.8452577
+                    },
+                    "travel_mode": "WALKING"
+                  },
+                  {
+                    "distance": {
+                      "text": "7 m",
+                      "value": 7
+                    },
+                    "duration": {
+                      "text": "1 min",
+                      "value": 15
+                    },
+                    "end_location": {
+                      "lat": 1.2990624,
+                      "lng": 103.8456602
+                    },
+                    "html_instructions": "Turn <b>right</b>",
+                    "maneuver": "turn-right",
+                    "polyline": {
+                      "points": "}v|FujyxRXH"
+                    },
+                    "start_location": {
+                      "lat": 1.299195,
+                      "lng": 103.8457108
+                    },
+                    "travel_mode": "WALKING"
+                  },
+                  {
+                    "distance": {
+                      "text": "0.2 km",
+                      "value": 228
+                    },
+                    "duration": {
+                      "text": "3 mins",
+                      "value": 183
+                    },
+                    "end_location": {
+                      "lat": 1.2984057,
+                      "lng": 103.8473967
+                    },
+                    "html_instructions": "Turn <b>left</b>",
+                    "maneuver": "turn-left",
+                    "polyline": {
+                      "points": "cv|FkjyxRRw@b@iBPo@@EBIDIBGDOBM@M@M?U?E?G?A?A@?@?DAHAD??A"
+                    },
+                    "start_location": {
+                      "lat": 1.2990624,
+                      "lng": 103.8456602
+                    },
+                    "travel_mode": "WALKING"
+                  },
+                  {
+                    "distance": {
+                      "text": "6 m",
+                      "value": 6
+                    },
+                    "duration": {
+                      "text": "1 min",
+                      "value": 5
+                    },
+                    "end_location": {
+                      "lat": 1.2982641,
+                      "lng": 103.8474376
+                    },
+                    "html_instructions": "Slight <b>right</b> onto <b>Handy Rd</b>",
+                    "maneuver": "turn-slight-right",
+                    "polyline": {
+                      "points": "ar|FguyxRD?D?PG"
+                    },
+                    "start_location": {
+                      "lat": 1.2984057,
+                      "lng": 103.8473967
+                    },
+                    "travel_mode": "WALKING"
+                  },
+                  {
+                    "distance": {
+                      "text": "0.2 km",
+                      "value": 202
+                    },
+                    "duration": {
+                      "text": "3 mins",
+                      "value": 172
+                    },
+                    "end_location": {
+                      "lat": 1.2971505,
+                      "lng": 103.8488946
+                    },
+                    "html_instructions": "Turn <b>left</b> onto <b>Orchard Rd</b>",
+                    "maneuver": "turn-left",
+                    "polyline": {
+                      "points": "cq|FouyxRCEDMDKBKFI`@e@BIHOV]V_@t@_A@?@ABA@?@?DEA??AA?NO?DHGLKAC"
+                    },
+                    "start_location": {
+                      "lat": 1.2982641,
+                      "lng": 103.8474376
+                    },
+                    "travel_mode": "WALKING"
+                  },
+                  {
+                    "distance": {
+                      "text": "35 m",
+                      "value": 35
+                    },
+                    "duration": {
+                      "text": "1 min",
+                      "value": 30
+                    },
+                    "end_location": {
+                      "lat": 1.2974771,
+                      "lng": 103.8492493
+                    },
+                    "html_instructions": "Turn <b>left</b> onto <b>Bencoolen St</b>",
+                    "maneuver": "turn-left",
+                    "polyline": {
+                      "points": "ej|Fq~yxRk@s@IIKI"
+                    },
+                    "start_location": {
+                      "lat": 1.2971505,
+                      "lng": 103.8488946
+                    },
+                    "travel_mode": "WALKING"
+                  },
+                  {
+                    "distance": {
+                      "text": "29 m",
+                      "value": 29
+                    },
+                    "duration": {
+                      "text": "1 min",
+                      "value": 22
+                    },
+                    "end_location": {
+                      "lat": 1.2975474,
+                      "lng": 103.8493585
+                    },
+                    "html_instructions": "Turn <b>right</b><div style=\"font-size:0.9em\">Destination will be on the left</div>",
+                    "maneuver": "turn-right",
+                    "polyline": {
+                      "points": "gl|Fy`zxR?GAA?AAACCCAAA"
+                    },
+                    "start_location": {
+                      "lat": 1.2974771,
+                      "lng": 103.8492493
+                    },
+                    "travel_mode": "WALKING"
+                  }
+                ],
+                "travel_mode": "WALKING"
+              }
+            ],
+            "traffic_speed_entry": [],
+            "via_waypoint": []
+          }
+        ],
+        "overview_polyline": {
+          "points": "}tkG_}jyRl@{@FOGG}BsAkAlBCDKGg@[}CiBa@W_@UKE[d@}@tALJILSOoAdBiBlCu@hAIZAXH^|EzCd@XdBhA~Ap@fBp@pEzATFITGPAB?^Dn@Ch@Up@Wl@I`@q@rAmAvCgAjDe@`BUd@_@pBy@tF_A|Gu@xDmB`Hy@bCu@rBARGT]`Aq@~AyAjDqArCi@x@e@p@Q\\IRC^?b@F`@Zl@b@`@lAx@fA`AfAfAt@|@|@rA~BvExEjJ|@zA~@nAf@n@`A|@fAv@tAx@z@b@v@V~DbAdHdB|EdAjCh@bMxCzCp@`Dr@TCr@F~Cf@z@NbAXtHrCt@\\XXl@z@BPD^TpC`@pFN~Ar@~BLdAJnBF~@VfBTzCVjER~CHhBGbAOr@Al@LrBNhBVdFPfDBXU@{AJwCRy@F}@Nw@V}@`@m@ZkC|ByArAMLGb@CNCRbBfBnAvAd@`@`DfDzBdCxB|BlDvD~A|AvAhB|@hAXUa@Qj@Cc@rA~Yb[rHjJlItJ|@|@zIvIvApAzDzCfGfE`B|@tElBvGtBfDl@nABzEAxIFn@DbHZjBHnDXxNpAlFjAjH`BdFz@hN`CxAd@p@XtJvFvK`IxRrNfGnDfA`AjFvElc@hf@tBjBxG|F`EpCpBbAzNxHxf@r[`A{AGVfATFWPw@FKD@XHRw@t@yCNa@Ly@?e@HCTCVGCEDMHWh@o@LYn@}@v@_ADCB?DEAALO?DVSm@w@USCMIG"
+        },
+        "summary": "",
+        "warnings": [
+          "Walking directions are in beta. Use caution \u2013 This route may be missing sidewalks or pedestrian paths."
+        ],
+        "waypoint_order": []
+      },
+      {
+        "bounds": {
+          "northeast": {
+            "lat": 1.3813749,
+            "lng": 103.9369112
+          },
+          "southwest": {
+            "lat": 1.2971398,
+            "lng": 103.8450285
+          }
+        },
+        "copyrights": "Powered by Google, \u00a92025 Google",
+        "legs": [
+          {
+            "arrival_time": {
+              "text": "7:44\u202fAM",
+              "time_zone": "Asia/Singapore",
+              "value": 1742773473
+            },
+            "departure_time": {
+              "text": "6:46\u202fAM",
+              "time_zone": "Asia/Singapore",
+              "value": 1742769976
+            },
+            "distance": {
+              "text": "17.9 km",
+              "value": 17854
+            },
+            "duration": {
+              "text": "58 mins",
+              "value": 3497
+            },
+            "end_address": "80 Stamford Rd, Singapore 178902",
+            "end_location": {
+              "lat": 1.2975474,
+              "lng": 103.8493585
+            },
+            "start_address": "Singapore 510767",
+            "start_location": {
+              "lat": 1.3756664,
+              "lng": 103.9356795
+            },
+            "steps": [
+              {
+                "distance": {
+                  "text": "0.5 km",
+                  "value": 538
+                },
+                "duration": {
+                  "text": "7 mins",
+                  "value": 433
+                },
+                "end_location": {
+                  "lat": 1.3783398,
+                  "lng": 103.9361642
+                },
+                "html_instructions": "Walk to Blk 740",
+                "polyline": {
+                  "points": "}tkG_}jyRV_@T[DI@EAC?AEAqAu@KGIIUKW`@s@jACDKGKG[Si@]sBkACA]UYSEAKE[d@g@x@UZJH@@EFCD"
+                },
+                "start_location": {
+                  "lat": 1.3756664,
+                  "lng": 103.9356795
+                },
+                "steps": [
+                  {
+                    "distance": {
+                      "text": "0.2 km",
+                      "value": 153
+                    },
+                    "duration": {
+                      "text": "2 mins",
+                      "value": 119
+                    },
+                    "end_location": {
+                      "lat": 1.3760747,
+                      "lng": 103.9365163
+                    },
+                    "html_instructions": "Head <b>southeast</b> toward <b>Pasir Ris Street 71</b>",
+                    "polyline": {
+                      "points": "}tkG_}jyRV_@T[DI@EAC?AEAqAu@KGIIUK"
+                    },
+                    "start_location": {
+                      "lat": 1.3756664,
+                      "lng": 103.9356795
+                    },
+                    "travel_mode": "WALKING"
+                  },
+                  {
+                    "distance": {
+                      "text": "77 m",
+                      "value": 77
+                    },
+                    "duration": {
+                      "text": "1 min",
+                      "value": 64
+                    },
+                    "end_location": {
+                      "lat": 1.3764733,
+                      "lng": 103.9359428
+                    },
+                    "html_instructions": "Turn <b>left</b> onto <b>Pasir Ris Street 71</b>",
+                    "maneuver": "turn-left",
+                    "polyline": {
+                      "points": "mwkGgbkyRW`@s@jACD"
+                    },
+                    "start_location": {
+                      "lat": 1.3760747,
+                      "lng": 103.9365163
+                    },
+                    "travel_mode": "WALKING"
+                  },
+                  {
+                    "distance": {
+                      "text": "0.2 km",
+                      "value": 193
+                    },
+                    "duration": {
+                      "text": "3 mins",
+                      "value": 154
+                    },
+                    "end_location": {
+                      "lat": 1.3779073,
+                      "lng": 103.9369112
+                    },
+                    "html_instructions": "Turn <b>right</b> onto <b>Pasir Ris Drive 10</b>",
+                    "maneuver": "turn-right",
+                    "polyline": {
+                      "points": "}ykGs~jyRKGKG[Si@]sBkACA]UYSEAKE"
+                    },
+                    "start_location": {
+                      "lat": 1.3764733,
+                      "lng": 103.9359428
+                    },
+                    "travel_mode": "WALKING"
+                  },
+                  {
+                    "distance": {
+                      "text": "89 m",
+                      "value": 89
+                    },
+                    "duration": {
+                      "text": "1 min",
+                      "value": 71
+                    },
+                    "end_location": {
+                      "lat": 1.3783604,
+                      "lng": 103.9362874
+                    },
+                    "html_instructions": "Turn <b>left</b> onto <b>Pasir Ris Dr 1</b>",
+                    "maneuver": "turn-left",
+                    "polyline": {
+                      "points": "}blGudkyR[d@g@x@UZ"
+                    },
+                    "start_location": {
+                      "lat": 1.3779073,
+                      "lng": 103.9369112
+                    },
+                    "travel_mode": "WALKING"
+                  },
+                  {
+                    "distance": {
+                      "text": "18 m",
+                      "value": 18
+                    },
+                    "duration": {
+                      "text": "1 min",
+                      "value": 19
+                    },
+                    "end_location": {
+                      "lat": 1.3782904,
+                      "lng": 103.9362294
+                    },
+                    "html_instructions": "Turn <b>left</b><div style=\"font-size:0.9em\">Take the stairs</div>",
+                    "maneuver": "turn-left",
+                    "polyline": {
+                      "points": "welGy`kyRJH@@"
+                    },
+                    "start_location": {
+                      "lat": 1.3783604,
+                      "lng": 103.9362874
+                    },
+                    "travel_mode": "WALKING"
+                  },
+                  {
+                    "distance": {
+                      "text": "8 m",
+                      "value": 8
+                    },
+                    "duration": {
+                      "text": "1 min",
+                      "value": 6
+                    },
+                    "end_location": {
+                      "lat": 1.3783398,
+                      "lng": 103.9361642
+                    },
+                    "html_instructions": "Turn <b>right</b><div style=\"font-size:0.9em\">Partial restricted usage road</div>",
+                    "maneuver": "turn-right",
+                    "polyline": {
+                      "points": "ielGm`kyREFCD"
+                    },
+                    "start_location": {
+                      "lat": 1.3782904,
+                      "lng": 103.9362294
+                    },
+                    "travel_mode": "WALKING"
+                  }
+                ],
+                "travel_mode": "WALKING"
+              },
+              {
+                "distance": {
+                  "text": "10.0 km",
+                  "value": 9992
+                },
+                "duration": {
+                  "text": "26 mins",
+                  "value": 1588
+                },
+                "end_location": {
+                  "lat": 1.350498,
+                  "lng": 103.873245
+                },
+                "html_instructions": "Bus towards Bishan",
+                "polyline": {
+                  "points": "yelGe`kyRMIa@j@m@x@SXW\\a@n@[d@q@~@CHELCLAL?J@JFRVPlAv@vA|@^R\\RFDTLnAz@~@b@^LrAd@RJhA`@fCx@TFITGL?B?@A@?@?@?B?VB\\@P?VCPGVMXO^GLGPANc@z@MV]r@[x@IPIVCHSn@Wv@Wx@Ql@CJI\\EHCHQZ_@pBy@tFg@xDWbB_@tBUbASt@[nA_@rA]fAEPGNk@`Bu@rBARAHEJMb@O\\Wl@Yp@MVMVKVq@bBy@jBWf@OTYb@WZMTMVCDIRC^?b@F`@Zl@b@`@lAx@fA`AfAfAt@|@f@t@T\\DDb@|@h@fAj@jAl@jAl@jAvApCd@`AXh@b@p@T\\h@p@JNZ^ZZd@`@b@\\b@Xj@^h@Xz@b@v@Vp@RlCn@zEjAhAXpCn@jATj@L`ARB?XFB?B@r@NfKfCn@NjB`@`Dr@TCJ?f@FjARrARF@r@LPDp@Rd@NdBp@hC`A^Nd@PNJXXl@z@@N@@@LBPBP?B@HNpBV|CHrAJ|@B`@Rj@DRL`@J\\BNDV@H@R@N@JBf@Bj@B^B^Lp@Ht@Dn@Fl@Dp@@JD|@Fx@Fp@@`@?BFz@Df@Dv@@HBb@@J@n@Ab@E^K`@CPAP?ZFx@Dx@Ff@@PBh@@DFvA@^Dd@FfA@h@Dh@Dn@Bb@BXDv@HtA?FBXBf@FfA@RFlAFdAHxAHxABVL`CLvB|@Et@ETAJCJCPIf@Sp@YHCTKz@]LGFCfAa@bA]bA]d@KLCREn@KBA\\CRCnBSTCjAMz@I^APAX?Z?d@B\\Bf@FRDXFr@Pp@Pr@Pz@RJDNB~@Tx@RPBALBp@?h@@P@R@PBVHt@@BFh@BPHd@l@bEDXN|@V|@l@lBHRNb@L\\HT@DJd@@HHd@Hp@VpDJzABXNrB@Z?V?@A^AZCVEPMlA?FKnAC~@AD?PAT?P@NDNDRJVN^KJ_@VWRWRABOPKPGJMVKRM`@ADKd@EZAF?LAFI\\EVG^EPENKT?VATCR?F?N?XV^p@v@Z`@VXrAzArB~B~@v@TP`@\\LJQNA@IF?@A?g@b@IFk@b@QNHL"
+                },
+                "start_location": {
+                  "lat": 1.378372,
+                  "lng": 103.936188
+                },
+                "transit_details": {
+                  "arrival_stop": {
+                    "location": {
+                      "lat": 1.350498,
+                      "lng": 103.873245
+                    },
+                    "name": "S'goon Stn Exit E"
+                  },
+                  "arrival_time": {
+                    "text": "7:19\u202fAM",
+                    "time_zone": "Asia/Singapore",
+                    "value": 1742771999
+                  },
+                  "departure_stop": {
+                    "location": {
+                      "lat": 1.378372,
+                      "lng": 103.936188
+                    },
+                    "name": "Blk 740"
+                  },
+                  "departure_time": {
+                    "text": "6:53\u202fAM",
+                    "time_zone": "Asia/Singapore",
+                    "value": 1742770411
+                  },
+                  "headsign": "Bishan",
+                  "headway": 480,
+                  "line": {
+                    "agencies": [
+                      {
+                        "name": "SBS Transit",
+                        "phone": "011 65 1800 225 5663",
+                        "url": "https://www.sbstransit.com.sg/"
+                      }
+                    ],
+                    "color": "#55dd33",
+                    "name": "53",
+                    "text_color": "#000000",
+                    "vehicle": {
+                      "icon": "//maps.gstatic.com/mapfiles/transit/iw2/6/bus2.png",
+                      "name": "Bus",
+                      "type": "BUS"
+                    }
+                  },
+                  "num_stops": 14
+                },
+                "travel_mode": "TRANSIT"
+              },
+              {
+                "distance": {
+                  "text": "0.1 km",
+                  "value": 103
+                },
+                "duration": {
+                  "text": "2 mins",
+                  "value": 95
+                },
+                "end_location": {
+                  "lat": 1.34971,
+                  "lng": 103.87357
+                },
+                "html_instructions": "Walk to Serangoon",
+                "polyline": {
+                  "points": "uwfG{v~xRROb@]JQDDRCB?J?JDFF@?VIBC"
+                },
+                "start_location": {
+                  "lat": 1.3505109,
+                  "lng": 103.873256
+                },
+                "steps": [
+                  {
+                    "distance": {
+                      "text": "53 m",
+                      "value": 53
+                    },
+                    "duration": {
+                      "text": "1 min",
+                      "value": 48
+                    },
+                    "end_location": {
+                      "lat": 1.3501656,
+                      "lng": 103.8735792
+                    },
+                    "html_instructions": "Head <b>southeast</b> on <b>Serangoon Central</b>",
+                    "polyline": {
+                      "points": "uwfG{v~xRROb@]JQ"
+                    },
+                    "start_location": {
+                      "lat": 1.3505109,
+                      "lng": 103.873256
+                    },
+                    "travel_mode": "WALKING"
+                  },
+                  {
+                    "distance": {
+                      "text": "47 m",
+                      "value": 47
+                    },
+                    "duration": {
+                      "text": "1 min",
+                      "value": 43
+                    },
+                    "end_location": {
+                      "lat": 1.3498473,
+                      "lng": 103.8734977
+                    },
+                    "html_instructions": "Turn <b>right</b> onto <b>Upper Serangoon Rd</b><div style=\"font-size:0.9em\">Destination will be on the left</div>",
+                    "maneuver": "turn-right",
+                    "polyline": {
+                      "points": "qufG{x~xRDDRCB?J?JDFF@?"
+                    },
+                    "start_location": {
+                      "lat": 1.3501656,
+                      "lng": 103.8735792
+                    },
+                    "travel_mode": "WALKING"
+                  },
+                  {
+                    "distance": {
+                      "text": "3 m",
+                      "value": 3
+                    },
+                    "duration": {
+                      "text": "1 min",
+                      "value": 4
+                    },
+                    "end_location": {
+                      "lat": 1.34971,
+                      "lng": 103.87357
+                    },
+                    "html_instructions": "Take entrance <span class=\"location\">H</span>",
+                    "polyline": {
+                      "points": "yrfGux~xRBC"
+                    },
+                    "start_location": {
+                      "lat": 1.3497277,
+                      "lng": 103.8735465
+                    },
+                    "travel_mode": "WALKING"
+                  }
+                ],
+                "travel_mode": "WALKING"
+              },
+              {
+                "distance": {
+                  "text": "6.7 km",
+                  "value": 6653
+                },
+                "duration": {
+                  "text": "12 mins",
+                  "value": 720
+                },
+                "end_location": {
+                  "lat": 1.29971,
+                  "lng": 103.84549
+                },
+                "html_instructions": "Subway towards Harbourfront",
+                "polyline": {
+                  "points": "urfGyx~xRh@s@p@h@fAt@xAbA|@n@f@\\`B|@tElBjCz@jCx@fDl@nABhCApA?xIFn@DnGXR@jBHnDXtJ|@bCRXFRDLBpDx@jH`BdFz@fC`@`J~Al@Rj@Pp@XtJvFfE|CnEbDxRrNfGnDx@r@LLXVpE~D~b@xe@LNBBpBfBxG|F`EpCpAp@^Pz@d@rGhDnBbAz@d@vEzCx@h@`IdFZTz@h@pCfBfFfDrEvC`A{A"
+                },
+                "start_location": {
+                  "lat": 1.34971,
+                  "lng": 103.87357
+                },
+                "transit_details": {
+                  "arrival_stop": {
+                    "location": {
+                      "lat": 1.29971,
+                      "lng": 103.84549
+                    },
+                    "name": "Dhoby Ghaut"
+                  },
+                  "arrival_time": {
+                    "text": "7:36\u202fAM",
+                    "time_zone": "Asia/Singapore",
+                    "value": 1742772994
+                  },
+                  "departure_stop": {
+                    "location": {
+                      "lat": 1.34971,
+                      "lng": 103.87357
+                    },
+                    "name": "Serangoon"
+                  },
+                  "departure_time": {
+                    "text": "7:24\u202fAM",
+                    "time_zone": "Asia/Singapore",
+                    "value": 1742772274
+                  },
+                  "headsign": "Harbourfront",
+                  "headway": 180,
+                  "line": {
+                    "agencies": [
+                      {
+                        "name": "SBS Transit",
+                        "phone": "011 65 1800 287 2727",
+                        "url": "http://www.sbstransit.com.sg/"
+                      }
+                    ],
+                    "color": "#844184",
+                    "name": "North East Line",
+                    "short_name": "NE",
+                    "text_color": "#ffffff",
+                    "vehicle": {
+                      "icon": "//maps.gstatic.com/mapfiles/transit/iw2/6/subway2.png",
+                      "name": "Subway",
+                      "type": "SUBWAY"
+                    }
+                  },
+                  "num_stops": 6
+                },
+                "travel_mode": "TRANSIT"
+              },
+              {
+                "distance": {
+                  "text": "0.6 km",
+                  "value": 568
+                },
+                "duration": {
+                  "text": "8 mins",
+                  "value": 479
+                },
+                "end_location": {
+                  "lat": 1.2975474,
+                  "lng": 103.8493585
+                },
+                "html_instructions": "Walk to 80 Stamford Rd, Singapore 178902",
+                "polyline": {
+                  "points": "ez|FiiyxRGVfATFWHc@FSFKD@XHRw@b@iBPo@@EBIDIBGDOBM@M@M?U?E?G?A?A@?@?DAHAD??AD?D?PGCEDMDKBKFI`@e@BIHOV]V_@t@_A@?@ABA@?@?DEA??AA?NO?DHGLKACk@s@IIKI?GAA?AAACCCAAA"
+                },
+                "start_location": {
+                  "lat": 1.29971,
+                  "lng": 103.84549
+                },
+                "steps": [
+                  {
+                    "distance": {
+                      "text": "13 m",
+                      "value": 13
+                    },
+                    "duration": {
+                      "text": "1 min",
+                      "value": 14
+                    },
+                    "end_location": {
+                      "lat": 1.2997485,
+                      "lng": 103.8453723
+                    },
+                    "html_instructions": "Take exit <span class=\"location\">E</span>",
+                    "polyline": {
+                      "points": "ez|FiiyxRGV"
+                    },
+                    "start_location": {
+                      "lat": 1.29971,
+                      "lng": 103.84549
+                    },
+                    "travel_mode": "WALKING"
+                  },
+                  {
+                    "distance": {
+                      "text": "48 m",
+                      "value": 48
+                    },
+                    "duration": {
+                      "text": "1 min",
+                      "value": 38
+                    },
+                    "end_location": {
+                      "lat": 1.299195,
+                      "lng": 103.8457108
+                    },
+                    "html_instructions": "Head <b>east</b> on <b>Orchard Rd</b>",
+                    "polyline": {
+                      "points": "ex|F{gyxRFWHc@FSFKD@"
+                    },
+                    "start_location": {
+                      "lat": 1.2993924,
+                      "lng": 103.8452577
+                    },
+                    "travel_mode": "WALKING"
+                  },
+                  {
+                    "distance": {
+                      "text": "7 m",
+                      "value": 7
+                    },
+                    "duration": {
+                      "text": "1 min",
+                      "value": 15
+                    },
+                    "end_location": {
+                      "lat": 1.2990624,
+                      "lng": 103.8456602
+                    },
+                    "html_instructions": "Turn <b>right</b>",
+                    "maneuver": "turn-right",
+                    "polyline": {
+                      "points": "}v|FujyxRXH"
+                    },
+                    "start_location": {
+                      "lat": 1.299195,
+                      "lng": 103.8457108
+                    },
+                    "travel_mode": "WALKING"
+                  },
+                  {
+                    "distance": {
+                      "text": "0.2 km",
+                      "value": 228
+                    },
+                    "duration": {
+                      "text": "3 mins",
+                      "value": 183
+                    },
+                    "end_location": {
+                      "lat": 1.2984057,
+                      "lng": 103.8473967
+                    },
+                    "html_instructions": "Turn <b>left</b>",
+                    "maneuver": "turn-left",
+                    "polyline": {
+                      "points": "cv|FkjyxRRw@b@iBPo@@EBIDIBGDOBM@M@M?U?E?G?A?A@?@?DAHAD??A"
+                    },
+                    "start_location": {
+                      "lat": 1.2990624,
+                      "lng": 103.8456602
+                    },
+                    "travel_mode": "WALKING"
+                  },
+                  {
+                    "distance": {
+                      "text": "6 m",
+                      "value": 6
+                    },
+                    "duration": {
+                      "text": "1 min",
+                      "value": 5
+                    },
+                    "end_location": {
+                      "lat": 1.2982641,
+                      "lng": 103.8474376
+                    },
+                    "html_instructions": "Slight <b>right</b> onto <b>Handy Rd</b>",
+                    "maneuver": "turn-slight-right",
+                    "polyline": {
+                      "points": "ar|FguyxRD?D?PG"
+                    },
+                    "start_location": {
+                      "lat": 1.2984057,
+                      "lng": 103.8473967
+                    },
+                    "travel_mode": "WALKING"
+                  },
+                  {
+                    "distance": {
+                      "text": "0.2 km",
+                      "value": 202
+                    },
+                    "duration": {
+                      "text": "3 mins",
+                      "value": 172
+                    },
+                    "end_location": {
+                      "lat": 1.2971505,
+                      "lng": 103.8488946
+                    },
+                    "html_instructions": "Turn <b>left</b> onto <b>Orchard Rd</b>",
+                    "maneuver": "turn-left",
+                    "polyline": {
+                      "points": "cq|FouyxRCEDMDKBKFI`@e@BIHOV]V_@t@_A@?@ABA@?@?DEA??AA?NO?DHGLKAC"
+                    },
+                    "start_location": {
+                      "lat": 1.2982641,
+                      "lng": 103.8474376
+                    },
+                    "travel_mode": "WALKING"
+                  },
+                  {
+                    "distance": {
+                      "text": "35 m",
+                      "value": 35
+                    },
+                    "duration": {
+                      "text": "1 min",
+                      "value": 30
+                    },
+                    "end_location": {
+                      "lat": 1.2974771,
+                      "lng": 103.8492493
+                    },
+                    "html_instructions": "Turn <b>left</b> onto <b>Bencoolen St</b>",
+                    "maneuver": "turn-left",
+                    "polyline": {
+                      "points": "ej|Fq~yxRk@s@IIKI"
+                    },
+                    "start_location": {
+                      "lat": 1.2971505,
+                      "lng": 103.8488946
+                    },
+                    "travel_mode": "WALKING"
+                  },
+                  {
+                    "distance": {
+                      "text": "29 m",
+                      "value": 29
+                    },
+                    "duration": {
+                      "text": "1 min",
+                      "value": 22
+                    },
+                    "end_location": {
+                      "lat": 1.2975474,
+                      "lng": 103.8493585
+                    },
+                    "html_instructions": "Turn <b>right</b><div style=\"font-size:0.9em\">Destination will be on the left</div>",
+                    "maneuver": "turn-right",
+                    "polyline": {
+                      "points": "gl|Fy`zxR?GAA?AAACCCAAA"
+                    },
+                    "start_location": {
+                      "lat": 1.2974771,
+                      "lng": 103.8492493
+                    },
+                    "travel_mode": "WALKING"
+                  }
+                ],
+                "travel_mode": "WALKING"
+              }
+            ],
+            "traffic_speed_entry": [],
+            "via_waypoint": []
+          }
+        ],
+        "overview_polyline": {
+          "points": "}tkG_}jyRl@{@FOGG}BsAkAlBCDKGg@[}CiBa@W_@UKE[d@}@tALJILSOoAdBiBlCu@hAIZAXH^|EzCd@XdBhA~Ap@fBp@pEzATFITGPAB?^Dn@Ch@Up@Wl@I`@q@rAmAvCgAjDe@`BUd@_@pBy@tF_A|Gu@xDmB`Hy@bCu@rBARGT]`Aq@~AyAjDqArCi@x@e@p@Q\\IRC^?b@F`@Zl@b@`@lAx@fA`AfAfAt@|@|@rA~BvExEjJ|@zA~@nAf@n@`A|@fAv@tAx@z@b@v@V~DbAdHdB|EdAjCh@bMxCzCp@`Dr@TCr@F~Cf@z@NbAXtHrCt@\\XXl@z@BPD^TpC`@pFN~Ar@~BLdAJnBF~@VfBTzCVjER~CHhBGbAOr@Al@LrBNhBVdFPfDd@lIb@fIPxCLvB|@EjAGVGtB{@fBu@jC_AhBi@tAWvD_@fCWp@Ct@?d@BdAJl@LtEhAtCr@PBALBzAHnAVtBlA`I~AbFVr@Lj@Jn@`@bF`@dG?XCz@W~BOnCAVAf@F^Pj@N^KJw@j@YVq@fAYt@Mj@Ix@]fBQd@Al@CZ?h@|BrCfEzEtAhAn@h@SPs@l@u@j@QNHLACROb@]JQDDRCN?RLXIl@w@xB~AvCrBhCzAtElBjCz@jCx@fDl@xE@jLF~Lj@dPvA|CZ~NdDlJ|A`J~Al@R|Aj@tJvFfE|ChYvSfGnDx@r@f@d@pE~D~b@xe@PRjKdJ`EpCpAp@zAv@bKlFz@d@vEzCzJnGvA~@xJnGrEvC`A{AGVfATP{@FSFK^JjAwERk@D[@c@?QRCPAPGCEJYJUd@o@`@m@lA_BHC@?PW?DHGLKACu@}@KI?GACEEEC"
+        },
+        "summary": "",
+        "warnings": [
+          "Walking directions are in beta. Use caution \u2013 This route may be missing sidewalks or pedestrian paths."
+        ],
+        "waypoint_order": []
+      },
+      {
+        "bounds": {
+          "northeast": {
+            "lat": 1.4053802,
+            "lng": 103.9369112
+          },
+          "southwest": {
+            "lat": 1.2971398,
+            "lng": 103.8450285
+          }
+        },
+        "copyrights": "Powered by Google, \u00a92025 Google",
+        "legs": [
+          {
+            "arrival_time": {
+              "text": "7:47\u202fAM",
+              "time_zone": "Asia/Singapore",
+              "value": 1742773622
+            },
+            "departure_time": {
+              "text": "6:49\u202fAM",
+              "time_zone": "Asia/Singapore",
+              "value": 1742770167
+            },
+            "distance": {
+              "text": "20.1 km",
+              "value": 20058
+            },
+            "duration": {
+              "text": "58 mins",
+              "value": 3455
+            },
+            "end_address": "80 Stamford Rd, Singapore 178902",
+            "end_location": {
+              "lat": 1.2975474,
+              "lng": 103.8493585
+            },
+            "start_address": "Singapore 510767",
+            "start_location": {
+              "lat": 1.3756664,
+              "lng": 103.9356795
+            },
+            "steps": [
+              {
+                "distance": {
+                  "text": "0.5 km",
+                  "value": 538
+                },
+                "duration": {
+                  "text": "7 mins",
+                  "value": 433
+                },
+                "end_location": {
+                  "lat": 1.3783398,
+                  "lng": 103.9361642
+                },
+                "html_instructions": "Walk to Blk 740",
+                "polyline": {
+                  "points": "}tkG_}jyRV_@T[DI@EAC?AEAqAu@KGIIUKW`@s@jACDKGKG[Si@]sBkACA]UYSEAKE[d@g@x@UZJH@@EFCD"
+                },
+                "start_location": {
+                  "lat": 1.3756664,
+                  "lng": 103.9356795
+                },
+                "steps": [
+                  {
+                    "distance": {
+                      "text": "0.2 km",
+                      "value": 153
+                    },
+                    "duration": {
+                      "text": "2 mins",
+                      "value": 119
+                    },
+                    "end_location": {
+                      "lat": 1.3760747,
+                      "lng": 103.9365163
+                    },
+                    "html_instructions": "Head <b>southeast</b> toward <b>Pasir Ris Street 71</b>",
+                    "polyline": {
+                      "points": "}tkG_}jyRV_@T[DI@EAC?AEAqAu@KGIIUK"
+                    },
+                    "start_location": {
+                      "lat": 1.3756664,
+                      "lng": 103.9356795
+                    },
+                    "travel_mode": "WALKING"
+                  },
+                  {
+                    "distance": {
+                      "text": "77 m",
+                      "value": 77
+                    },
+                    "duration": {
+                      "text": "1 min",
+                      "value": 64
+                    },
+                    "end_location": {
+                      "lat": 1.3764733,
+                      "lng": 103.9359428
+                    },
+                    "html_instructions": "Turn <b>left</b> onto <b>Pasir Ris Street 71</b>",
+                    "maneuver": "turn-left",
+                    "polyline": {
+                      "points": "mwkGgbkyRW`@s@jACD"
+                    },
+                    "start_location": {
+                      "lat": 1.3760747,
+                      "lng": 103.9365163
+                    },
+                    "travel_mode": "WALKING"
+                  },
+                  {
+                    "distance": {
+                      "text": "0.2 km",
+                      "value": 193
+                    },
+                    "duration": {
+                      "text": "3 mins",
+                      "value": 154
+                    },
+                    "end_location": {
+                      "lat": 1.3779073,
+                      "lng": 103.9369112
+                    },
+                    "html_instructions": "Turn <b>right</b> onto <b>Pasir Ris Drive 10</b>",
+                    "maneuver": "turn-right",
+                    "polyline": {
+                      "points": "}ykGs~jyRKGKG[Si@]sBkACA]UYSEAKE"
+                    },
+                    "start_location": {
+                      "lat": 1.3764733,
+                      "lng": 103.9359428
+                    },
+                    "travel_mode": "WALKING"
+                  },
+                  {
+                    "distance": {
+                      "text": "89 m",
+                      "value": 89
+                    },
+                    "duration": {
+                      "text": "1 min",
+                      "value": 71
+                    },
+                    "end_location": {
+                      "lat": 1.3783604,
+                      "lng": 103.9362874
+                    },
+                    "html_instructions": "Turn <b>left</b> onto <b>Pasir Ris Dr 1</b>",
+                    "maneuver": "turn-left",
+                    "polyline": {
+                      "points": "}blGudkyR[d@g@x@UZ"
+                    },
+                    "start_location": {
+                      "lat": 1.3779073,
+                      "lng": 103.9369112
+                    },
+                    "travel_mode": "WALKING"
+                  },
+                  {
+                    "distance": {
+                      "text": "18 m",
+                      "value": 18
+                    },
+                    "duration": {
+                      "text": "1 min",
+                      "value": 19
+                    },
+                    "end_location": {
+                      "lat": 1.3782904,
+                      "lng": 103.9362294
+                    },
+                    "html_instructions": "Turn <b>left</b><div style=\"font-size:0.9em\">Take the stairs</div>",
+                    "maneuver": "turn-left",
+                    "polyline": {
+                      "points": "welGy`kyRJH@@"
+                    },
+                    "start_location": {
+                      "lat": 1.3783604,
+                      "lng": 103.9362874
+                    },
+                    "travel_mode": "WALKING"
+                  },
+                  {
+                    "distance": {
+                      "text": "8 m",
+                      "value": 8
+                    },
+                    "duration": {
+                      "text": "1 min",
+                      "value": 6
+                    },
+                    "end_location": {
+                      "lat": 1.3783398,
+                      "lng": 103.9361642
+                    },
+                    "html_instructions": "Turn <b>right</b><div style=\"font-size:0.9em\">Partial restricted usage road</div>",
+                    "maneuver": "turn-right",
+                    "polyline": {
+                      "points": "ielGm`kyREFCD"
+                    },
+                    "start_location": {
+                      "lat": 1.3782904,
+                      "lng": 103.9362294
+                    },
+                    "travel_mode": "WALKING"
+                  }
+                ],
+                "travel_mode": "WALKING"
+              },
+              {
+                "distance": {
+                  "text": "5.0 km",
+                  "value": 4973
+                },
+                "duration": {
+                  "text": "15 mins",
+                  "value": 870
+                },
+                "end_location": {
+                  "lat": 1.4053138,
+                  "lng": 103.9018912
+                },
+                "html_instructions": "Bus towards Yishun",
+                "polyline": {
+                  "points": "yelGe`kyRMIa@j@m@x@SXW\\a@n@[d@q@~@CHi@x@OV[f@c@n@o@~@OTCDABMPS`@g@`A[j@ITYz@GNCHGHMXoAxDCF]`AqApDGPQf@u@vBA@Ob@u@|BUr@Mb@e@nAA@e@jA_@n@[h@e@j@YXMNKHk@f@}@l@_Ah@{@`@e@P[LaA\\_Bn@m@T[LqAb@e@Rm@RmA\\WJQJ}@`@w@X{Bt@KDq@TOFYLOFSL]N_@TWNEBk@`@g@`@]Xm@l@c@d@_@d@U^EDSZc@r@CDQXABaA~Ae@r@S\\KPU\\i@x@U\\?@SZA@S\\SXGJKPi@x@GH{@tAUZa@r@s@hAUX]j@qAlBsAvBEFOR[d@_@l@Yb@QXABABkBnC_AvAa@n@GL[d@IPW`@e@v@eA`BEHw@lAEJMNA@aAzAq@|@W^SZa@j@QZINIL[`@e@v@IL[f@U^[b@?@_AvAS\\U^IL]h@c@t@SXm@z@s@jAOTYd@ILS\\KPGHEHk@bAEFkA|BGLCBGNKT_@v@GJOXINO`@KNGRWj@OZGNKTQd@KTQ`@GPINc@z@LF"
+                },
+                "start_location": {
+                  "lat": 1.378372,
+                  "lng": 103.936188
+                },
+                "transit_details": {
+                  "arrival_stop": {
+                    "location": {
+                      "lat": 1.4053138,
+                      "lng": 103.9018912
+                    },
+                    "name": "Punggol Stn/Int"
+                  },
+                  "arrival_time": {
+                    "text": "7:11\u202fAM",
+                    "time_zone": "Asia/Singapore",
+                    "value": 1742771472
+                  },
+                  "departure_stop": {
+                    "location": {
+                      "lat": 1.378372,
+                      "lng": 103.936188
+                    },
+                    "name": "Blk 740"
+                  },
+                  "departure_time": {
+                    "text": "6:56\u202fAM",
+                    "time_zone": "Asia/Singapore",
+                    "value": 1742770602
+                  },
+                  "headsign": "Yishun",
+                  "headway": 780,
+                  "line": {
+                    "agencies": [
+                      {
+                        "name": "SBS Transit",
+                        "phone": "011 65 1800 225 5663",
+                        "url": "https://www.sbstransit.com.sg/"
+                      }
+                    ],
+                    "color": "#55dd33",
+                    "name": "39",
+                    "text_color": "#000000",
+                    "vehicle": {
+                      "icon": "//maps.gstatic.com/mapfiles/transit/iw2/6/bus2.png",
+                      "name": "Bus",
+                      "type": "BUS"
+                    }
+                  },
+                  "num_stops": 6
+                },
+                "travel_mode": "TRANSIT"
+              },
+              {
+                "distance": {
+                  "text": "0.2 km",
+                  "value": 165
+                },
+                "duration": {
+                  "text": "2 mins",
+                  "value": 144
+                },
+                "end_location": {
+                  "lat": 1.40455,
+                  "lng": 103.90207
+                },
+                "html_instructions": "Walk to Punggol",
+                "polyline": {
+                  "points": "inqGcjdyR^w@`Ad@TJx@^@?A@Uu@"
+                },
+                "start_location": {
+                  "lat": 1.4053336,
+                  "lng": 103.9019391
+                },
+                "steps": [
+                  {
+                    "distance": {
+                      "text": "36 m",
+                      "value": 36
+                    },
+                    "duration": {
+                      "text": "1 min",
+                      "value": 30
+                    },
+                    "end_location": {
+                      "lat": 1.4051678,
+                      "lng": 103.9022153
+                    },
+                    "html_instructions": "Head <b>southeast</b> on <b>Punggol Central</b>",
+                    "polyline": {
+                      "points": "inqGcjdyR^w@"
+                    },
+                    "start_location": {
+                      "lat": 1.4053336,
+                      "lng": 103.9019391
+                    },
+                    "travel_mode": "WALKING"
+                  },
+                  {
+                    "distance": {
+                      "text": "0.1 km",
+                      "value": 97
+                    },
+                    "duration": {
+                      "text": "1 min",
+                      "value": 81
+                    },
+                    "end_location": {
+                      "lat": 1.4044341,
+                      "lng": 103.9018069
+                    },
+                    "html_instructions": "Turn <b>right</b>",
+                    "maneuver": "turn-right",
+                    "polyline": {
+                      "points": "imqG{kdyR`Ad@TJx@^@?"
+                    },
+                    "start_location": {
+                      "lat": 1.4051678,
+                      "lng": 103.9022153
+                    },
+                    "travel_mode": "WALKING"
+                  },
+                  {
+                    "distance": {
+                      "text": "32 m",
+                      "value": 32
+                    },
+                    "duration": {
+                      "text": "1 min",
+                      "value": 33
+                    },
+                    "end_location": {
+                      "lat": 1.40455,
+                      "lng": 103.90207
+                    },
+                    "html_instructions": "Take entrance <span class=\"location\">D</span>",
+                    "polyline": {
+                      "points": "whqGgidyRUu@"
+                    },
+                    "start_location": {
+                      "lat": 1.4044383,
+                      "lng": 103.9017985
+                    },
+                    "travel_mode": "WALKING"
+                  }
+                ],
+                "travel_mode": "WALKING"
+              },
+              {
+                "distance": {
+                  "text": "13.8 km",
+                  "value": 13814
+                },
+                "duration": {
+                  "text": "22 mins",
+                  "value": 1347
+                },
+                "end_location": {
+                  "lat": 1.29971,
+                  "lng": 103.84549
+                },
+                "html_instructions": "Subway towards Harbourfront",
+                "polyline": {
+                  "points": "miqG}jdyRjoAdh@`v@vM?FdFT~@FhAJp@Hr@Lz@L|@HbAFhILjLBvD?~C@jG?~GAfA?B?^?~C@lCJbCV~ATxAZzAh@nAl@bAh@hFjFzBhC^^\\\\bKdKvL`MRRfKtK^^bLxLrHjJlItJh@j@RPzIvIvApAhCpBp@h@fAt@xAbA|@n@f@\\`B|@tElBjCz@jCx@fDl@nABhCApA?xIFn@DnGXR@jBHnDXtJ|@bCRXFRDLBpDx@jH`BdFz@fC`@`J~Al@Rj@Pp@XtJvFfE|CnEbDxRrNfGnDx@r@LLXVpE~D~b@xe@LNBBpBfBxG|F`EpCpAp@^Pz@d@rGhDnBbAz@d@vEzCx@h@`IdFZTz@h@pCfBfFfDrEvC`A{A"
+                },
+                "start_location": {
+                  "lat": 1.40455,
+                  "lng": 103.90207
+                },
+                "transit_details": {
+                  "arrival_stop": {
+                    "location": {
+                      "lat": 1.29971,
+                      "lng": 103.84549
+                    },
+                    "name": "Dhoby Ghaut"
+                  },
+                  "arrival_time": {
+                    "text": "7:39\u202fAM",
+                    "time_zone": "Asia/Singapore",
+                    "value": 1742773143
+                  },
+                  "departure_stop": {
+                    "location": {
+                      "lat": 1.40455,
+                      "lng": 103.90207
+                    },
+                    "name": "Punggol"
+                  },
+                  "departure_time": {
+                    "text": "7:16\u202fAM",
+                    "time_zone": "Asia/Singapore",
+                    "value": 1742771796
+                  },
+                  "headsign": "Harbourfront",
+                  "headway": 180,
+                  "line": {
+                    "agencies": [
+                      {
+                        "name": "SBS Transit",
+                        "phone": "011 65 1800 287 2727",
+                        "url": "http://www.sbstransit.com.sg/"
+                      }
+                    ],
+                    "color": "#844184",
+                    "name": "North East Line",
+                    "short_name": "NE",
+                    "text_color": "#ffffff",
+                    "vehicle": {
+                      "icon": "//maps.gstatic.com/mapfiles/transit/iw2/6/subway2.png",
+                      "name": "Subway",
+                      "type": "SUBWAY"
+                    }
+                  },
+                  "num_stops": 11
+                },
+                "travel_mode": "TRANSIT"
+              },
+              {
+                "distance": {
+                  "text": "0.6 km",
+                  "value": 568
+                },
+                "duration": {
+                  "text": "8 mins",
+                  "value": 479
+                },
+                "end_location": {
+                  "lat": 1.2975474,
+                  "lng": 103.8493585
+                },
+                "html_instructions": "Walk to 80 Stamford Rd, Singapore 178902",
+                "polyline": {
+                  "points": "ez|FiiyxRGVfATFWHc@FSFKD@XHRw@b@iBPo@@EBIDIBGDOBM@M@M?U?E?G?A?A@?@?DAHAD??AD?D?PGCEDMDKBKFI`@e@BIHOV]V_@t@_A@?@ABA@?@?DEA??AA?NO?DHGLKACk@s@IIKI?GAA?AAACCCAAA"
+                },
+                "start_location": {
+                  "lat": 1.29971,
+                  "lng": 103.84549
+                },
+                "steps": [
+                  {
+                    "distance": {
+                      "text": "13 m",
+                      "value": 13
+                    },
+                    "duration": {
+                      "text": "1 min",
+                      "value": 14
+                    },
+                    "end_location": {
+                      "lat": 1.2997485,
+                      "lng": 103.8453723
+                    },
+                    "html_instructions": "Take exit <span class=\"location\">E</span>",
+                    "polyline": {
+                      "points": "ez|FiiyxRGV"
+                    },
+                    "start_location": {
+                      "lat": 1.29971,
+                      "lng": 103.84549
+                    },
+                    "travel_mode": "WALKING"
+                  },
+                  {
+                    "distance": {
+                      "text": "48 m",
+                      "value": 48
+                    },
+                    "duration": {
+                      "text": "1 min",
+                      "value": 38
+                    },
+                    "end_location": {
+                      "lat": 1.299195,
+                      "lng": 103.8457108
+                    },
+                    "html_instructions": "Head <b>east</b> on <b>Orchard Rd</b>",
+                    "polyline": {
+                      "points": "ex|F{gyxRFWHc@FSFKD@"
+                    },
+                    "start_location": {
+                      "lat": 1.2993924,
+                      "lng": 103.8452577
+                    },
+                    "travel_mode": "WALKING"
+                  },
+                  {
+                    "distance": {
+                      "text": "7 m",
+                      "value": 7
+                    },
+                    "duration": {
+                      "text": "1 min",
+                      "value": 15
+                    },
+                    "end_location": {
+                      "lat": 1.2990624,
+                      "lng": 103.8456602
+                    },
+                    "html_instructions": "Turn <b>right</b>",
+                    "maneuver": "turn-right",
+                    "polyline": {
+                      "points": "}v|FujyxRXH"
+                    },
+                    "start_location": {
+                      "lat": 1.299195,
+                      "lng": 103.8457108
+                    },
+                    "travel_mode": "WALKING"
+                  },
+                  {
+                    "distance": {
+                      "text": "0.2 km",
+                      "value": 228
+                    },
+                    "duration": {
+                      "text": "3 mins",
+                      "value": 183
+                    },
+                    "end_location": {
+                      "lat": 1.2984057,
+                      "lng": 103.8473967
+                    },
+                    "html_instructions": "Turn <b>left</b>",
+                    "maneuver": "turn-left",
+                    "polyline": {
+                      "points": "cv|FkjyxRRw@b@iBPo@@EBIDIBGDOBM@M@M?U?E?G?A?A@?@?DAHAD??A"
+                    },
+                    "start_location": {
+                      "lat": 1.2990624,
+                      "lng": 103.8456602
+                    },
+                    "travel_mode": "WALKING"
+                  },
+                  {
+                    "distance": {
+                      "text": "6 m",
+                      "value": 6
+                    },
+                    "duration": {
+                      "text": "1 min",
+                      "value": 5
+                    },
+                    "end_location": {
+                      "lat": 1.2982641,
+                      "lng": 103.8474376
+                    },
+                    "html_instructions": "Slight <b>right</b> onto <b>Handy Rd</b>",
+                    "maneuver": "turn-slight-right",
+                    "polyline": {
+                      "points": "ar|FguyxRD?D?PG"
+                    },
+                    "start_location": {
+                      "lat": 1.2984057,
+                      "lng": 103.8473967
+                    },
+                    "travel_mode": "WALKING"
+                  },
+                  {
+                    "distance": {
+                      "text": "0.2 km",
+                      "value": 202
+                    },
+                    "duration": {
+                      "text": "3 mins",
+                      "value": 172
+                    },
+                    "end_location": {
+                      "lat": 1.2971505,
+                      "lng": 103.8488946
+                    },
+                    "html_instructions": "Turn <b>left</b> onto <b>Orchard Rd</b>",
+                    "maneuver": "turn-left",
+                    "polyline": {
+                      "points": "cq|FouyxRCEDMDKBKFI`@e@BIHOV]V_@t@_A@?@ABA@?@?DEA??AA?NO?DHGLKAC"
+                    },
+                    "start_location": {
+                      "lat": 1.2982641,
+                      "lng": 103.8474376
+                    },
+                    "travel_mode": "WALKING"
+                  },
+                  {
+                    "distance": {
+                      "text": "35 m",
+                      "value": 35
+                    },
+                    "duration": {
+                      "text": "1 min",
+                      "value": 30
+                    },
+                    "end_location": {
+                      "lat": 1.2974771,
+                      "lng": 103.8492493
+                    },
+                    "html_instructions": "Turn <b>left</b> onto <b>Bencoolen St</b>",
+                    "maneuver": "turn-left",
+                    "polyline": {
+                      "points": "ej|Fq~yxRk@s@IIKI"
+                    },
+                    "start_location": {
+                      "lat": 1.2971505,
+                      "lng": 103.8488946
+                    },
+                    "travel_mode": "WALKING"
+                  },
+                  {
+                    "distance": {
+                      "text": "29 m",
+                      "value": 29
+                    },
+                    "duration": {
+                      "text": "1 min",
+                      "value": 22
+                    },
+                    "end_location": {
+                      "lat": 1.2975474,
+                      "lng": 103.8493585
+                    },
+                    "html_instructions": "Turn <b>right</b><div style=\"font-size:0.9em\">Destination will be on the left</div>",
+                    "maneuver": "turn-right",
+                    "polyline": {
+                      "points": "gl|Fy`zxR?GAA?AAACCCAAA"
+                    },
+                    "start_location": {
+                      "lat": 1.2974771,
+                      "lng": 103.8492493
+                    },
+                    "travel_mode": "WALKING"
+                  }
+                ],
+                "travel_mode": "WALKING"
+              }
+            ],
+            "traffic_speed_entry": [],
+            "via_waypoint": []
+          }
+        ],
+        "overview_polyline": {
+          "points": "}tkG_}jyRl@{@FOGG}BsAkAlBCDKGg@[}CiBa@W_@UKE[d@}@tALJILSOoAdBiBlCoFhIg@|@cAlBITm@~A_C|GaDbJ}AvEs@rBg@lA{@xA_AdAYXiBtA{BjAaA^kFpBwBv@{Bp@_DrAiExA{Ar@}@h@sAbAkAfAcAjA[d@mAnB}BtDkCdEmE`H_IvLmAnBoEzGeAfBiDpFwAxB_CdD[j@e@n@aBlCqEhHeCvDcAbB_D~FqBhEsB|Em@jALFCI^w@`Ad@nAj@Us@joAdh@`v@vM?FdFThCRdBVxBVbAFhILbRBjL@jKA~C@lCJbCV~ATxAZzAh@rCvAhFjFzBhC|@|@zXfYzKhLbMxMrHjJlItJ|@|@zIvIvApAzDzC`DxBdBlA`B|@tElBvGtBfDl@nABzEAxIFn@DbHZjBHnDXxNpAl@L~D|@jH`BdFz@hN`CxAd@p@XtJvFvK`IxRrNfGnDfA`AjFvElc@hf@tBjBxG|F`EpCpBbAnInEjDhBpGdEjPlKzL~H`A{AGVfATFWPw@FKD@XHRw@t@yCDOHQH]Bw@@KVC\\ICEDMHWh@o@LYn@}@v@_AFC@?DEAALO?DVSm@w@USAIIIAA"
+        },
+        "summary": "",
+        "warnings": [
+          "Walking directions are in beta. Use caution \u2013 This route may be missing sidewalks or pedestrian paths."
+        ],
+        "waypoint_order": []
+      },
+      {
+        "bounds": {
+          "northeast": {
+            "lat": 1.3779496,
+            "lng": 103.95662
+          },
+          "southwest": {
+            "lat": 1.29294,
+            "lng": 103.8488946
+          }
+        },
+        "copyrights": "Powered by Google, \u00a92025 Google",
+        "legs": [
+          {
+            "arrival_time": {
+              "text": "7:43\u202fAM",
+              "time_zone": "Asia/Singapore",
+              "value": 1742773437
+            },
+            "departure_time": {
+              "text": "6:46\u202fAM",
+              "time_zone": "Asia/Singapore",
+              "value": 1742770016
+            },
+            "distance": {
+              "text": "21.2 km",
+              "value": 21239
+            },
+            "duration": {
+              "text": "57 mins",
+              "value": 3421
+            },
+            "end_address": "80 Stamford Rd, Singapore 178902",
+            "end_location": {
+              "lat": 1.2975474,
+              "lng": 103.8493585
+            },
+            "start_address": "Singapore 510767",
+            "start_location": {
+              "lat": 1.3756664,
+              "lng": 103.9356795
+            },
+            "steps": [
+              {
+                "distance": {
+                  "text": "0.5 km",
+                  "value": 549
+                },
+                "duration": {
+                  "text": "8 mins",
+                  "value": 460
+                },
+                "end_location": {
+                  "lat": 1.3774042,
+                  "lng": 103.9379292
+                },
+                "html_instructions": "Walk to Blk 643",
+                "polyline": {
+                  "points": "}tkG_}jyRV_@T[DI@EAC?AEAqAu@KGIIUKKEKGU^q@dA[Si@]sBiACC[UYS?CAGEGKICAKGNSHMVa@d@s@LU@C?ADK"
+                },
+                "start_location": {
+                  "lat": 1.3756664,
+                  "lng": 103.9356795
+                },
+                "steps": [
+                  {
+                    "distance": {
+                      "text": "0.2 km",
+                      "value": 160
+                    },
+                    "duration": {
+                      "text": "2 mins",
+                      "value": 126
+                    },
+                    "end_location": {
+                      "lat": 1.376188,
+                      "lng": 103.9365876
+                    },
+                    "html_instructions": "Head <b>southeast</b> toward <b>Pasir Ris Street 71</b>",
+                    "polyline": {
+                      "points": "}tkG_}jyRV_@T[DI@EAC?AEAqAu@KGIIUKKEKG"
+                    },
+                    "start_location": {
+                      "lat": 1.3756664,
+                      "lng": 103.9356795
+                    },
+                    "travel_mode": "WALKING"
+                  },
+                  {
+                    "distance": {
+                      "text": "77 m",
+                      "value": 77
+                    },
+                    "duration": {
+                      "text": "1 min",
+                      "value": 66
+                    },
+                    "end_location": {
+                      "lat": 1.3765451,
+                      "lng": 103.9360811
+                    },
+                    "html_instructions": "Turn <b>left</b> onto <b>Pasir Ris Street 71</b>",
+                    "maneuver": "turn-left",
+                    "polyline": {
+                      "points": "exkGubkyRU^q@dA"
+                    },
+                    "start_location": {
+                      "lat": 1.376188,
+                      "lng": 103.9365876
+                    },
+                    "travel_mode": "WALKING"
+                  },
+                  {
+                    "distance": {
+                      "text": "0.2 km",
+                      "value": 198
+                    },
+                    "duration": {
+                      "text": "3 mins",
+                      "value": 164
+                    },
+                    "end_location": {
+                      "lat": 1.3779496,
+                      "lng": 103.9371342
+                    },
+                    "html_instructions": "Turn <b>right</b> onto <b>Pasir Ris Drive 10</b>",
+                    "maneuver": "turn-right",
+                    "polyline": {
+                      "points": "mzkGo_kyR[Si@]sBiACC[UYS?CAGEGKICAKG"
+                    },
+                    "start_location": {
+                      "lat": 1.3765451,
+                      "lng": 103.9360811
+                    },
+                    "travel_mode": "WALKING"
+                  },
+                  {
+                    "distance": {
+                      "text": "0.1 km",
+                      "value": 101
+                    },
+                    "duration": {
+                      "text": "2 mins",
+                      "value": 90
+                    },
+                    "end_location": {
+                      "lat": 1.3774286,
+                      "lng": 103.9378577
+                    },
+                    "html_instructions": "Turn <b>right</b> onto <b>Pasir Ris Dr 1</b>",
+                    "maneuver": "turn-right",
+                    "polyline": {
+                      "points": "eclGafkyRNSHMVa@d@s@LU@C"
+                    },
+                    "start_location": {
+                      "lat": 1.3779496,
+                      "lng": 103.9371342
+                    },
+                    "travel_mode": "WALKING"
+                  },
+                  {
+                    "distance": {
+                      "text": "13 m",
+                      "value": 13
+                    },
+                    "duration": {
+                      "text": "1 min",
+                      "value": 14
+                    },
+                    "end_location": {
+                      "lat": 1.3774042,
+                      "lng": 103.9379292
+                    },
+                    "html_instructions": "Slight <b>left</b>",
+                    "maneuver": "turn-slight-left",
+                    "polyline": {
+                      "points": "}_lGsjkyR?ADK"
+                    },
+                    "start_location": {
+                      "lat": 1.3774286,
+                      "lng": 103.9378577
+                    },
+                    "travel_mode": "WALKING"
+                  }
+                ],
+                "travel_mode": "WALKING"
+              },
+              {
+                "distance": {
+                  "text": "1.6 km",
+                  "value": 1593
+                },
+                "duration": {
+                  "text": "5 mins",
+                  "value": 319
+                },
+                "end_location": {
+                  "lat": 1.37241,
+                  "lng": 103.948654
+                },
+                "html_instructions": "Bus towards Changi Village Rd",
+                "polyline": {
+                  "points": "{_lGckkyRJH`@i@rAkBd@o@DGl@{@rAqBxAyBFGp@eA@A^q@DOx@mAf@o@BEZi@NWDKL]To@l@yBT_ADK?A`AcDHWh@gBNk@FQH_@|@kEVm@DYd@}Ak@_A_@Is@K[Ic@GQCQ?YBSBASNCh@CD?L@P@f@L\\MBA@ADEFKHODIn@mABCKE"
+                },
+                "start_location": {
+                  "lat": 1.377418,
+                  "lng": 103.937935
+                },
+                "transit_details": {
+                  "arrival_stop": {
+                    "location": {
+                      "lat": 1.37241,
+                      "lng": 103.948654
+                    },
+                    "name": "Pasir Ris Stn Exit B"
+                  },
+                  "arrival_time": {
+                    "text": "6:59\u202fAM",
+                    "time_zone": "Asia/Singapore",
+                    "value": 1742770797
+                  },
+                  "departure_stop": {
+                    "location": {
+                      "lat": 1.377418,
+                      "lng": 103.937935
+                    },
+                    "name": "Blk 643"
+                  },
+                  "departure_time": {
+                    "text": "6:54\u202fAM",
+                    "time_zone": "Asia/Singapore",
+                    "value": 1742770478
+                  },
+                  "headsign": "Changi Village Rd",
+                  "headway": 720,
+                  "line": {
+                    "agencies": [
+                      {
+                        "name": "SBS Transit",
+                        "phone": "011 65 1800 225 5663",
+                        "url": "https://www.sbstransit.com.sg/"
+                      }
+                    ],
+                    "color": "#55dd33",
+                    "name": "109",
+                    "text_color": "#000000",
+                    "vehicle": {
+                      "icon": "//maps.gstatic.com/mapfiles/transit/iw2/6/bus2.png",
+                      "name": "Bus",
+                      "type": "BUS"
+                    }
+                  },
+                  "num_stops": 5
+                },
+                "travel_mode": "TRANSIT"
+              },
+              {
+                "distance": {
+                  "text": "0.2 km",
+                  "value": 156
+                },
+                "duration": {
+                  "text": "2 mins",
+                  "value": 127
+                },
+                "end_location": {
+                  "lat": 1.37298,
+                  "lng": 103.94927
+                },
+                "html_instructions": "Walk to Pasir Ris",
+                "polyline": {
+                  "points": "k`kG_nmyRLWBGBUF]?UcASQCCAA@]G[J"
+                },
+                "start_location": {
+                  "lat": 1.3723829,
+                  "lng": 103.9486375
+                },
+                "steps": [
+                  {
+                    "distance": {
+                      "text": "63 m",
+                      "value": 63
+                    },
+                    "duration": {
+                      "text": "1 min",
+                      "value": 50
+                    },
+                    "end_location": {
+                      "lat": 1.372227,
+                      "lng": 103.9491701
+                    },
+                    "html_instructions": "Head <b>southeast</b> on <b>Pasir Ris Central</b>",
+                    "polyline": {
+                      "points": "k`kG_nmyRLWBGBUF]?U"
+                    },
+                    "start_location": {
+                      "lat": 1.3723829,
+                      "lng": 103.9486375
+                    },
+                    "travel_mode": "WALKING"
+                  },
+                  {
+                    "distance": {
+                      "text": "77 m",
+                      "value": 77
+                    },
+                    "duration": {
+                      "text": "1 min",
+                      "value": 60
+                    },
+                    "end_location": {
+                      "lat": 1.3728438,
+                      "lng": 103.9493264
+                    },
+                    "html_instructions": "Turn <b>left</b>",
+                    "maneuver": "turn-left",
+                    "polyline": {
+                      "points": "m_kGiqmyRcASQCCAA@]G"
+                    },
+                    "start_location": {
+                      "lat": 1.372227,
+                      "lng": 103.9491701
+                    },
+                    "travel_mode": "WALKING"
+                  },
+                  {
+                    "distance": {
+                      "text": "16 m",
+                      "value": 16
+                    },
+                    "duration": {
+                      "text": "1 min",
+                      "value": 17
+                    },
+                    "end_location": {
+                      "lat": 1.37298,
+                      "lng": 103.94927
+                    },
+                    "html_instructions": "Take entrance <span class=\"location\">A</span>",
+                    "polyline": {
+                      "points": "gckGirmyR[J"
+                    },
+                    "start_location": {
+                      "lat": 1.372842,
+                      "lng": 103.9493334
+                    },
+                    "travel_mode": "WALKING"
+                  }
+                ],
+                "travel_mode": "WALKING"
+              },
+              {
+                "distance": {
+                  "text": "18.1 km",
+                  "value": 18121
+                },
+                "duration": {
+                  "text": "27 mins",
+                  "value": 1620
+                },
+                "end_location": {
+                  "lat": 1.29294,
+                  "lng": 103.85259
+                },
+                "html_instructions": "Subway towards Tuas Link",
+                "polyline": {
+                  "points": "cdkG}qmyRBMfCf@XFXFr@LPDnAV^F`@HdAT`@HXDj@J`@HfAR^FzAVzAVl@LdB^r@Pp@THBf@Pr@Vp@XLDf@RTNNFjExBvAp@tBbA~@^LDJDXL`AXjBl@bBb@zBd@|A\\fAVF?XFXFnA\\f@J|AXjAVt@PhAVj@Jt@N`@Fj@Fz@F^?d@?P?f@CtAMp@IDA^KNEp@UPG`@SJE@AZSNI|@o@bBqAl@e@f@_@j@c@rAaAROTQp@e@FCx@i@PKJIJIz@q@dAy@rAeAr@i@t@k@JGfA{@XS|@q@RQDE^YXS\\Yv@m@@AlA{@`@[r@k@f@_@`As@r@k@z@o@FE`@]n@g@DCh@_@`@]ZUTQ@?\\WXWv@m@d@a@NMHGVUJKXSFGFErAcAv@m@XU@?XU~AmAFGFEp@g@b@Yx@i@ZUt@g@zAkArBeAr@YdBg@nA[|Fw@hEi@H?JAHAf@CjCIp@?bDN~AT\\DpBh@`@HFBd@PVJ|Ar@n@Zn@d@NJNHjAx@HHLNLLbA`A`@j@JLHJb@p@|@dBLVbA~BLVDJl@nADHBFTd@fBzDZr@FNFLRf@Vp@Rf@BFXbA`@tA`AxENn@DNHZDNBNp@dCNl@r@nCBHr@dCLb@^rADRFRBF@Hp@jCF\\Lh@l@dCZtAP`AVfBD^BZ@D@RBRDb@Dz@PbCLjBNbCPhCRnCBb@D`@LpB@TDf@HfABb@@L@TDb@B`@F~@PlCHnA@FBZ@LFx@?DFx@?N@T@V@TDt@H~@?J@L@LFv@HbA?BFp@@TFn@?@BVBXBZ@BHnABTBXDl@Fr@BPNlBBTBVPhBHbA?BPhBP~ALjALbAPlABJRfAJj@DTDNBLFZ^|APp@Pt@XlARv@b@`BBJ@JdA`EDRRz@DT@H@FBR@F@HB^?BBZ?F?R@TAh@AVAXCp@Ef@El@En@G|@?DG`AAr@?|@?n@@ZBd@BZ@J@FRfB?@BJ@JD^NdA@DDXBXZ~B@NPxAThBTfB@HBJ@JPtALdA@F@F@LRxAVhB@F@HPtA@H@HRzAHl@@HDl@?D@P?@@^@Z?l@APAVIrACb@?DGnAATAl@AP?L@\\?HBf@?DB\\F|@@HLjBPbCBd@V|DLzAH~@@PDb@D^LrAHn@BRBZNrARhB|@|H`@nD@L@LFj@V|BDf@@BXlE?DBZDt@Fx@BXBXFx@TfD@@@f@Bh@?DBvABb@?BLjBFp@BNXlCXlCBVBV@L^nCBPZpC@JZpDTlCBRBRFl@b@dE`@hE@JTvBFx@Dd@B\\Dz@B^B`@@PVnBLdADb@Db@ThBDb@Jx@NpA?HDTDTHd@FPFTHVN^DJN\\R^JPR\\vBrDpAvBZf@Xf@l@`Af@z@NVLVVb@\\n@LTf@z@d@|@HNn@hA\\n@HPjAlBd@r@n@~AR`@HPFLTl@L\\Jb@`@jBBLLv@Jl@nAfH~@pF`A`CFLDHvCjEpFhFXXfFnGTZxIvK|G`HdNvLvEbELJXTzBfBdLvINJhAXvBTXDD?@?HA@?nIaCd@SN^"
+                },
+                "start_location": {
+                  "lat": 1.37298,
+                  "lng": 103.94927
+                },
+                "transit_details": {
+                  "arrival_stop": {
+                    "location": {
+                      "lat": 1.29294,
+                      "lng": 103.85259
+                    },
+                    "name": "City Hall"
+                  },
+                  "arrival_time": {
+                    "text": "7:32\u202fAM",
+                    "time_zone": "Asia/Singapore",
+                    "value": 1742772726
+                  },
+                  "departure_stop": {
+                    "location": {
+                      "lat": 1.37298,
+                      "lng": 103.94927
+                    },
+                    "name": "Pasir Ris"
+                  },
+                  "departure_time": {
+                    "text": "7:05\u202fAM",
+                    "time_zone": "Asia/Singapore",
+                    "value": 1742771106
+                  },
+                  "headsign": "Tuas Link",
+                  "headway": 180,
+                  "line": {
+                    "agencies": [
+                      {
+                        "name": "Smrt",
+                        "phone": "011 65 1800 336 8900",
+                        "url": "http://www.smrt.com.sg/"
+                      }
+                    ],
+                    "color": "#189e4a",
+                    "name": "East West Line",
+                    "short_name": "EW",
+                    "text_color": "#ffffff",
+                    "vehicle": {
+                      "icon": "//maps.gstatic.com/mapfiles/transit/iw2/6/subway2.png",
+                      "name": "Subway",
+                      "type": "SUBWAY"
+                    }
+                  },
+                  "num_stops": 12
+                },
+                "travel_mode": "TRANSIT"
+              },
+              {
+                "distance": {
+                  "text": "0.8 km",
+                  "value": 820
+                },
+                "duration": {
+                  "text": "12 mins",
+                  "value": 711
+                },
+                "end_location": {
+                  "lat": 1.2975474,
+                  "lng": 103.8493585
+                },
+                "html_instructions": "Walk to 80 Stamford Rd, Singapore 178902",
+                "polyline": {
+                  "points": "{o{FuuzxR_@|BEBEDCDq@_@ABOTEAEFCF[f@QRk@dAC?Yn@GNUb@B@CFSh@CFECGJINWh@EH_@t@MJMI?AYIWOWQWMUOG?E@E?A@C@E@ABGF_AjAA@KJQLaAl@ONEBQLQJWPEBIDk@s@IIKI?GAA?AAACCCAAA"
+                },
+                "start_location": {
+                  "lat": 1.29294,
+                  "lng": 103.85259
+                },
+                "steps": [
+                  {
+                    "distance": {
+                      "text": "72 m",
+                      "value": 72
+                    },
+                    "duration": {
+                      "text": "1 min",
+                      "value": 73
+                    },
+                    "end_location": {
+                      "lat": 1.2930999,
+                      "lng": 103.8519602
+                    },
+                    "html_instructions": "Take exit <span class=\"location\">B</span>",
+                    "polyline": {
+                      "points": "{o{FuuzxR_@|B"
+                    },
+                    "start_location": {
+                      "lat": 1.29294,
+                      "lng": 103.85259
+                    },
+                    "travel_mode": "WALKING"
+                  },
+                  {
+                    "distance": {
+                      "text": "18 m",
+                      "value": 18
+                    },
+                    "duration": {
+                      "text": "1 min",
+                      "value": 14
+                    },
+                    "end_location": {
+                      "lat": 1.2931755,
+                      "lng": 103.8518799
+                    },
+                    "html_instructions": "Head <b>northwest</b> toward <b>N Bridge Rd</b>",
+                    "polyline": {
+                      "points": "aq{FsqzxREDCD"
+                    },
+                    "start_location": {
+                      "lat": 1.2931342,
+                      "lng": 103.8519421
+                    },
+                    "travel_mode": "WALKING"
+                  },
+                  {
+                    "distance": {
+                      "text": "49 m",
+                      "value": 49
+                    },
+                    "duration": {
+                      "text": "1 min",
+                      "value": 40
+                    },
+                    "end_location": {
+                      "lat": 1.2934426,
+                      "lng": 103.8520159
+                    },
+                    "html_instructions": "Turn <b>right</b> onto <b>N Bridge Rd</b>",
+                    "maneuver": "turn-right",
+                    "polyline": {
+                      "points": "kq{FgqzxRq@_@AB"
+                    },
+                    "start_location": {
+                      "lat": 1.2931755,
+                      "lng": 103.8518799
+                    },
+                    "travel_mode": "WALKING"
+                  },
+                  {
+                    "distance": {
+                      "text": "0.3 km",
+                      "value": 295
+                    },
+                    "duration": {
+                      "text": "4 mins",
+                      "value": 263
+                    },
+                    "end_location": {
+                      "lat": 1.294967,
+                      "lng": 103.8496828
+                    },
+                    "html_instructions": "Turn <b>left</b> onto <b>Stamford Rd</b>",
+                    "maneuver": "turn-left",
+                    "polyline": {
+                      "points": "_s{FcrzxROTEAEFCF[f@QRk@dAC?Yn@GNUb@B@CFSh@CFECGJINWh@EH_@t@MJ"
+                    },
+                    "start_location": {
+                      "lat": 1.2934426,
+                      "lng": 103.8520159
+                    },
+                    "travel_mode": "WALKING"
+                  },
+                  {
+                    "distance": {
+                      "text": "80 m",
+                      "value": 80
+                    },
+                    "duration": {
+                      "text": "1 min",
+                      "value": 75
+                    },
+                    "end_location": {
+                      "lat": 1.2956355,
+                      "lng": 103.8501112
+                    },
+                    "html_instructions": "Turn <b>right</b> to stay on <b>Stamford Rd</b>",
+                    "maneuver": "turn-right",
+                    "polyline": {
+                      "points": "q|{FoczxRMI?AYIWOWQWMUO"
+                    },
+                    "start_location": {
+                      "lat": 1.294967,
+                      "lng": 103.8496828
+                    },
+                    "travel_mode": "WALKING"
+                  },
+                  {
+                    "distance": {
+                      "text": "0.2 km",
+                      "value": 242
+                    },
+                    "duration": {
+                      "text": "3 mins",
+                      "value": 196
+                    },
+                    "end_location": {
+                      "lat": 1.2971505,
+                      "lng": 103.8488946
+                    },
+                    "html_instructions": "Slight <b>left</b> to stay on <b>Stamford Rd</b>",
+                    "maneuver": "turn-slight-left",
+                    "polyline": {
+                      "points": "w`|FefzxRG?E@E?A@C@E@ABGF_AjAA@KJQLaAl@ONEBQLQJWPEBID"
+                    },
+                    "start_location": {
+                      "lat": 1.2956355,
+                      "lng": 103.8501112
+                    },
+                    "travel_mode": "WALKING"
+                  },
+                  {
+                    "distance": {
+                      "text": "35 m",
+                      "value": 35
+                    },
+                    "duration": {
+                      "text": "1 min",
+                      "value": 28
+                    },
+                    "end_location": {
+                      "lat": 1.2974771,
+                      "lng": 103.8492493
+                    },
+                    "html_instructions": "Turn <b>right</b> onto <b>Bencoolen St</b>",
+                    "maneuver": "turn-right",
+                    "polyline": {
+                      "points": "ej|Fq~yxRk@s@IIKI"
+                    },
+                    "start_location": {
+                      "lat": 1.2971505,
+                      "lng": 103.8488946
+                    },
+                    "travel_mode": "WALKING"
+                  },
+                  {
+                    "distance": {
+                      "text": "29 m",
+                      "value": 29
+                    },
+                    "duration": {
+                      "text": "1 min",
+                      "value": 22
+                    },
+                    "end_location": {
+                      "lat": 1.2975474,
+                      "lng": 103.8493585
+                    },
+                    "html_instructions": "Turn <b>right</b><div style=\"font-size:0.9em\">Destination will be on the left</div>",
+                    "maneuver": "turn-right",
+                    "polyline": {
+                      "points": "gl|Fy`zxR?GAA?AAACCCAAA"
+                    },
+                    "start_location": {
+                      "lat": 1.2974771,
+                      "lng": 103.8492493
+                    },
+                    "travel_mode": "WALKING"
+                  }
+                ],
+                "travel_mode": "WALKING"
+              }
+            ],
+            "traffic_speed_entry": [],
+            "via_waypoint": []
+          }
+        ],
+        "overview_polyline": {
+          "points": "}tkG_}jyRl@{@FOGG}BsAWMgAdB}D_Cu@i@AKQQOIvAwBTg@CAJH`@i@xB{Cr@cAfFyH`@s@DOx@mAj@u@j@aARi@bAiD|AqFjA}DfAkFVm@DYd@}Ak@_AsAU_AQc@Cm@FASNCn@C^Bf@L\\MDCLQNYr@qAKED@P_@Js@?UcASUE_@E[JBM`Dn@nDr@xI`BdGdAxCp@z@XzChA|@b@zE`ClEtBlAd@rEzA~EhAdDt@`@FhBd@fGnAtBb@vAVfBN^?v@?|BQv@Kn@QpBw@jBoAdF{DnDiC~AcA~KuI`GsE~JuH|EuDhEkD|EuDhCqBjDaCpCsBrBeAr@YtDcA|Fw@hEi@TAp@EjCIp@?bDN~AT\\DpBh@h@L|@\\lCnAzCtBhBhBzAvBjA|BpAvC|@lB`DdHfAnC\\jA`@tA`AxET~@Nj@xBrIxB`ItBxIl@vC\\fCJhAj@nItArSvAnTX`Ff@pGh@zGhAhM^jD^pCh@tCbCdKnBzH`@nBHl@FfAAjBQ`DUtDApB@jAJtAX`CpAhK|CbV`@|CFfABz@A~@OtCMdDD|AhA~P^pE`@vDrCnW\\dDZpEPpCd@tGFxAFzBLnB~@|Ih@lE^bD\\|Dd@bF|ArOVxDF`AX`Cn@vF`@xD\\bBf@xAbAlB~FzJ~ErI|BfEtA~Bd@r@n@~A\\r@\\z@X`Ad@xBhD~RnAxCvCjEpFhFXXfFnGnJrL|G`HdNvLdFnEtC|BtLbJhAXvBT^DJApIaCd@SN^_@|BEBIJq@_@ABOTEAIN[f@QRo@dAa@~@Ub@B@Wp@CFECQZ]r@_@t@MJMKYIWOo@_@UOG?K@EBoAxAMLsAz@URc@X]TIDk@s@USAIIIAA"
+        },
+        "summary": "",
+        "warnings": [
+          "Walking directions are in beta. Use caution \u2013 This route may be missing sidewalks or pedestrian paths."
+        ],
+        "waypoint_order": []
+      },
+      {
+        "bounds": {
+          "northeast": {
+            "lat": 1.3993265,
+            "lng": 103.9384423
+          },
+          "southwest": {
+            "lat": 1.2975474,
+            "lng": 103.8452454
+          }
+        },
+        "copyrights": "Powered by Google, \u00a92025 Google",
+        "legs": [
+          {
+            "arrival_time": {
+              "text": "8:03\u202fAM",
+              "time_zone": "Asia/Singapore",
+              "value": 1742774588
+            },
+            "departure_time": {
+              "text": "6:46\u202fAM",
+              "time_zone": "Asia/Singapore",
+              "value": 1742769993
+            },
+            "distance": {
+              "text": "21.3 km",
+              "value": 21283
+            },
+            "duration": {
+              "text": "1 hour 17 mins",
+              "value": 4595
+            },
+            "end_address": "80 Stamford Rd, Singapore 178902",
+            "end_location": {
+              "lat": 1.2975474,
+              "lng": 103.8493585
+            },
+            "start_address": "Singapore 510767",
+            "start_location": {
+              "lat": 1.3756664,
+              "lng": 103.9356795
+            },
+            "steps": [
+              {
+                "distance": {
+                  "text": "0.6 km",
+                  "value": 627
+                },
+                "duration": {
+                  "text": "8 mins",
+                  "value": 501
+                },
+                "end_location": {
+                  "lat": 1.3767867,
+                  "lng": 103.9383534
+                },
+                "html_instructions": "Walk to Tampines Meridian Jc",
+                "polyline": {
+                  "points": "}tkG_}jyRV_@T[DI@EAC?AEAqAu@KGIIUKKEKGU^q@dA[Si@]sBiACC[UYS?CAGEIr@gAZg@FIv@kA\\c@\\c@?F"
+                },
+                "start_location": {
+                  "lat": 1.3756664,
+                  "lng": 103.9356795
+                },
+                "steps": [
+                  {
+                    "distance": {
+                      "text": "0.2 km",
+                      "value": 160
+                    },
+                    "duration": {
+                      "text": "2 mins",
+                      "value": 126
+                    },
+                    "end_location": {
+                      "lat": 1.376188,
+                      "lng": 103.9365876
+                    },
+                    "html_instructions": "Head <b>southeast</b> toward <b>Pasir Ris Street 71</b>",
+                    "polyline": {
+                      "points": "}tkG_}jyRV_@T[DI@EAC?AEAqAu@KGIIUKKEKG"
+                    },
+                    "start_location": {
+                      "lat": 1.3756664,
+                      "lng": 103.9356795
+                    },
+                    "travel_mode": "WALKING"
+                  },
+                  {
+                    "distance": {
+                      "text": "77 m",
+                      "value": 77
+                    },
+                    "duration": {
+                      "text": "1 min",
+                      "value": 66
+                    },
+                    "end_location": {
+                      "lat": 1.3765451,
+                      "lng": 103.9360811
+                    },
+                    "html_instructions": "Turn <b>left</b> onto <b>Pasir Ris Street 71</b>",
+                    "maneuver": "turn-left",
+                    "polyline": {
+                      "points": "exkGubkyRU^q@dA"
+                    },
+                    "start_location": {
+                      "lat": 1.376188,
+                      "lng": 103.9365876
+                    },
+                    "travel_mode": "WALKING"
+                  },
+                  {
+                    "distance": {
+                      "text": "0.2 km",
+                      "value": 187
+                    },
+                    "duration": {
+                      "text": "2 mins",
+                      "value": 146
+                    },
+                    "end_location": {
+                      "lat": 1.3778142,
+                      "lng": 103.9370399
+                    },
+                    "html_instructions": "Turn <b>right</b> onto <b>Pasir Ris Drive 10</b>",
+                    "maneuver": "turn-right",
+                    "polyline": {
+                      "points": "mzkGo_kyR[Si@]sBiACC[UYS?CAGEI"
+                    },
+                    "start_location": {
+                      "lat": 1.3765451,
+                      "lng": 103.9360811
+                    },
+                    "travel_mode": "WALKING"
+                  },
+                  {
+                    "distance": {
+                      "text": "0.2 km",
+                      "value": 194
+                    },
+                    "duration": {
+                      "text": "3 mins",
+                      "value": 151
+                    },
+                    "end_location": {
+                      "lat": 1.376794,
+                      "lng": 103.9383893
+                    },
+                    "html_instructions": "Turn <b>right</b> onto <b>Pasir Ris Dr 1</b>",
+                    "maneuver": "turn-right",
+                    "polyline": {
+                      "points": "iblGoekyRr@gAZg@FIv@kA\\c@\\c@"
+                    },
+                    "start_location": {
+                      "lat": 1.3778142,
+                      "lng": 103.9370399
+                    },
+                    "travel_mode": "WALKING"
+                  },
+                  {
+                    "distance": {
+                      "text": "9 m",
+                      "value": 9
+                    },
+                    "duration": {
+                      "text": "1 min",
+                      "value": 12
+                    },
+                    "end_location": {
+                      "lat": 1.3767867,
+                      "lng": 103.9383534
+                    },
+                    "html_instructions": "Turn <b>right</b><div style=\"font-size:0.9em\">Destination will be on the left</div>",
+                    "maneuver": "turn-right",
+                    "polyline": {
+                      "points": "}{kG}mkyR?F"
+                    },
+                    "start_location": {
+                      "lat": 1.376794,
+                      "lng": 103.9383893
+                    },
+                    "travel_mode": "WALKING"
+                  }
+                ],
+                "travel_mode": "WALKING"
+              },
+              {
+                "distance": {
+                  "text": "9.1 km",
+                  "value": 9082
+                },
+                "duration": {
+                  "text": "25 mins",
+                  "value": 1516
+                },
+                "end_location": {
+                  "lat": 1.3760111,
+                  "lng": 103.8847006
+                },
+                "html_instructions": "Bus towards S'Goon",
+                "polyline": {
+                  "points": "k{kGymkyRSMA@_@f@]b@u@jAIHA@Yd@w@lAIL_@j@i@v@U\\ILa@j@m@x@SXW\\a@n@[d@q@~@CHELCLAL?J@JFRVPlAv@vA|@^R\\RFDTLnAz@~@b@^LrAd@RJhA`@fCx@TFITGL?B?@A@?@?@?B?VB\\@P?VCPGVMXO^GLGPANc@z@MV]r@[x@IPIVCHSn@Wv@Wx@Ql@CJI\\EHCHQZ_@pBy@tFg@xDWbB_@tBUbASt@[nA_@rA]fAEPGNk@`Bu@rB]l@MZg@bA]j@GJ_@l@{@hAo@z@cAlAa@b@u@t@iAdAsCnCwBpBsAnA]XMLMJWRaAv@QRIJMP}BlBSNQNyBfBYVg@b@e@^uBbBgEhDgA|@WRCBEDOL]XoA`AgA|@w@p@iEhDcAz@w@p@eAz@iBzAaAx@s@l@YXmAhAwBvBuA~AaAfAm@t@CBUZ]f@QRQTOTa@l@e@t@y@jAe@v@c@v@CDGLCD_A`Bi@hAARAH?FCD]|@Qh@Sv@e@xACHALANSf@Sn@Od@M^Qx@[lAI`@Ox@GTEVKr@Kv@c@tCAHGb@AFGj@]|B@Z@F@J@FBHFL@DBBBFDDJH\\X^JxCv@\\J~Bp@n@JdAXn@Lz@VVFLDNDPFdBb@l@L^JD@r@PNDb@L|@VP@ZHDBz@RVB~@Tr@Pr@PJBr@Ph@LNBVFFBRBLFLDTDNDLDF@RB^LRFTDl@Nj@NxA\\RHHBPBLDj@LvCr@b@L|@Tb@HVFXJVDJ@`@JPFTDf@L`@JXHTDXFRDt@RVFnAZZFXFNDXHhA`@d@VZPDB`@XNJZXv@h@~@x@FDtAhATPRNXPt@d@LJLJb@ZnA`A^XB@jA`ANJZTJFNNFHx@r@XRVTRR@@RZHPHPFTBHJ\\@FHh@BV@V@TBb@@|ABFDFJLDFHHNJ|BAR?PA\\?|BEj@AL?l@?`D?TA?G"
+                },
+                "start_location": {
+                  "lat": 1.376705,
+                  "lng": 103.93837
+                },
+                "transit_details": {
+                  "arrival_stop": {
+                    "location": {
+                      "lat": 1.3760111,
+                      "lng": 103.8847006
+                    },
+                    "name": "Blk 687"
+                  },
+                  "arrival_time": {
+                    "text": "7:20\u202fAM",
+                    "time_zone": "Asia/Singapore",
+                    "value": 1742772011
+                  },
+                  "departure_stop": {
+                    "location": {
+                      "lat": 1.376705,
+                      "lng": 103.93837
+                    },
+                    "name": "Tampines Meridian Jc"
+                  },
+                  "departure_time": {
+                    "text": "6:54\u202fAM",
+                    "time_zone": "Asia/Singapore",
+                    "value": 1742770495
+                  },
+                  "headsign": "S'Goon",
+                  "headway": 720,
+                  "line": {
+                    "agencies": [
+                      {
+                        "name": "SBS Transit",
+                        "phone": "011 65 1800 225 5663",
+                        "url": "https://www.sbstransit.com.sg/"
+                      }
+                    ],
+                    "color": "#55dd33",
+                    "name": "109",
+                    "text_color": "#000000",
+                    "vehicle": {
+                      "icon": "//maps.gstatic.com/mapfiles/transit/iw2/6/bus2.png",
+                      "name": "Bus",
+                      "type": "BUS"
+                    }
+                  },
+                  "num_stops": 13
+                },
+                "travel_mode": "TRANSIT"
+              },
+              {
+                "distance": {
+                  "text": "11.5 km",
+                  "value": 11508
+                },
+                "duration": {
+                  "text": "31 mins",
+                  "value": 1860
+                },
+                "end_location": {
+                  "lat": 1.2981981,
+                  "lng": 103.8493953
+                },
+                "html_instructions": "Bus towards Shenton Way",
+                "polyline": {
+                  "points": "awkGk~`yR?FhACJARGRGFANCFCJEXMRMTSHGVQVMPENAX?j@DZDlBXl@HJ@N@H?HAHAFCFEBCFIDK^k@^k@^e@LSLHLHVNr@d@nAt@f@ZJFBBLF\\RNLPRTd@BJB\\?d@c@lCEVMbAG`@MdAEPCLKv@G`@G^Eb@Kt@Ir@?BA^BV?B@DBJBHNTDFDDDDHFDDFB@@D@pAXD@r@JZD^D~@HTBATIv@O~@Ev@Gx@Ab@?`E?LATA^AV?FAFAPCZGf@Iv@SjAGXERELGRMh@IRUn@]dAEHGNITABM^KZEPE^ED_@~BEPAPEXCJUnASjAG\\E\\CPATEXAPG^Ib@AHCHAPEVADTDh`M~|CTDDQJa@DUJc@Ha@Ja@DSf@qBBSBQ@UAi@AU?MC]Ce@?]?e@Be@@GBIBKLa@JQRYZa@LSV[QO"
+                },
+                "start_location": {
+                  "lat": 1.3760111,
+                  "lng": 103.8847006
+                },
+                "transit_details": {
+                  "arrival_stop": {
+                    "location": {
+                      "lat": 1.2981981,
+                      "lng": 103.8493953
+                    },
+                    "name": "Bencoolen Stn Exit B"
+                  },
+                  "arrival_time": {
+                    "text": "8:02\u202fAM",
+                    "time_zone": "Asia/Singapore",
+                    "value": 1742774520
+                  },
+                  "departure_stop": {
+                    "location": {
+                      "lat": 1.3760111,
+                      "lng": 103.8847006
+                    },
+                    "name": "Blk 687"
+                  },
+                  "departure_time": {
+                    "text": "7:31\u202fAM",
+                    "time_zone": "Asia/Singapore",
+                    "value": 1742772660
+                  },
+                  "headsign": "Shenton Way",
+                  "headway": 300,
+                  "line": {
+                    "agencies": [
+                      {
+                        "name": "SBS Transit",
+                        "phone": "011 65 1800 225 5663",
+                        "url": "https://www.sbstransit.com.sg/"
+                      }
+                    ],
+                    "color": "#55dd33",
+                    "name": "660",
+                    "text_color": "#000000",
+                    "vehicle": {
+                      "icon": "//maps.gstatic.com/mapfiles/transit/iw2/6/bus2.png",
+                      "name": "Bus",
+                      "type": "BUS"
+                    }
+                  },
+                  "num_stops": 7
+                },
+                "travel_mode": "TRANSIT"
+              },
+              {
+                "distance": {
+                  "text": "66 m",
+                  "value": 66
+                },
+                "duration": {
+                  "text": "1 min",
+                  "value": 68
+                },
+                "end_location": {
+                  "lat": 1.2975474,
+                  "lng": 103.8493585
+                },
+                "html_instructions": "Walk to 80 Stamford Rd, Singapore 178902",
+                "polyline": {
+                  "points": "}o|F{bzxR@@GLB@TPHIDDDBTN^GB?@?@?"
+                },
+                "start_location": {
+                  "lat": 1.2980688,
+                  "lng": 103.8495791
+                },
+                "steps": [
+                  {
+                    "distance": {
+                      "text": "45 m",
+                      "value": 45
+                    },
+                    "duration": {
+                      "text": "1 min",
+                      "value": 48
+                    },
+                    "end_location": {
+                      "lat": 1.297753,
+                      "lng": 103.8493159
+                    },
+                    "html_instructions": "Head <b>southwest</b> on <b>Bencoolen St</b> toward <b>Bras Basah Rd</b>",
+                    "polyline": {
+                      "points": "}o|F{bzxR@@GLB@TPHIDDDBTN"
+                    },
+                    "start_location": {
+                      "lat": 1.2980688,
+                      "lng": 103.8495791
+                    },
+                    "travel_mode": "WALKING"
+                  },
+                  {
+                    "distance": {
+                      "text": "21 m",
+                      "value": 21
+                    },
+                    "duration": {
+                      "text": "1 min",
+                      "value": 20
+                    },
+                    "end_location": {
+                      "lat": 1.2975474,
+                      "lng": 103.8493585
+                    },
+                    "html_instructions": "Slight <b>left</b><div style=\"font-size:0.9em\">Destination will be on the left</div>",
+                    "maneuver": "turn-slight-left",
+                    "polyline": {
+                      "points": "}m|FgazxR^GB?@?@?"
+                    },
+                    "start_location": {
+                      "lat": 1.297753,
+                      "lng": 103.8493159
+                    },
+                    "travel_mode": "WALKING"
+                  }
+                ],
+                "travel_mode": "WALKING"
+              }
+            ],
+            "traffic_speed_entry": [],
+            "via_waypoint": []
+          }
+        ],
+        "overview_polyline": {
+          "points": "}tkG_}jyRl@{@FOGG}BsAWMgAdB}D_Cu@i@AKEIr@gAb@q@tAoB\\c@?FPCSMa@h@sAnBKJ{BlDkBnC{B`DmAdBIVEZ@VFRVPdDtBzAz@nAz@~@b@rBr@|Al@|C`AQh@AHD~AKh@]x@O^ANc@z@k@jAe@jAy@hCw@pCIRQZ_@pBaBnLw@xEi@xB{@bDk@hBaBtEk@hAeAnBg@x@kBdCeBpBkK|JmCbCyAjA[^MP}BlBe@^aFbE}K~IqMlKkHdGuBfBgBbBmEvEoB|BiAzAiBnCy@jAe@v@g@|@kAtBi@hAARAPa@bAe@`Bi@bBC\\eA|Cm@fCYzAe@xCo@jEe@hDBb@Nj@NVh@b@xDbA|C|@n@JdAXjBd@d@L`@LrCp@hBd@`Bd@l@J`AVvAXfDx@xA\\`@Jb@J\\JZDr@TbATdCl@\\LbFjA|Ct@~A^pBf@vG|Ah@LbBj@hBfAjHzFnAv@ZVvCxBbCjBVXrAfAj@h@T\\^bALd@L`ABl@D`CZd@XTpCAxEIrFA?G?FtAEf@OVE`Ae@^[n@_@`@GdADbEj@X@RCNIJMdBiCLSLHd@XvD~BPJl@`@PRTd@Fh@?d@c@lCSzA_@fCa@|CUhBAb@Hl@R^JL\\V~A^nAP~ANTBATYvBMpBAdFEzAG|@Q~A[dBa@~AeB|EQl@Kd@e@pCGj@u@dEQ~AU~AEZG\\~`Md}CTDDQPw@TeA|@{DDg@C_AGoBBkADQPm@^k@h@u@V[QOXc@@@GLB@TPHIJHTN^GD?@?"
+        },
+        "summary": "",
+        "warnings": [
+          "Walking directions are in beta. Use caution \u2013 This route may be missing sidewalks or pedestrian paths."
+        ],
+        "waypoint_order": []
+      }
+    ],
+    "status": "OK"
+  }
+  

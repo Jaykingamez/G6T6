@@ -13,13 +13,13 @@ app = Flask(__name__)
 CORS(app)
 
 # URL for SelectedRoute microservice
-selected_route_URL = "http://localhost:5301/selectedroute"
+selected_route_URL = "http://selected_route:5301/selectedroute"
 
 # URL for BusTracking microservice
-bus_tracking_URL = "http://localhost:5030/bus-tracking"
+bus_tracking_URL = "http://bus_tracking:5030/bus-tracking"
 
 # RabbitMQ Configuration
-rabbit_host = "localhost"
+rabbit_host = "G6T6-rabbit"
 rabbit_port = 5672
 notification_exchange = "notification.direct"
 notification_exchange_type = "direct"
@@ -151,10 +151,11 @@ def track_bus_arrival(bus_stop_code, bus_id):
         if should_notify and notification_data:
             # Publish notification
             publish_notification(notification_data)
+            print(f"Notification sent!", flush=True)
             break
         else:
             # Wait for 2 minutes before checking again
-            print(f"Bus not arriving soon, checking again in 2 minutes")
+            print(f"Bus not arriving soon, checking again in 2 minutes", flush=True)
             time.sleep(120)  # Wait for 2 minutes
 
 @app.route("/enable_notification/<int:RouteID>", methods=["GET"])

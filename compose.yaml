@@ -173,7 +173,7 @@ services:
     image: smartTransport/topup:1.0
     container_name: topup    
     ports:
-      - "5210:5210"
+      - "5212:5212"
     depends_on:
       - make_payment
       - check_balance

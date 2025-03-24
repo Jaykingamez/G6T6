@@ -1,6 +1,7 @@
 from flask import Flask, request, jsonify
 from flasgger import Swagger
 from flask_cors import CORS
+from pathlib import Path
 from werkzeug.exceptions import BadRequest
 import requests
 import os
@@ -10,7 +11,8 @@ from concurrent.futures import ThreadPoolExecutor
 from dotenv import load_dotenv
 
 # Load environment variables from .env file
-load_dotenv()
+env_path = Path(__file__).resolve().parents[2] / ".env"
+load_dotenv(env_path)
 
 app = Flask(__name__)
 CORS(app)
@@ -19,10 +21,15 @@ swagger = Swagger(app)
 # API endpoint
 LTA_API_URL = "https://datamall2.mytransport.sg/ltaodataservice/v3/BusArrival"
 
+LTA_API_KEY = os.environ.get('LTA_API_KEY')
+print(LTA_API_KEY)
+
+if not LTA_API_KEY:
+    raise ValueError("LTA API Key not found. Please set the LTA_API_KEY environment variable.")
+
 # API key loaded from environment variables
-API_KEY = os.environ.get("LTA_API_KEY", "7HRmqLbzR0adInLDvWB6EQ==")
 HEADERS = {
-    "AccountKey": API_KEY,
+    "AccountKey": LTA_API_KEY,
     "accept": "application/json"
 }
 

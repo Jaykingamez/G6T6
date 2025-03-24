@@ -7,7 +7,7 @@ load_dotenv()
 
 app = Flask(__name__)
 app.config["SQLALCHEMY_DATABASE_URI"] = (
-    environ.get("dbURL") or "mysql+mysqlconnector://root@localhost:3306/SelectedRoute"
+    environ.get("dbURL") or "mysql+mysqlconnector://root@localhost:3306/selectedroute"
 )
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_ENGINE_OPTIONS'] = {'pool_recycle': 299}
@@ -176,4 +176,5 @@ def delete_route(RouteID):
     )
 
 if __name__ == '__main__':
-    app.run(port=5301, debug=True)
+    app.run(host='0.0.0.0', port=5301, debug=True)
+

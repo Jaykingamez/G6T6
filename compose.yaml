@@ -39,6 +39,8 @@ services:
     container_name: bus_tracking
     ports:
       - "5030:5030"
+    env_file:
+      - .env
     networks:
       - app-network
 

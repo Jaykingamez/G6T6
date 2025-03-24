@@ -13,6 +13,7 @@ app = Flask(__name__)
 CORS(app, supports_credentials=True)
 
 check_balance_url = "http://localhost:5005/checkbalance/<int:user_id>"
+send_notification_url = "http://localhost:5210/notify"
 
 @app.route('/makepayment', methods=['POST'])
 def MakePayment():
@@ -33,4 +34,4 @@ def MakePayment():
 
 if __name__ == "__main__":
     print("Composite service: Make Payment ...")
-    app.run(host='0.0.0.0', port=5008, debug=True)
+    app.run(host='0.0.0.0', port=5208, debug=True)

@@ -70,4 +70,4 @@ def get_user_cards(user_id):
 
 if __name__ == "__main__":
     print("Composite service: User Card Balance ...")
-    app.run(host='0.0.0.0', port=5005, debug=True)
+    app.run(host='0.0.0.0', port=5205, debug=True)

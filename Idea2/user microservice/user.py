@@ -7,7 +7,6 @@ from flask_sqlalchemy import SQLAlchemy
 from os import environ
 import os
 import logging
-from werkzeug.security import generate_password_hash, check_password_hash
 
 # Configure logging
 logging.basicConfig(level=logging.DEBUG)
@@ -19,7 +18,7 @@ CORS(app)
 
 # Update the database configuration
 app.config["SQLALCHEMY_DATABASE_URI"] = (
-    environ.get("dbURL") or "mysql+mysqlconnector://root:root@user-db:3306/users"
+    environ.get("dbURL") or "mysql+mysqlconnector://root@localhost:3306/users"
 )
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_ENGINE_OPTIONS'] = {'pool_recycle': 299}
@@ -32,8 +31,7 @@ class User(db.Model):
     UserId = db.Column(db.Integer, primary_key=True)
     FullName = db.Column(db.String(100), nullable=False)
     Email = db.Column(db.String(255), unique=True, nullable=False)
-    Password = db.Column(db.String(255), nullable=False)
-    Phone = db.Column(db.String(20), unique=True)  # Made nullable since it's not required for authentication
+    Phone = db.Column(db.String(20), unique=True, nullable=False)
     CreatedAt = db.Column(db.TIMESTAMP, server_default=db.func.now())
     UpdatedAt = db.Column(db.TIMESTAMP, server_default=db.func.now(), onupdate=db.func.now())
 
@@ -47,16 +45,11 @@ class User(db.Model):
             'UpdatedAt': self.UpdatedAt.isoformat()
         }
 
-    def check_password(self, password):
-        return check_password_hash(self.Password, password)
-
 # CREATE
 @app.route("/users", methods=['POST'])
 def createUser():
     if request.is_json:
         data = request.get_json()
-        # Debug log the received data
-        logger.debug(f"Received data for user creation: {data}")
         result = processCreateUser(data)
         return jsonify(result), result["code"]
     else:
@@ -106,42 +99,13 @@ def deleteUser(user_id):
     result = processDeleteUser(user_id)
     return jsonify(result), result["code"]
 
-# Authentication
-@app.route("/authenticate", methods=['POST'])
-def authenticate():
-    if not request.is_json:
-        return jsonify({"code": 400, "message": "Authentication data should be in JSON."}), 400
-
-    data = request.get_json()
-    if not all(k in data for k in ["FullName", "Password"]):
-        return jsonify({"code": 400, "message": "Both FullName and Password are required."}), 400
-
-    try:
-        user = User.query.filter_by(FullName=data['FullName']).first()
-        if user and user.check_password(data['Password']):
-            return jsonify({
-                "code": 200,
-                "data": user.serialize(),
-                "message": "Authentication successful"
-            }), 200
-        else:
-            return jsonify({
-                "code": 401,
-                "message": "Invalid credentials"
-            }), 401
-    except Exception as e:
-        return jsonify({
-            "code": 500,
-            "message": str(e)
-        }), 500
-
 def processCreateUser(data):
     try:
         # Debug logging
-        logger.debug(f"Processing user creation with data: {data}")
+        logger.debug(f"Received data: {data}")
         
         # Validate required fields
-        required_fields = ['FullName', 'Email', 'Password']
+        required_fields = ['FullName', 'Email', 'Phone']
         for field in required_fields:
             if field not in data:
                 logger.error(f"Missing field: {field}")
@@ -151,18 +115,16 @@ def processCreateUser(data):
                     'message': f'Missing required field: {field}'
                 }
 
-        # Create new user with explicit fields
+        # Create new user
         new_user = User(
             FullName=data['FullName'],
             Email=data['Email'],
-            Password=generate_password_hash(data['Password']),
-            Phone=data.get('Phone')  # Optional field
+            Phone=data['Phone']
         )
         
         # Add and commit to database
         db.session.add(new_user)
         db.session.commit()
-        logger.debug("User created successfully")
         
         return {
             'code': 201,
@@ -196,8 +158,6 @@ def processUpdateUser(user_id, data):
             user.FullName = data['FullName']
         if 'Email' in data:
             user.Email = data['Email']
-        if 'Password' in data:
-            user.Password = generate_password_hash(data['Password'])
         if 'Phone' in data:
             user.Phone = data['Phone']
 

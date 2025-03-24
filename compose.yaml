@@ -85,15 +85,6 @@ services:
     networks:
       - app-network  # Add this line to connect to the app-network
 
-  make_payment:
-    build:
-      context: ./Idea2/payment service  # Path to the directory containing make_payment.py and Dockerfile
-      dockerfile: Dockerfile               # Name of the Dockerfile
-    ports:
-      - "5008:5008"                        # Map port 5008 of the container to port 5008 on the host
-    # environment:
-    #   - STRIPE_SECRET_KEY=${STRIPE_SECRET_KEY}
-
   user:
     build:
       context: "./Idea2/user microservice"
@@ -133,6 +124,60 @@ services:
       - dbURL=mysql+mysqlconnector://is213@host.docker.internal:3306/transactions
     networks:
       - app-network
+
+  notification:
+    build:
+      context: ./Idea2/notification microservice 
+      dockerfile: Dockerfile   
+    image: smartTransport/notificaiton:1.0
+    container_name: notification            
+    ports:
+      - "5210:5210"                        
+  
+  check_balance:
+    build:
+      context: ./Idea2/check balance microservice 
+      dockerfile: Dockerfile   
+    image: smartTransport/checkbalance:1.0
+    container_name: checkbalance
+    ports:
+      - "5205:5205"
+    depends_on:
+      - user
+      - card
+    networks:
+      - app-network 
+  
+  make_payment:
+    build:
+      context: ./Idea2/payment service  # Path to the directory containing make_payment.py and Dockerfile
+      dockerfile: Dockerfile               # Name of the Dockerfile
+    ports:
+      - "5208:5208"                        # Map port 5008 of the container to port 5008 on the host
+    depends_on:
+      - check_balance
+      - user
+      - card
+      - transaction
+    networks:
+      - app-network 
+    # environment:
+    #   - STRIPE_SECRET_KEY=${STRIPE_SECRET_KEY}
+  
+  top_up:
+    build:
+      context: ./Idea2/top up microservice 
+      dockerfile: Dockerfile   
+    image: smartTransport/topup:1.0
+    container_name: topup    
+    ports:
+      - "5210:5210"
+    depends_on:
+      - make_payment
+      - check_balance
+    networks:
+      - app-network 
+
 
   redis:
     image: redis:latest

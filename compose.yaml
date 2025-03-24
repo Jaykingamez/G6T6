@@ -222,8 +222,10 @@ services:
     container_name: selected_route
     ports:
       - "5301:5301"
+    networks:
+      - G6T6-net
     environment:
-      - dbURL=mysql+mysqlconnector://root@localhost:3306/SelectedRoute
+      - dbURL=mysql+mysqlconnector://is213@host.docker.internal:3306/SelectedRoute
 
   enable_notification:
     build:
@@ -232,6 +234,8 @@ services:
     container_name: enable_notification
     ports:
       - "5302:5302"
+    networks:
+      - G6T6-net
     depends_on:
       - rabbitmq
   #IDEA3 - END

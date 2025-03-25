@@ -85,14 +85,25 @@ export default {
     },
 
     logout({ commit }) {
+      // Clear user from state
       commit('SET_USER', null);
+      
+      // Ensure localStorage is cleared
+      localStorage.removeItem('user');
     },
 
     // Initialize auth state from localStorage
-    initAuth({ commit }) {
+    initAuth({ commit, dispatch }) {
       const user = localStorage.getItem('user');
       if (user) {
-        commit('SET_USER', JSON.parse(user));
+        try {
+          commit('SET_USER', JSON.parse(user));
+          // After initializing from local storage, verify user still exists on server
+          dispatch('checkAuthState');
+        } catch (error) {
+          console.error('Error parsing user data from localStorage:', error);
+          localStorage.removeItem('user');
+        }
       }
     },
 

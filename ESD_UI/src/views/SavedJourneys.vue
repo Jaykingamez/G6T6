@@ -42,14 +42,14 @@
               <span class="badge" :class="getBadgeClass(journey.transportMode)">
                 {{ journey.transportMode }}
               </span>
-              <small class="text-muted">Saved on {{ formatDate(journey.savedAt) }}</small>
+              <small class="text-muted">Route ID: {{ journey.id }}</small>
             </div>
             <div class="card-body">
-              <h5 class="card-title">{{ journey.startPoint }} to {{ journey.endPoint }}</h5>
-              <p v-if="journey.routeName" class="text-muted">{{ journey.routeName }}</p>
+              <h5 class="card-title">Bus Stop: {{ journey.startPoint }}</h5>
+              <p class="text-muted">Bus ID: {{ journey.endPoint }}</p>
               <ul class="list-unstyled">
-                <li><strong>Travel Time:</strong> {{ journey.travelTime }} mins</li>
-                <li><strong>Cost:</strong> ${{ Number(journey.cost).toFixed(2) }}</li>
+                <li v-if="journey.travelTime"><strong>Travel Time:</strong> {{ journey.travelTime }} mins</li>
+                <li v-if="journey.cost"><strong>Cost:</strong> ${{ Number(journey.cost).toFixed(2) }}</li>
               </ul>
             </div>
             <div class="card-footer bg-white">

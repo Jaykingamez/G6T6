@@ -19,8 +19,8 @@ export default {
     Footer
   },
   created() {
-    // Check if user is authenticated on app load
-    this.$store.dispatch('auth/checkAuthState');
+    // Initialize authentication state when app starts
+    this.$store.dispatch('auth/initAuth');
   }
 };
 </script>

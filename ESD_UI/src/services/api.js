@@ -33,21 +33,40 @@ export const saveJourney = async (journeyData) => {
 
 // Function to get saved journeys for a user
 export const getSavedJourneys = async (userId) => {
+    console.log('Fetching journeys for user ID:', userId); // Debug log
+    
+    if (!userId) {
+        console.error('Missing userId in getSavedJourneys call');
+        throw new Error('User ID is required');
+    }
+    
     try {
-        // Call the composite service first (preferred way)
-        const response = await axios.get(`${API_BASE_URL}/routes/user/${userId}`);
-        return response.data;
+        // Direct call to the selectedRoute microservice
+        const directResponse = await axios.get(`http://localhost:5301/selectedroute/user/${userId}`, {
+            // Add timeout and additional headers
+            timeout: 10000,
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            }
+        });
+        return directResponse.data;
     } catch (error) {
-        console.error('Error fetching saved journeys from composite service:', error);
+        console.error('Error fetching saved journeys:', error);
         
-        // Fallback to direct atomic service call if composite fails
-        try {
-            const directResponse = await axios.get(`${SAVED_ROUTES_SERVICE_URL}/saved_routes/user/${userId}`);
-            return directResponse.data;
-        } catch (fallbackError) {
-            console.error('Error fetching saved journeys from atomic service:', fallbackError);
-            throw fallbackError;
+        // Return a default response for development
+        if (process.env.NODE_ENV === 'development') {
+            console.log('Returning mock data in development mode');
+            return {
+                code: 200,
+                data: {
+                    routes: [],
+                    count: 0
+                }
+            };
         }
+        
+        throw error;
     }
 };
 

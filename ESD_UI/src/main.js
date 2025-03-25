@@ -11,8 +11,6 @@ import 'bootstrap-icons/font/bootstrap-icons.css';
 import Toast from 'vue-toastification';
 import 'vue-toastification/dist/index.css';
 
-const app = createApp(App);
-
 const toastOptions = {
   position: 'top-right',
   timeout: 3000,
@@ -28,8 +26,13 @@ const toastOptions = {
   rtl: false
 };
 
-app.use(router);
-app.use(store);
-app.use(Toast, toastOptions);
+// Initialize auth state before mounting the app
+store.dispatch('auth/initAuth').then(() => {
+  const app = createApp(App);
 
-app.mount('#app');
+  app.use(router);
+  app.use(store);
+  app.use(Toast, toastOptions);
+
+  app.mount('#app');
+});

@@ -31,7 +31,10 @@ export default {
       
       try {
         // Get the current user ID from auth module
-        const userId = rootState.auth.user?.id;
+        const userId = rootState.auth.user?.UserId;
+        
+        console.log('Current user state:', rootState.auth.user);
+        console.log('Using user ID for routes:', userId);
         
         if (!userId) {
           throw new Error('User ID not available. Please log in again.');
@@ -40,19 +43,19 @@ export default {
         const response = await getSavedJourneys(userId);
         
         if (response.code === 200) {
-          // Extract routes from the response based on API structure
-          const routes = response.data?.routes || response.data || [];
+          // Extract routes from the selectedRoute service response
+          const routes = response.data?.routes || [];
           
           // Transform the data to match our UI format
           const transformedJourneys = routes.map(route => ({
-            id: route.id,
-            startPoint: route.route_data.startPoint || 'Unknown start',
-            endPoint: route.route_data.endPoint || 'Unknown destination',
-            transportMode: route.route_data.transportMode || 'Mixed',
-            travelTime: route.route_data.travelTime || 0,
-            cost: route.route_data.cost || 0,
-            savedAt: route.created_at || new Date().toISOString(),
-            routeName: route.route_name || 'Unnamed Route'
+            id: route.RouteID,
+            startPoint: route.BusStopCode || 'Unknown start',
+            endPoint: route.BusID || 'Unknown destination',
+            transportMode: 'Bus', // Default to bus since we're using BusID
+            travelTime: 0, // This data might not be available from selectedRoute
+            cost: 0,       // This data might not be available from selectedRoute
+            savedAt: new Date().toISOString(),
+            routeName: `Route from ${route.BusStopCode} via ${route.BusID}`
           }));
           
           commit('SET_SAVED_JOURNEYS', transformedJourneys);
@@ -75,7 +78,7 @@ export default {
       commit('SET_ERROR', null);
       
       try {
-        const userId = rootState.auth.user?.id;
+        const userId = rootState.auth.user?.UserId;
         
         if (!userId) {
           throw new Error('User ID not available. Please log in again.');
@@ -121,13 +124,14 @@ export default {
       commit('SET_ERROR', null);
       
       try {
-        const response = await deleteJourney(journeyId);
+        // Call the selectedRoute service to delete the route
+        const response = await axios.delete(`http://localhost:5301/selectedroute/${journeyId}`);
         
-        if (response.code === 200) {
+        if (response.data.code === 200) {
           commit('REMOVE_JOURNEY', journeyId);
           return true;
         } else {
-          throw new Error(response.message || 'Failed to remove journey');
+          throw new Error(response.data.message || 'Failed to remove journey');
         }
       } catch (error) {
         console.error('Error in removeJourney:', error);

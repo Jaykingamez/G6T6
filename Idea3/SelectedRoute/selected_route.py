@@ -2,10 +2,12 @@ from flask import Flask, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from os import environ
 from dotenv import load_dotenv
+from flask_cors import CORS  # Add this import
 
 load_dotenv()
 
 app = Flask(__name__)
+CORS(app)  # Enable CORS for all routes
 app.config["SQLALCHEMY_DATABASE_URI"] = (
     environ.get("dbURL") or "mysql+mysqlconnector://is213@host.docker.internal:3306/selectedroute"
 )
@@ -74,6 +76,30 @@ def find_by_routeid(RouteID):
         {
             "code": 404,
             "message": "Route not found."
+        }
+    ), 404
+
+# Get all routes for a specific user
+@app.route("/selectedroute/user/<int:UserID>")
+def find_by_userid(UserID):
+    routelist = db.session.scalars(
+        db.select(SelectedRoute).filter_by(UserID=UserID)
+    ).all()
+    
+    if len(routelist):
+        return jsonify(
+            {
+                "code": 200,
+                "data": {
+                    "routes": [route.json() for route in routelist],
+                    "count": len(routelist)
+                }
+            }
+        )
+    return jsonify(
+        {
+            "code": 404,
+            "message": f"No routes found for UserID {UserID}."
         }
     ), 404
 

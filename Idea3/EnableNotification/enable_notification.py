@@ -112,6 +112,7 @@ def process_bus_arrival(bus_stop_code, service_no):
             'Feature': next_bus.get('Feature', ''),
             'Type': next_bus.get('Type', '')
         }
+        print("Notification Sent!")
         return True, notification_data
     
     return False, None

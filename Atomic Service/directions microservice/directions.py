@@ -123,7 +123,7 @@ def get_directions():
     # Get query parameters
     origin = request.args.get('origin')
     destination = request.args.get('destination')
-    mode = request.args.get('mode', 'driving')  # Default to 'driving'
+    mode = request.args.get('mode', 'transit')  # Default to 'driving'
     departure_time = request.args.get('departure_time')
     avoid = request.args.get('avoid')
     alternatives = request.args.get('alternatives', 'true')  # Default to 'true'

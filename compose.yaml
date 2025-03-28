@@ -87,6 +87,16 @@ services:
       - "5032:5032"
     networks:
       - app-network
+  plan_journey:
+    build:
+      context: "./Composite Service/plan_journey"
+      dockerfile: Dockerfile
+    image: kelvinpcw/plan_journey:1.0
+    container_name: plan_journey
+    ports:
+      - "5031:5031"
+    networks:
+      - app-network
 
   composite_service:
     build: ./Composite Service/api_gateway

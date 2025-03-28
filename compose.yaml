@@ -97,6 +97,15 @@ services:
       - "5031:5031"
     networks:
       - app-network
+    depends_on:
+      - directions
+      - bus_stop_lookup
+      - calculate_fare
+      - bus_fare
+      - train_fare
+      - emission
+      - bus_tracking
+
 
   composite_service:
     build: ./Composite Service/api_gateway
@@ -117,7 +126,6 @@ services:
     ports:
       - "5201:5201"
     environment:
-      # Connect to MySQL running on the host machine via host.docker.internal
       - dbURL=mysql+mysqlconnector://is213@host.docker.internal:3306/users
     networks:
       - app-network

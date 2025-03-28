@@ -18,7 +18,7 @@
               placeholder="Enter start point"
               required
             />
-            <label for="startPoint">Start Point</label>
+            
             <div v-if="startSuggestions.length && startFocused" class="suggestions-dropdown">
               <div 
                 v-for="suggestion in startSuggestions" 
@@ -55,7 +55,7 @@
               placeholder="Enter destination"
               required
             />
-            <label for="endPoint">Destination</label>
+            
             <div v-if="endSuggestions.length && endFocused" class="suggestions-dropdown">
               <div 
                 v-for="suggestion in endSuggestions" 

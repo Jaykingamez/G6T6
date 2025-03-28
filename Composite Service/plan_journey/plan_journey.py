@@ -2,8 +2,15 @@
 from flask import Flask, request, jsonify
 import asyncio
 import aiohttp  # Async HTTP requests
+from flask_cors import CORS  # Import CORS
+import logging
+
+# Configure logging
+logging.basicConfig(level=logging.DEBUG)
+logger = logging.getLogger(__name__)
 
 app = Flask(__name__)
+CORS(app)  # Enable CORS for all routes
 
 # Change from localhost references
 DIRECTIONS_API = "http://directions:5001/directions"  # Instead of localhost:5001
@@ -20,6 +27,8 @@ def plan_journey():
     destination = request.args.get('destination')
     passenger_type = request.args.get('passengerType', 'adult')  # Default to adult if not specified
     peak_hour = request.args.get('peakHour', 'false').lower() == 'true'  # Convert to boolean, default false
+    
+    logger.debug(f"Planning journey - Origin: {origin}, Destination: {destination}, Type: {passenger_type}, Peak: {peak_hour}")
     
     # Validate required parameters
     if not origin or not destination:
@@ -182,11 +191,8 @@ async def get_emissions_for_routes(session, directions_data):
                         if travel_mode == "driving":
                             mode = "car"
                         elif travel_mode == "walking" or travel_mode == "bicycling":
-                            # Skip walking/cycling or use lowest emission mode
-                            # Option 1: Skip this segment for emissions calculation
+                            # Skip walking/cycling as they have zero emissions
                             continue
-                            # Option 2: Use train as lowest emission option
-                            # mode = "train"
                         else:
                             # Default to bus for unknown modes
                             mode = "bus"
@@ -225,19 +231,18 @@ async def get_emissions(session, mode, distance):
     try:
         distance_float = float(distance)
         if distance_float <= 0:
-            return {"error": "Distance must be a positive number"}
+            return {"error": "Distance must be positive"}
     except (ValueError, TypeError):
-        return {"error": f"Invalid distance value: {distance}"}
+        return {"error": "Invalid distance value"}
     
     # Ensure mode is supported by the emissions API
     supported_modes = ["car", "bus", "train"]
     if mode not in supported_modes:
-        # Default to bus for unsupported modes
-        mode = "bus"
+        return {"error": f"Unsupported transport mode: {mode}"}
     
     params = {
         'mode': mode,
-        'distance': str(distance_float)  # Convert to string for URL parameter
+        'distance': str(distance_float)
     }
     
     try:

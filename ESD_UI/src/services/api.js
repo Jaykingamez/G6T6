@@ -3,6 +3,7 @@ import axios from 'axios';
 // Replace with your actual API base URLs - adjust based on your deployment configuration
 const API_BASE_URL = process.env.VUE_APP_API_BASE_URL || 'http://localhost:5004'; // Composite service
 const SAVED_ROUTES_SERVICE_URL = process.env.VUE_APP_SAVED_ROUTES_URL || 'http://localhost:5006'; // Atomic service
+const PLAN_JOURNEY_API = process.env.VUE_APP_PLAN_JOURNEY_API || 'http://localhost:5031'; // Plan Journey service
 
 // Function to get journey options based on start and end points
 export const getJourneyOptions = async (startPoint, endPoint) => {
@@ -16,6 +17,25 @@ export const getJourneyOptions = async (startPoint, endPoint) => {
         return response.data;
     } catch (error) {
         console.error('Error fetching journey options:', error);
+        throw error;
+    }
+};
+
+// Function to call the plan_journey composite service
+export const planJourney = async (origin, destination, passengerType = 'adult', peakHour = true) => {
+    try {
+        console.log(`Calling plan_journey API with origin: ${origin}, destination: ${destination}`);
+        const response = await axios.get(`${PLAN_JOURNEY_API}/plan_journey`, {
+            params: {
+                origin,
+                destination,
+                peakHour,
+                passengerType,
+            }
+        });
+        return response.data;
+    } catch (error) {
+        console.error('Error planning journey:', error);
         throw error;
     }
 };

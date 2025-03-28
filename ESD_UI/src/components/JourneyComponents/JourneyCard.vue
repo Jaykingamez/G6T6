@@ -1,31 +1,73 @@
 <template>
   <div class="journey-card">
-    <div class="card-content">
-      <div class="transport-icon">
-        <i :class="getTransportIcon"></i>
+    <div class="card h-100 shadow-sm">
+      <div :class="['card-header', getTransportClass(transportMode)]">
+        <div class="d-flex justify-content-between align-items-center">
+          <h5 class="mb-0">{{ transportMode }}</h5>
+          <span class="transport-icon">
+            <i :class="getTransportIcon(transportMode)"></i>
+          </span>
+        </div>
       </div>
-      <div class="journey-details">
-        <h3 class="transport-mode">{{ transportMode }}</h3>
-        <div class="journey-stats">
-          <div class="stat">
-            <i class="bi bi-clock"></i>
-            <span>{{ travelTime }} min</span>
+      <div class="card-body">
+        <div class="journey-details">
+          <div class="journey-time mb-3">
+            <div class="d-flex justify-content-between">
+              <div>
+                <strong>Travel Time:</strong> {{ travelTime }} mins
+              </div>
+              <div v-if="departureTime && arrivalTime">
+                <small class="text-muted">{{ departureTime }} - {{ arrivalTime }}</small>
+              </div>
+            </div>
+            <div v-if="distance" class="mt-1">
+              <small class="text-muted">Distance: {{ distance }}</small>
+            </div>
           </div>
-          <div class="stat">
-            <i class="bi bi-currency-dollar"></i>
-            <span>${{ cost.toFixed(2) }}</span>
+          
+          <div class="journey-cost mb-3">
+            <strong>Cost:</strong> ${{ parseFloat(cost).toFixed(2) }}
+          </div>
+          
+          <div v-if="emission" class="journey-emissions mb-3">
+            <strong>CO₂ Emission:</strong> {{ emission }} kg
+            <div class="emission-indicator mt-1">
+              <div class="progress" style="height: 6px;">
+                <div 
+                  class="progress-bar" 
+                  role="progressbar" 
+                  :style="{width: getEmissionIndicator(emission) + '%'}" 
+                  :class="getEmissionClass(emission)">
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div v-if="steps && steps.length" class="journey-steps">
+            <strong>Key Steps:</strong>
+            <ul class="list-unstyled small mt-2">
+              <li v-for="(step, index) in formatSteps(steps)" :key="index" class="mb-1">
+                <i :class="getStepIcon(step)"></i> {{ step }}
+              </li>
+            </ul>
           </div>
         </div>
       </div>
-      <div class="journey-actions">
-        <button class="btn-save" @click="saveJourney" title="Save Journey">
-          <i class="bi bi-bookmark-plus"></i>
-          <span>Save</span>
-        </button>
-        <button class="btn-map" @click="viewOnMap" title="View on Map">
-          <i class="bi bi-map"></i>
-          <span>Map</span>
-        </button>
+      <div class="card-footer bg-white border-0">
+        <div class="d-flex justify-content-between">
+          <button 
+            class="btn btn-outline-primary btn-sm" 
+            @click="viewOnMap"
+            title="View this route on the map">
+            <i class="bi bi-map"></i> View Map
+          </button>
+          <button 
+            class="btn btn-outline-success btn-sm" 
+            @click="handleSave"
+            title="Save this route to your favorites">
+            <i class="bi bi-bookmark-plus"></i> Save
+          </button>
+        </div>
       </div>
     </div>
   </div>
@@ -43,32 +85,115 @@ export default {
       required: true
     },
     cost: {
-      type: Number,
+      type: [Number, String],
       required: true
-    }
-  },
-  computed: {
-    getTransportIcon() {
-      const icons = {
-        'MRT': 'bi bi-train-front',
-        'Bus': 'bi bi-bus-front',
-        'Taxi': 'bi bi-taxi-front',
-        'Walk': 'bi bi-person-walking'
-      };
-      return icons[this.transportMode] || 'bi bi-arrow-right-circle';
+    },
+    emission: {
+      type: [Number, String],
+      default: 0
+    },
+    distance: {
+      type: String,
+      default: ''
+    },
+    departureTime: {
+      type: String,
+      default: ''
+    },
+    arrivalTime: {
+      type: String,
+      default: ''
+    },
+    steps: {
+      type: Array,
+      default: () => []
+    },
+    routeIndex: {
+      type: Number,
+      default: 0
     }
   },
   methods: {
-    saveJourney() {
+    getTransportClass(mode) {
+      const modeMap = {
+        'Bus': 'bg-primary text-white',
+        'MRT': 'bg-success text-white',
+        'Walking': 'bg-info text-white',
+        'Taxi': 'bg-warning text-dark',
+        'Mixed': 'bg-secondary text-white'
+      };
+      return modeMap[mode] || 'bg-secondary text-white';
+    },
+    getTransportIcon(mode) {
+      const iconMap = {
+        'Bus': 'bi bi-bus-front',
+        'MRT': 'bi bi-train-front',
+        'Walking': 'bi bi-person-walking',
+        'Taxi': 'bi bi-taxi-front',
+        'Mixed': 'bi bi-arrow-repeat'
+      };
+      return iconMap[mode] || 'bi bi-signpost-2';
+    },
+    getStepIcon(step) {
+      if (step.includes('Bus')) return 'bi bi-bus-front';
+      if (step.includes('MRT') || step.includes('train')) return 'bi bi-train-front';
+      if (step.includes('Walk')) return 'bi bi-person-walking';
+      return 'bi bi-arrow-right';
+    },
+    formatSteps(steps) {
+      // Extract key information from steps to display a summary
+      const formattedSteps = [];
+      
+      for (const step of steps) {
+        if (step.travel_mode === 'TRANSIT') {
+          const transit = step.transit_details;
+          if (transit) {
+            const vehicleType = transit.line?.vehicle?.name || 'Transit';
+            const routeName = transit.line?.short_name || transit.line?.name || '';
+            const stops = transit.num_stops || 0;
+            formattedSteps.push(`${vehicleType} ${routeName} (${stops} stops)`);
+          }
+        } else if (step.travel_mode === 'WALKING') {
+          // Only include walking steps that are substantial
+          if (step.distance && step.distance.value > 100) {
+            formattedSteps.push(`Walk ${step.distance.text}`);
+          }
+        }
+      }
+      
+      // Limit to 3 key steps maximum
+      return formattedSteps.slice(0, 3);
+    },
+    getEmissionIndicator(emission) {
+      // Scale the emissions to a percentage (0-100) for the progress bar
+      // Assuming 5kg is the max that would reach 100%
+      const maxEmission = 5;
+      return Math.min(parseFloat(emission) / maxEmission * 100, 100);
+    },
+    getEmissionClass(emission) {
+      const value = parseFloat(emission);
+      if (value < 1) return 'bg-success';
+      if (value < 2) return 'bg-info';
+      if (value < 3) return 'bg-warning';
+      return 'bg-danger';
+    },
+    handleSave() {
       this.$emit('save-journey', {
         transportMode: this.transportMode,
         travelTime: this.travelTime,
-        cost: this.cost
+        cost: this.cost,
+        emission: this.emission,
+        routeIndex: this.routeIndex
       });
     },
     viewOnMap() {
       this.$emit('view-on-map', {
-        transportMode: this.transportMode
+        transportMode: this.transportMode,
+        travelTime: this.travelTime,
+        cost: this.cost,
+        emission: this.emission,
+        routeIndex: this.routeIndex,
+        steps: this.steps
       });
     }
   }
@@ -77,132 +202,22 @@ export default {
 
 <style scoped>
 .journey-card {
-  background: white;
-  border-radius: 16px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
-  transition: all 0.3s ease;
-  overflow: hidden;
-  border: 1px solid rgba(226, 232, 240, 0.8);
-  backdrop-filter: blur(10px);
-  margin-bottom: 1rem;
-}
-
-.journey-card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 12px rgba(0, 0, 0, 0.1);
-}
-
-.card-content {
-  padding: 1.5rem;
+  height: 100%;
 }
 
 .transport-icon {
-  background: linear-gradient(135deg, #4299e1 0%, #2c5282 100%);
-  width: 48px;
-  height: 48px;
-  border-radius: 12px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: 1rem;
-  color: white;
-  font-size: 1.5rem;
-  transition: transform 0.3s ease;
-}
-
-.journey-card:hover .transport-icon {
-  transform: scale(1.05);
-}
-
-.transport-mode {
   font-size: 1.25rem;
-  font-weight: 700;
-  color: #2d3748;
-  margin-bottom: 0.75rem;
 }
 
-.journey-stats {
-  display: flex;
-  gap: 1.5rem;
-  margin-bottom: 1.5rem;
+.emission-indicator {
+  height: 6px;
 }
 
-.stat {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  color: #4a5568;
-  font-size: 0.95rem;
+.card {
+  transition: transform 0.2s;
 }
 
-.stat i {
-  color: #4299e1;
-}
-
-.journey-actions {
-  display: flex;
-  gap: 1rem;
-}
-
-.btn-save,
-.btn-map {
-  flex: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
-  padding: 0.75rem;
-  border: none;
-  border-radius: 8px;
-  font-weight: 600;
-  transition: all 0.3s ease;
-  cursor: pointer;
-}
-
-.btn-save {
-  background: #4299e1;
-  color: white;
-}
-
-.btn-map {
-  background: #edf2f7;
-  color: #2d3748;
-}
-
-.btn-save:hover {
-  background: #3182ce;
-}
-
-.btn-map:hover {
-  background: #e2e8f0;
-}
-
-.btn-save i,
-.btn-map i {
-  font-size: 1.1rem;
-}
-
-@media (max-width: 768px) {
-  .card-content {
-    padding: 1.25rem;
-  }
-
-  .transport-icon {
-    width: 40px;
-    height: 40px;
-    font-size: 1.25rem;
-  }
-
-  .transport-mode {
-    font-size: 1.1rem;
-  }
-
-  .journey-stats {
-    gap: 1rem;
-  }
-
-  .stat {
-    font-size: 0.9rem;
-  }
+.card:hover {
+  transform: translateY(-5px);
 }
 </style>

@@ -70,8 +70,9 @@
           </div>
         </div>
 
-        <button type="submit" class="search-btn">
-          <i class="bi bi-search"></i>
+        <button type="submit" class="search-btn" :disabled="loading">
+          <span v-if="loading" class="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span>
+          <i v-else class="bi bi-search"></i>
           <span>Find Routes</span>
         </button>
       </div>
@@ -80,6 +81,8 @@
 </template>
 
 <script>
+import { planJourney } from '@/services/api';
+
 export default {
   data() {
     return {
@@ -88,7 +91,8 @@ export default {
       startSuggestions: [],
       endSuggestions: [],
       startFocused: false,
-      endFocused: false
+      endFocused: false,
+      loading: false
     };
   },
   methods: {
@@ -136,11 +140,42 @@ export default {
     swapLocations() {
       [this.startPoint, this.endPoint] = [this.endPoint, this.startPoint];
     },
-    planJourney() {
-      this.$emit('plan-journey', {
-        startPoint: this.startPoint,
-        endPoint: this.endPoint
-      });
+    async planJourney() {
+      if (!this.startPoint || !this.endPoint) {
+        alert("Please enter both start point and destination");
+        return;
+      }
+      
+      this.loading = true;
+      
+      try {
+        // Call the planJourney API with the form inputs
+        const response = await planJourney(this.startPoint, this.endPoint);
+        
+        console.log('Journey planning response:', response);
+        
+        // Store raw response for debugging
+        localStorage.setItem('lastApiResponse', JSON.stringify(response));
+        
+        // Emit the results to parent component
+        this.$emit('plan-journey', {
+          startPoint: this.startPoint,
+          endPoint: this.endPoint,
+          journeyResponse: response
+        });
+      } catch (error) {
+        console.error('Error planning journey:', error);
+        
+        // Try to extract response from error object for debugging
+        if (error.response && error.response.data) {
+          console.log('API error response:', error.response.data);
+          localStorage.setItem('lastApiError', JSON.stringify(error.response.data));
+        }
+        
+        alert(`Failed to plan journey: ${error.message || 'Unknown error'}`);
+      } finally {
+        this.loading = false;
+      }
     }
   }
 };

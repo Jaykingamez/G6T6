@@ -47,7 +47,13 @@
             <strong>Key Steps:</strong>
             <ul class="list-unstyled small mt-2">
               <li v-for="(step, index) in formatSteps(steps)" :key="index" class="mb-1">
-                <i :class="getStepIcon(step)"></i> {{ step }}
+                <div class="d-flex align-items-center">
+                  <i :class="getStepIcon(step.text)" class="me-1"></i> 
+                  <span>{{ step.text }}</span>
+                  <span v-if="step.busLoad" :class="getBusLoadClass(step.busLoad)" class="ms-2 px-1 small rounded">
+                    {{ step.busLoad }}
+                  </span>
+                </div>
               </li>
             </ul>
           </div>
@@ -151,18 +157,39 @@ export default {
             const vehicleType = transit.line?.vehicle?.name || 'Transit';
             const routeName = transit.line?.short_name || transit.line?.name || '';
             const stops = transit.num_stops || 0;
-            formattedSteps.push(`${vehicleType} ${routeName} (${stops} stops)`);
+            let stepText = `${vehicleType} ${routeName} (${stops} stops)`;
+            
+            // Add bus load info if available and it's a bus
+            let busLoad = null;
+            if (vehicleType === 'Bus' && step.bus_load_description) {
+              busLoad = step.bus_load_description;
+            }
+            
+            formattedSteps.push({
+              text: stepText,
+              busLoad: busLoad
+            });
           }
         } else if (step.travel_mode === 'WALKING') {
           // Only include walking steps that are substantial
           if (step.distance && step.distance.value > 100) {
-            formattedSteps.push(`Walk ${step.distance.text}`);
+            formattedSteps.push({
+              text: `Walk ${step.distance.text}`,
+              busLoad: null
+            });
           }
         }
       }
       
       // Limit to 3 key steps maximum
       return formattedSteps.slice(0, 3);
+    },
+    getBusLoadClass(loadDescription) {
+      // Style different load levels with different colors
+      if (loadDescription === 'Seats Available') return 'bg-success text-white';
+      if (loadDescription === 'Standing Available') return 'bg-warning text-dark';
+      if (loadDescription === 'Limited Standing') return 'bg-danger text-white';
+      return 'bg-secondary text-white';
     },
     getEmissionIndicator(emission) {
       // Scale the emissions to a percentage (0-100) for the progress bar

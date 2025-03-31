@@ -141,6 +141,7 @@ export default {
       const routes = this.rawJourneyResponse.directions.routes;
       const fareCosts = this.rawJourneyResponse.fareCosts || {};
       const emissions = this.rawJourneyResponse.emissions || {};
+      const busTracking = this.rawJourneyResponse.busTracking || {};
       
       console.log('Processing fare costs:', fareCosts);
       
@@ -198,6 +199,28 @@ export default {
         const emission = emissions.routeEmissions && emissions.routeEmissions[index] ?
           emissions.routeEmissions[index].totalEmissions :
           0;
+
+        // Process bus load information for each transit step
+        const transitStepsWithLoad = steps.map(step => {
+          if (step.travel_mode === 'TRANSIT' && 
+              step.transit_details && 
+              step.transit_details.line && 
+              step.transit_details.line.vehicle && 
+              step.transit_details.line.vehicle.name === 'Bus') {
+            
+            // Try to find matching bus data in busTracking
+            const busInfo = this.findBusLoadInfo(busTracking, step);
+            if (busInfo) {
+              return {
+                ...step,
+                bus_load: busInfo.load,
+                bus_load_description: this.translateBusLoad(busInfo.load),
+                next_arrival: busInfo.estimatedArrival
+              };
+            }
+          }
+          return step;
+        });
         
         // Create the journey result object
         return {
@@ -211,12 +234,55 @@ export default {
           departureTime: leg.departure_time ? leg.departure_time.text : '',
           arrivalTime: leg.arrival_time ? leg.arrival_time.text : '',
           distance: leg.distance ? leg.distance.text : '',
-          steps: steps,
+          steps: transitStepsWithLoad,
           summary: route.summary || '',
           routeData: route, // Store the raw route data for later use
-          fareCosts: fareCosts // Store the fare costs for later use
+          fareCosts: fareCosts, // Store the fare costs for later use
+          busTracking: busTracking // Store the bus tracking data for later use
         };
       });
+    },
+
+    // helper method to find bus load info from the busTracking data
+    findBusLoadInfo(busTracking, step) {
+      if (!busTracking.results || !Array.isArray(busTracking.results)) {
+        return null;
+      }
+      
+      // Extract bus service number and bus stop code if available
+      const busNumber = step.transit_details.line.short_name || step.transit_details.line.name;
+      const stopName = step.transit_details.departure_stop.name;
+      
+      // Look for matching bus service in the tracking data
+      for (const result of busTracking.results) {
+        if (result.arrival_data && result.arrival_data.Services) {
+          for (const service of result.arrival_data.Services) {
+            // Check if this is the right bus service
+            if (service.ServiceNo === busNumber) {
+              // Return data from NextBus (assuming it's the most relevant)
+              if (service.NextBus) {
+                return {
+                  load: service.NextBus.Load,
+                  estimatedArrival: service.NextBus.EstimatedArrival
+                };
+              }
+            }
+          }
+        }
+      }
+      
+      return null;
+    },
+
+    // helper method to translate bus load codes to user-friendly descriptions
+    translateBusLoad(loadCode) {
+      const loadMap = {
+        'SEA': 'Seats Available',
+        'SDA': 'Standing Available',
+        'LSD': 'Limited Standing'
+      };
+      
+      return loadMap[loadCode] || 'Unknown';
     },
     
     formatTransportMode(mode) {

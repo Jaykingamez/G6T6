@@ -56,12 +56,8 @@
         <div v-if="showMap" class="map-section fade-in">
           <h2 class="text-center mb-4">Route Details</h2>
           <div class="map-container">
-            <RouteMap 
-              v-if="selectedJourney && hasGoogleMapsApiKey" 
-              :journey="selectedJourney" 
-            />
             <SimplifiedRouteView 
-              v-else-if="selectedJourney" 
+              v-if="selectedJourney" 
               :journey="selectedJourney" 
             />
             <div v-else class="map-placeholder">

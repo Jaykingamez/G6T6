@@ -50,7 +50,7 @@ async def orchestrate_journey_planning(origin, destination, passenger_type, peak
             # All depend on directions_response
             bus_stops_task = asyncio.create_task(lookup_bus_stops(session, directions_response))
             fare_calc_task = asyncio.create_task(calculate_fare(session, directions_response, passenger_type, peak_hour))
-            emissions_task = asyncio.create_task(get_emissions_for_routes(session, directions_response))
+            emissions_task = asyncio.create_task(get_route_emissions(session, directions_response))
             
             # Await all tasks to complete
             bus_stops_response, fare_response, emissions_response = await asyncio.gather(
@@ -144,86 +144,22 @@ async def get_bus_tracking(session, bus_stops_data):
     except Exception as e:
         return {"error": f"Error connecting to bus tracking service: {str(e)}"}
 
-async def get_emissions_for_routes(session, directions_data):
-    """Get emissions data for all routes in the directions response"""
+async def get_route_emissions(session, directions_data):
+    """Get emissions data for routes by passing directions data to the emissions service"""
     try:
-        # Extract routes from the directions data
-        routes = directions_data.get('routes', [])
-        if not routes:
-            return {"error": "No routes found in directions data"}
-        
-        # Process each route to get emissions
-        emissions_results = []
-        for route_index, route in enumerate(routes):
-            route_emissions = []
-            total_emissions = 0
-            
-            # Process each leg and step in the route
-            for leg in route.get("legs", []):
-                for step in leg.get("steps", []):
-                    # Get travel mode and distance
-                    travel_mode = step.get("travel_mode", "").lower()
-                    
-                    # Extract distance in meters and convert to kilometers
-                    distance_m = step.get("distance", {}).get("value", 0)
-                    distance_km = distance_m / 1000
-                    
-                    # Skip steps with zero distance
-                    if distance_km <= 0:
-                        continue
-                    
-                    # Determine the actual mode of transport
-                    if travel_mode == "transit":
-                        transit_details = step.get("transit_details", {})
-                        line_info = transit_details.get("line", {})
-                        vehicle_type = line_info.get("vehicle", {}).get("type", "").lower()
-                        
-                        # Map Google's vehicle types to your emissions API's supported modes
-                        if vehicle_type in ["bus", "bus_service"]:
-                            mode = "bus"
-                        elif vehicle_type in ["subway", "train", "heavy_rail", "commuter_train", "rail"]:
-                            mode = "train"
-                        else:
-                            # Default to bus for other transit types
-                            mode = "bus"
-                    else:
-                        # Map non-transit modes to supported emission modes
-                        if travel_mode == "driving":
-                            mode = "car"
-                        elif travel_mode == "walking" or travel_mode == "bicycling":
-                            # Skip walking/cycling as they have zero emissions
-                            continue
-                        else:
-                            # Default to bus for unknown modes
-                            mode = "bus"
-                    
-                    # Call emissions API for this segment
-                    emissions_data = await get_emissions(session, mode, distance_km)
-                    
-                    if "error" in emissions_data:
-                        return emissions_data
-                    
-                    # Add step details to the emissions data
-                    emissions_data['mode'] = mode
-                    emissions_data['distance_km'] = distance_km
-                    route_emissions.append(emissions_data)
-                    
-                    # Add to total emissions (using the 'emission_kg_co2' field)
-                    total_emissions += emissions_data.get('emission_kg_co2', 0)
-            
-            # Create a summary for this route
-            route_summary = {
-                'routeIndex': route_index,
-                'totalEmissions': total_emissions,
-                'segments': route_emissions
-            }
-            
-            emissions_results.append(route_summary)
-        
-        return {"routeEmissions": emissions_results}
-            
+        async with session.post(EMISSIONS_API, json=directions_data) as response:
+            if response.status == 200:
+                return await response.json()
+            else:
+                error_text = await response.text()
+                return {"error": f"Route Emissions API error: {error_text}"}
     except Exception as e:
-        return {"error": f"Error processing emissions data: {str(e)}"}
+        return {"error": f"Error connecting to emissions service: {str(e)}"}
+
+# This function is no longer needed as the logic has been moved to the Emissions service
+# async def get_emissions_for_routes(session, directions_data):
+#     """Get emissions data for all routes in the directions response"""
+#     ...
 
 async def get_emissions(session, mode, distance):
     """Call the emissions API for a specific mode and distance"""

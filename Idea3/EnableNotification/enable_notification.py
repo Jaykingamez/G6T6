@@ -18,6 +18,9 @@ selected_route_URL = "http://selected_route:5301/selectedroute"
 # URL for BusTracking microservice
 bus_tracking_URL = "http://bus_tracking:5030/bus-tracking"
 
+# URL for User microservice
+user_URL = "http://user:5201/users"
+
 # RabbitMQ Configuration
 rabbit_host = "G6T6-rabbit"
 rabbit_port = 5672
@@ -41,7 +44,7 @@ def calculate_arrival_time(estimated_arrival):
         # Calculate time difference in minutes
         time_diff = (arrival_time - current_time).total_seconds() / 60
         
-        return max(0, time_diff)  # Ensure we don't return negative minutes
+        return max(0, time_diff) # Ensure we don't return negative minutes
     except Exception as e:
         print(f"Error calculating arrival time: {e}")
         return None
@@ -61,7 +64,7 @@ def connectAMQP():
         )
     except Exception as exception:
         print(f" Unable to connect to RabbitMQ.\n {exception=}\n")
-        exit(1)  # terminate
+        exit(1) # terminate
 
 def process_bus_arrival(bus_stop_code, service_no):
     """Process bus arrival information and check if notification should be sent"""
@@ -116,30 +119,48 @@ def process_bus_arrival(bus_stop_code, service_no):
     
     return False, None
 
-def publish_notification(notification_data):
-    """Publish notification to RabbitMQ"""
+def publish_notification(notification_data, phone_number):
+    """Publish notification to RabbitMQ with phone number"""
     try:
         # Ensure AMQP connection is established
         if connection is None or not amqp_lib.is_connection_open(connection):
             connectAMQP()
-            
+        
+        # Add phone number to notification data
+        notification_data['PhoneNumber'] = phone_number
+        
         channel.basic_publish(
             exchange=notification_exchange,
             routing_key=notification_routing_key,
             body=json.dumps(notification_data),
             properties=pika.BasicProperties(
-                delivery_mode=2,  # make message persistent
+                delivery_mode=2, # make message persistent
                 content_type='application/json'
             )
         )
-        print(f"Published notification for bus {notification_data['ServiceNo']} arriving at stop {notification_data['BusStopCode']}")
+        print(f"Published notification for bus {notification_data['ServiceNo']} arriving at stop {notification_data['BusStopCode']} to phone {phone_number}")
         return True
     except Exception as e:
         print(f"Error publishing notification: {e}")
         return False
 
-def track_bus_arrival(bus_stop_code, bus_id):
+def track_bus_arrival(bus_stop_code, bus_id, user_id):
     """Background task to track bus arrival and send notification"""
+    # Get user phone number
+    user_result = invoke_http(
+        f"{user_URL}/{user_id}",
+        method="GET"
+    )
+    
+    if user_result["code"] != 200:
+        print(f"Error retrieving user information: {user_result['message']}")
+        return
+    
+    phone_number = user_result["data"]["Phone"]
+    if not phone_number:
+        print(f"User {user_id} does not have a phone number")
+        return
+    
     should_notify = False
     notification_data = None
     
@@ -149,14 +170,14 @@ def track_bus_arrival(bus_stop_code, bus_id):
         
         # If bus is arriving in less than 2 minutes, publish notification
         if should_notify and notification_data:
-            # Publish notification
-            publish_notification(notification_data)
+            # Publish notification with phone number
+            publish_notification(notification_data, phone_number)
             print(f"Notification sent!", flush=True)
             break
         else:
             # Wait for 2 minutes before checking again
             print(f"Bus not arriving soon, checking again in 2 minutes", flush=True)
-            time.sleep(120)  # Wait for 2 minutes
+            time.sleep(120) # Wait for 2 minutes
 
 @app.route("/enable_notification/<int:RouteID>", methods=["GET"])
 def enable_notification(RouteID):
@@ -181,10 +202,10 @@ def enable_notification(RouteID):
         }), 500
 
 def process_notification_request(RouteID):
-    # 1. Invoke the SelectedRoute microservice to get BusStopCode and BusID
+    # 1. Invoke the SelectedRoute microservice to get BusStopCode, BusID, and UserID
     print(" Invoking SelectedRoute microservice...")
     selected_route_result = invoke_http(
-        f"{selected_route_URL}/{RouteID}", 
+        f"{selected_route_URL}/{RouteID}",
         method="GET"
     )
     print(f" selected_route_result: {selected_route_result}\n")
@@ -198,16 +219,18 @@ def process_notification_request(RouteID):
             "message": "Selected route not found."
         }
     
-    # 3. Extract BusStopCode and BusID from the response
+    # 3. Extract BusStopCode, BusID, and UserID from the response
     route_data = selected_route_result["data"]
     bus_stop_code = route_data["BusStopCode"]
     bus_id = route_data["BusID"]
+    user_id = route_data["UserId"]  # Assuming SelectedRoute now returns UserId
     
     # 4. Start tracking the bus in a separate thread
     tracking_thread = threading.Thread(
         target=track_bus_arrival,
-        args=(bus_stop_code, bus_id)
+        args=(bus_stop_code, bus_id, user_id)
     )
+    
     tracking_thread.daemon = True
     tracking_thread.start()
     
@@ -218,6 +241,7 @@ def process_notification_request(RouteID):
             "RouteID": RouteID,
             "BusStopCode": bus_stop_code,
             "BusID": bus_id,
+            "UserId": user_id,
             "tracking_started": True
         },
         "message": "Notification enabled successfully. You will be notified when the bus is arriving."

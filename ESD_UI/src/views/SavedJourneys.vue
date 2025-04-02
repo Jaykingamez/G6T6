@@ -87,6 +87,8 @@
 <script>
 import { mapState, mapGetters } from 'vuex';
 
+const SELECTED_ROUTE_API = 'http://localhost:5301/selectedroute'; // Add this line
+
 export default {
   name: 'SavedJourneys',
   data() {
@@ -151,10 +153,30 @@ export default {
     async confirmDelete() {
       this.deletingJourney = true;
       try {
-        await this.$store.dispatch('journeys/removeJourney', this.journeyToDelete);
-        this.$toast.success('Journey deleted successfully');
+        // Call the microservice to delete the route
+        const response = await fetch(`${SELECTED_ROUTE_API}/${this.journeyToDelete}`, {
+          method: 'DELETE',
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        });
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const data = await response.json();
+        
+        if (data.code === 200) {
+          // If deletion successful on backend, update the local state
+          await this.$store.dispatch('journeys/removeJourney', this.journeyToDelete);
+          this.$toast.success('Journey deleted successfully');
+        } else {
+          throw new Error(data.message || 'Failed to delete journey');
+        }
       } catch (error) {
-        this.$toast.error('Failed to delete journey: ' + (error.message || 'Unknown error'));
+        console.error('Delete error:', error);
+        this.$toast.error(error.message || 'Failed to delete journey');
       } finally {
         this.showDeleteConfirmation = false;
         this.journeyToDelete = null;

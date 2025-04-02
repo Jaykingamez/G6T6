@@ -1,10 +1,10 @@
 <template>
   <div id="app">
     <Navbar />
-    <main class="container px-0" style="width: 100%;">
+    <main class="container px-0" style="width: 100%;" >
       <router-view />
     </main>
-    <Footer />
+    <Footer/>
   </div>
 </template>
 

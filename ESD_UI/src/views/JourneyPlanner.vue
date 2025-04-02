@@ -1,16 +1,16 @@
 <template>
   <div class="journey-planner">
     <div class="planner-header">
-      <div class="container">
+      <div class="container-fluid">
         <h1 class="text-center mb-2">Plan Your Journey</h1>
         <p class="text-center text-white">Find the best route for your travel across Singapore</p>
       </div>
     </div>
 
     <div class="planner-content">
-      <div class="container">
+      <div class="container-fluid">
         <div class="row">
-          <div class="col-lg-10 mx-auto">
+          <div class="col-12">
             <div class="journey-form-card">
               <JourneyForm @plan-journey="handleJourneyPlan" />
             </div>
@@ -354,15 +354,22 @@ export default {
 .journey-planner {
   min-height: 100vh;
   background: linear-gradient(135deg, #f8fafc 0%, #edf2f7 100%);
+  width: 100%;
+  margin: 0;
+  padding: 0;
 }
 
 .planner-header {
   background: linear-gradient(135deg, #2c5282 0%, #4299e1 100%);
   padding: 4rem 0 8rem;
+  margin: 0;
   margin-bottom: -4rem;
   color: white;
   position: relative;
   overflow: hidden;
+  width: 100vw;
+  margin-left: calc(-50vw + 50%);
+  margin-right: calc(-50vw + 50%);
 }
 
 .planner-header::before {
@@ -386,12 +393,19 @@ export default {
 
 .planner-content {
   position: relative;
-  padding: 0 0 4rem;
+  padding: 0;
+  width: 100%;
+}
+
+.planner-content .container-fluid {
+  padding-left: 0;
+  padding-right: 0;
+  width: 100%;
 }
 
 .journey-form-card {
   background: white;
-  border-radius: 24px;
+  border-radius: 0;  /* Remove border radius for full-width look */
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
   padding: 2rem;
   margin-bottom: 3rem;

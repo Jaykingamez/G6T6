@@ -23,9 +23,6 @@
                   <div class="avatar-container mb-3">
                     <img :src="avatarUrl" :alt="user.FullName" class="rounded-circle img-fluid" />
                   </div>
-                  <button class="btn btn-sm btn-outline-primary" @click="changePhoto" disabled>
-                    Change Photo (Coming Soon)
-                  </button>
                 </div>
                 
                 <div class="col-md-8">
@@ -106,15 +103,6 @@
               <h3 class="mb-0">Account Settings</h3>
             </div>
             <div class="card-body">
-              <div class="mb-3">
-                <h5>Change Password</h5>
-                <button class="btn btn-outline-warning" @click="showChangePasswordModal = true">
-                  Change Password
-                </button>
-              </div>
-              
-              <hr>
-              
               <div>
                 <h5>Delete Account</h5>
                 <p class="text-danger">This action is irreversible. All your data will be permanently deleted.</p>
@@ -128,61 +116,7 @@
         </template>
       </div>
     </div>
-    
-    <!-- Password Modal -->
-    <div v-if="showChangePasswordModal" class="modal fade show" style="display: block">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title">Change Password</h5>
-            <button type="button" class="btn-close" @click="closePasswordModal"></button>
-          </div>
-          <div class="modal-body">
-            <form @submit.prevent="changePassword">
-              <div class="mb-3">
-                <label for="currentPassword" class="form-label">Current Password</label>
-                <input 
-                  type="password" 
-                  class="form-control" 
-                  id="currentPassword" 
-                  v-model="passwordForm.currentPassword"
-                  required
-                >
-              </div>
-              <div class="mb-3">
-                <label for="newPassword" class="form-label">New Password</label>
-                <input 
-                  type="password" 
-                  class="form-control" 
-                  id="newPassword" 
-                  v-model="passwordForm.newPassword"
-                  required
-                >
-              </div>
-              <div class="mb-3">
-                <label for="confirmPassword" class="form-label">Confirm New Password</label>
-                <input 
-                  type="password" 
-                  class="form-control" 
-                  id="confirmPassword" 
-                  v-model="passwordForm.confirmPassword"
-                  required
-                >
-              </div>
-              <div class="text-end">
-                <button type="button" class="btn btn-secondary me-2" @click="closePasswordModal">Cancel</button>
-                <button type="submit" class="btn btn-primary" :disabled="changingPassword">
-                  <span v-if="changingPassword" class="spinner-border spinner-border-sm me-2"></span>
-                  {{ changingPassword ? 'Changing...' : 'Change Password' }}
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
-      </div>
-      <div class="modal-backdrop fade show"></div>
-    </div>
-  </div>
+  </div> 
 </template>
 
 <script>
@@ -304,40 +238,6 @@ export default {
       } finally {
         this.deleting = false;
       }
-    },
-    async changePassword() {
-      if (this.passwordForm.newPassword !== this.passwordForm.confirmPassword) {
-        this.$toast.error('New passwords do not match.');
-        return;
-      }
-      
-      this.changingPassword = true;
-      
-      try {
-        await axios.post(`http://localhost:5201/users/${this.userId}/change-password`, {
-          currentPassword: this.passwordForm.currentPassword,
-          newPassword: this.passwordForm.newPassword
-        });
-        
-        this.closePasswordModal();
-        this.$toast.success('Password changed successfully!');
-      } catch (error) {
-        console.error('Error changing password:', error);
-        this.$toast.error(error.response?.data?.message || 'Failed to change password. Please try again.');
-      } finally {
-        this.changingPassword = false;
-      }
-    },
-    closePasswordModal() {
-      this.showChangePasswordModal = false;
-      this.passwordForm = {
-        currentPassword: '',
-        newPassword: '',
-        confirmPassword: ''
-      };
-    },
-    changePhoto() {
-      // Implementation of changePhoto method
     }
   }
 };
@@ -465,25 +365,6 @@ dt {
 dd {
   color: #1e293b;
   font-weight: 500;
-}
-
-.modal {
-  backdrop-filter: blur(8px);
-}
-
-.modal-content {
-  border: none;
-  border-radius: 20px;
-  box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1);
-}
-
-.modal-header {
-  border-bottom: 1px solid rgba(0,0,0,0.05);
-  padding: 1.5rem;
-}
-
-.modal-body {
-  padding: 2rem;
 }
 
 /* Animations */

@@ -7,7 +7,7 @@ from flask import Flask, request, jsonify, redirect
 from flask_cors import CORS
 import amqp_lib
 from decimal import Decimal
-from datetime import datetime, timezone
+import datetime
 
 # Load environment variables
 from dotenv import load_dotenv
@@ -25,7 +25,7 @@ CORS(app, supports_credentials=True, resources={
 })
 
 check_balance_url = "http://check_balance:5205/checkbalance/{user_id}"
-send_notification_url = "http://notification:5210/notify"
+send_notification_url = "http://notification:5210"
 user_url = "http://user:5201/users"
 create_transaction_url="https://personal-tkjmxw54.outsystemscloud.com/TransactionManagement/rest/TransactionsAPI/CreateTransaction"
 update_card_balance_url = "http://card:5203/cards/{card_id}/balance"  # PATCH endpoint for card balance update
@@ -50,7 +50,7 @@ def connectAMQP():
             exchange_type=exchange_type,
         )
 
-        # Declare queues AFTER connection
+        # Declare queues and bindings
         channel.queue_declare(queue="Notification", durable=True)
         channel.queue_bind(
             exchange=exchange_name,
@@ -107,33 +107,36 @@ def send_payment_notification(recipient, message, notification_type="sms"):
 def create_transaction_in_outsystems(user_id, card_id, amount, prevBalance):
     """Create transaction in Outsystems via HTTP POST"""
     # Get the current datetime
-    current_datetime = datetime.now(timezone.utc)
+    current_datetime = datetime.datetime.utcnow()
+    formatted_datetime = current_datetime.strftime('%Y-%m-%dT%H:%M:%S.%f')[:-3] + 'Z' 
 
-    # Format the datetime in ISO 8601 format with milliseconds and a "Z" for UTC
-    formatted_datetime = current_datetime.strftime('%Y-%m-%dT%H:%M:%S.%f')[:-3] + 'Z'
+    amount_decimal = Decimal(amount) / 100  # Convert cents to dollars
+    prev_balance_decimal = Decimal(prevBalance)
+    new_balance_decimal = prev_balance_decimal + amount_decimal
+
+    payload = {
+        "UserId": user_id,
+        "CardId": card_id,
+        "Amount": str(amount_decimal),
+        "PreviousBalance": float(prev_balance_decimal),
+        "NewBalance": float(new_balance_decimal),
+        "CreatedAt": formatted_datetime
+    }
+
     try:
         response = requests.post(
             create_transaction_url,
-            json={
-                "UserId": user_id,
-                "CardId": card_id,
-                "Amount": str(Decimal(amount)/100),
-                "PreviousBalance": prevBalance,
-                "NewBalance": prevBalance + (Decimal(amount)/100),
-                "CreatedAt": formatted_datetime
-            },
+            json=payload,
             headers={
-                "Content-Type": "application/json",
-                "Authorization": f"Bearer {os.getenv('OUTSYSTEMS_API_KEY')}"  # Add if required
+                "Content-Type": "application/json"
             },
             timeout=10
         )
-        if response.status_code == 200:
+
+
+        if response:
             return response.json()
-        return {
-            "code": response.status_code,
-            "message": f"Transaction creation failed: {response.text}"
-        }
+
     except Exception as e:
         return {
             "code": 500,
@@ -184,7 +187,7 @@ def MakePayment():
                 'user_id': user_id,
                 'card_id': data["card_id"],
                 'phone_number': data["phone_number"],
-                "Balance": data.get("Balance")
+                "Balance": str(Decimal(data.get("Balance", 0)))
             }
         )
         return jsonify({'checkout_url': session.url}), 200
@@ -216,15 +219,21 @@ def handle_success():
             )
 
             # 3. Create transaction via HTTP POST
-            transaction_response = create_transaction_in_outsystems(
+            create_transaction_in_outsystems(
                 user_id=metadata['user_id'],
                 card_id=metadata['card_id'],
                 amount=session.amount_total,
-                prevBalance=metadata['Balance']
+                prevBalance=Decimal(metadata['Balance'])  # Convert to Decimal
             )
-        
-            if transaction_response.get('code') != 200:
-                app.logger.error(f"Transaction creation failed: {transaction_response['message']}")
+            
+            # if transaction_response.get("Status") == "Success":
+            #     return transaction_response
+            # else:
+            #     # app.logger.error(f"Transaction failed: {transaction_response['message']}")
+            #     return jsonify({
+            #         "status": "partial_failure",
+            #         "message": "Unsuccessful"
+            #     }), 500
 
             # 4. Get updated balance
             balance_response = check_balance(metadata['user_id'])

@@ -24,7 +24,13 @@ def fetch_cards(user_id):
     try:
         response = requests.get(card_URL)
         if response.status_code == 200:
-            return [card for card in response.json() if card['UserId'] == user_id]
+            # Extract cards from the 'data' key in the response
+            cards_data = response.json().get('data', [])
+            # Filter cards by UserId safely using .get()
+            return [
+                card for card in cards_data 
+                if card.get('UserId') == user_id
+            ]
         return []
     except requests.exceptions.RequestException as e:
         print(f"Card service error: {e}")

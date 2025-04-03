@@ -6,7 +6,7 @@ A standalone script to create exchanges and queues on RabbitMQ.
 
 import pika
 
-amqp_host = "G6T6-rabbit"
+amqp_host = "localhost"
 amqp_port = 5672
 exchange_name = "SmartTransport"
 exchange_type = "direct"

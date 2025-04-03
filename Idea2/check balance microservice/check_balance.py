@@ -5,14 +5,15 @@ import requests
 app = Flask(__name__)
 CORS(app)
 
-user_URL = "http://localhost:5001/users"
-card_URL = "http://localhost:5003/cards"
+user_URL = "http://user:5201/users"
+card_URL = "http://card:5203/cards"
 
 
 def fetch_user(user_id):
     """Retrieve user details from user service"""
     try:
         response = requests.get(f"{user_URL}/{user_id}")
+        print()
         return response.json() if response.status_code == 200 else None
     except requests.exceptions.RequestException as e:
         print(f"User service error: {e}")
@@ -58,7 +59,8 @@ def get_user_cards(user_id):
             "user": {
                 "UserId": user_data.get('UserId'),
                 "FullName": user_data.get('FullName'),
-                "Email": user_data.get('Email')
+                "Email": user_data.get('Email'),
+                "Phone": user_data.get("Phone")
             },
             "cards": [{
                 "CardId": card.get('CardId'),

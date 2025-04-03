@@ -5,7 +5,7 @@ from flask import Flask, request, jsonify
 from flask_cors import CORS
 from flask_sqlalchemy import SQLAlchemy
 from os import environ
-from decimal import Decimal
+from decimal import Decimal, ROUND_HALF_UP
 import os
 
 app = Flask(__name__)
@@ -172,6 +172,73 @@ def processDeleteCard(card_id):
     except Exception as e:
         db.session.rollback()
         raise e
+    
+@app.route("/cards/<int:card_id>/balance", methods=['PATCH'])
+def update_card_balance(card_id):
+    """Update card balance with atomic increment/decrement support"""
+    if not request.is_json:
+        return jsonify({
+            "code": 400,
+            "message": "Balance update must be in JSON format"
+        }), 400
+
+    data = request.get_json()
+    
+    # Validate request parameters
+    if 'amount' not in data or 'operation' not in data:
+        return jsonify({
+            "code": 400,
+            "message": "Both 'amount' and 'operation' (add/subtract) are required"
+        }), 400
+
+    if data['operation'] not in ['add', 'subtract']:
+        return jsonify({
+            "code": 400,
+            "message": "Invalid operation. Use 'add' or 'subtract'"
+        }), 400
+
+    try:
+        amount = Decimal(str(data['amount'])).quantize(Decimal('0.00'), rounding=ROUND_HALF_UP)
+        if amount <= 0:
+            raise ValueError("Amount must be positive")
+    except (ValueError, TypeError) as e:
+        return jsonify({
+            "code": 400,
+            "message": f"Invalid amount: {str(e)}"
+        }), 400
+
+    try:
+        card = Card.query.get(card_id)
+        if not card:
+            return jsonify({
+                "code": 404,
+                "message": "Card not found"
+            }), 404
+        
+        # Perform atomic balance update
+        if data['operation'] == 'add':
+            card.Balance += amount
+        else:
+            if card.Balance < amount:
+                return jsonify({
+                    "code": 400,
+                    "message": "Insufficient balance for subtraction"
+                }), 400
+            card.Balance -= amount
+
+        db.session.commit()
+        return jsonify({
+            "code": 200,
+            "data": card.serialize(),
+            "message": "Balance updated successfully"
+        }), 200
+
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({
+            "code": 500,
+            "message": f"Balance update failed: {str(e)}"
+        }), 500
 
 if __name__ == "__main__":
     with app.app_context():

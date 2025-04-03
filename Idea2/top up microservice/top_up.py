@@ -5,80 +5,88 @@ import requests
 app = Flask(__name__)
 CORS(app)
 
-check_balance_url = "http://localhost:5005/checkbalance/<int:user_id>"
-make_payment_url = "http://localhost:5008/makepayment"
+check_balance_url = "http://checkbalance:5205/checkbalance/{user_id}"
+make_payment_url = "http://make_payment:5208/makepayment"
 
-@app.route('/top_up', methods=['POST'])
-def top_up():
+def check_balance(user_id):
+    """Fetch the balance for a given user ID."""
+    url = check_balance_url.format(user_id=user_id)
+    try:
+        # Make the GET request to the check_balance service
+        response = requests.get(url, timeout=5)  # Set a timeout for reliability
+        if response.status_code == 200:
+            # Return the balance data if successful
+            return response.json()
+        else:
+            # Handle error responses
+            return {
+                "error": f"Failed to fetch balance. Status code: {response.status_code}",
+                "details": response.text
+            }
+    except requests.exceptions.RequestException as e:
+        # Handle connection errors or timeouts
+        return {"error": f"Error connecting to check_balance service: {str(e)}"}
+
+@app.route('/top_up/<int:user_id>/<int:card_id>', methods=['POST'])
+def top_up(user_id, card_id):
     """Top up card balance."""
     if not request.is_json:
         return jsonify({"code": 400, "message": "Request must be JSON"}), 400
 
     data = request.get_json()
-    user_id = data.get("userId")
-    card_id = data.get("cardId")
     amount = data.get("amount")
+    
+    # Get balance info
+    balance_info = check_balance(user_id)
+    
+    if 'error' in balance_info:
+        return jsonify({
+            "code": 500,
+            "message": balance_info['error']
+        }), 500
 
-    if not user_id or not card_id or not amount:
-        return jsonify({"code": 400, "message": "Missing required fields"}), 400
-
-    # Step 1: Fetch current balance using Check Balance service
+    # Extract user data safely
+    user_data = balance_info.get('data', {}).get('user', {})
+    card_data = balance_info.get('data', {}).get('cards', [])
+    if not user_data:
+        return jsonify({"code": 404, "message": "User data not found"}), 404
+    phone_number = user_data.get("Phone")
+    if not phone_number:
+        return jsonify({"code": 400, "message": "Phone number not found"}), 400
+        
+    # Get and validate balance
     try:
-        response = requests.get(check_balance_url.format(user_id=user_id))
-        if response.status_code == 200:
-            balance_data = response.json()
-        else:
-            return jsonify({"code": 500, "message": "Failed to fetch current balance"}), 500
-    except Exception as e:
-        return jsonify({"code": 500, "message": f"Error fetching balance: {str(e)}"}), 500
+        currBalance = float(card_data[0].get("Balance"))  # Convert to float early
+        if currBalance is None:
+            raise ValueError("Balance field missing")
+    except (TypeError, IndexError, ValueError) as e:
+        return jsonify({"code": 400, "message": f"Invalid balance data: {str(e)}"}), 400
 
-    # Step 2: Process payment (mocked for simplicity)
-    payment_status = "succeeded"  # Mock payment status
-    payment_id = "mock_payment_id"  # Mock payment ID
-
-    if payment_status != "succeeded":
-        return jsonify({"code": 500, "message": "Payment failed"}), 500
-
-    # Step 3: Update card balance via HTTP PATCH
-    new_balance = float(balance_data["data"]["cards"][0]["Balance"]) + float(amount)
+    # Process payment
     try:
-        patch_response = requests.patch(
-            f"http://localhost:5003/cards/{card_id}",
-            json={"Balance": new_balance}
+        payment_response = requests.post(
+            "http://make_payment:5208/makepayment",
+            json={
+                "amount": int(float(amount) * 100),
+                "card_id": card_id,
+                "user_id": user_id,
+                "phone_number": phone_number,
+                "Balance": float(currBalance)
+            },
+            timeout=10
         )
-        if patch_response.status_code != 200:
-            return jsonify({"code": 500, "message": "Failed to update card balance"}), 500
-    except Exception as e:
-        return jsonify({"code": 500, "message": f"Error updating card balance: {str(e)}"}), 500
-
-    # Step 4: Notify user via Twilio (mocked for simplicity)
-    notification_message = f"Your card has been topped up with ${amount}. Payment ID: {payment_id}."
-    print(f"Notification sent to user {user_id}: {notification_message}")  # Mock notification
-
-    # Step 5: Log transaction via RabbitMQ (mocked for simplicity)
-    transaction_log = {
-        "userId": user_id,
-        "cardId": card_id,
-        "amount": amount,
-        "paymentId": payment_id,
-        "status": payment_status
-    }
-    print(f"Transaction logged: {transaction_log}")  # Mock transaction log
-
-    # Step 6: Fetch updated balance using Check Balance service
-    try:
-        updated_response = requests.get(check_balance_url.format(user_id=user_id))
-        if updated_response.status_code == 200:
-            updated_balance_data = updated_response.json()
+        
+        if payment_response.status_code != 200:
             return jsonify({
-                "code": 200,
-                "message": "Top-up successful",
-                "data": updated_balance_data["data"]
-            }), 200
-        else:
-            return jsonify({"code": 500, "message": "Failed to fetch updated balance"}), 500
+                "code": payment_response.status_code,
+                "message": "Payment failed",
+                "details": payment_response.text
+            }), payment_response.status_code
+            
+        return payment_response.json()
+        
     except Exception as e:
-        return jsonify({"code": 500, "message": f"Error fetching updated balance: {str(e)}"}), 500
+        return jsonify({"code": 500, "message": str(e)}), 500
 
 
 if __name__ == "__main__":

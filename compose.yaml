@@ -128,7 +128,7 @@ services:
     environment:
       - dbURL=mysql+mysqlconnector://is213@host.docker.internal:3306/users
     networks:
-      - app-network
+      - G6T6-net
 
   card:
     build:
@@ -141,20 +141,20 @@ services:
     environment:
       - dbURL=mysql+mysqlconnector://is213@host.docker.internal:3306/cards
     networks:
-      - app-network
+      - G6T6-net
   
-  transaction:
-    build:
-      context: "./Idea2/transaction microservice"
-      dockerfile: Dockerfile
-    image: smartTransport/transactions:1.0
-    container_name: transactions
-    ports:
-      - "5206:5206"
-    environment:
-      - dbURL=mysql+mysqlconnector://is213@host.docker.internal:3306/transactions
-    networks:
-      - app-network
+  # transaction:
+  #   build:
+  #     context: "./Idea2/transaction microservice"
+  #     dockerfile: Dockerfile
+  #   image: smartTransport/transactions:1.0
+  #   container_name: transactions
+  #   ports:
+  #     - "5206:5206"
+  #   environment:
+  #     - dbURL=mysql+mysqlconnector://is213@host.docker.internal:3306/transactions
+  #   networks:
+  #     - app-network
 
   notification:
     build:
@@ -163,7 +163,9 @@ services:
     image: smartTransport/notificaiton:1.0
     container_name: notification            
     ports:
-      - "5210:5210"                        
+      - "5210:5210"   
+    networks:
+      - G6T6-net                    
   
   check_balance:
     build:
@@ -177,7 +179,7 @@ services:
       - user
       - card
     networks:
-      - app-network 
+      - G6T6-net
   
   make_payment:
     build:
@@ -189,9 +191,9 @@ services:
       - check_balance
       - user
       - card
-      - transaction
+      - rabbitmq
     networks:
-      - app-network 
+      - G6T6-net
     # environment:
     #   - STRIPE_SECRET_KEY=${STRIPE_SECRET_KEY}
   
@@ -207,7 +209,7 @@ services:
       - make_payment
       - check_balance
     networks:
-      - app-network 
+      - G6T6-net
 
 
   redis:

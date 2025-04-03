@@ -8,8 +8,8 @@ A microservices-based public transport journey planning system that provides rou
 
 Project consists of the following microservices:
 
-1. **Plan Journey Orchestrator** - Coordinates calls to all other services and aggregates responses
-2. **Estimate Journey Costs** - Orchestrator that calculates total journey costs  
+1. **Plan Journey Orchestrator** - Coordinates calls to all other services and aggregates responses ✅
+2. **Estimate Journey Costs** - Orchestrator that calculates total journey costs ✅
 3. **Direction Service** - Interacts with Google Maps Directions API to fetch route information ✅
 4. **Bus Stop Lookup Service** - Retrieves bus stop details from Redis ✅
 5. **Bus Tracking Service** - Fetches real-time transport timing from the LTA API ✅

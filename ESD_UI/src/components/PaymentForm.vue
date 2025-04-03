@@ -19,10 +19,10 @@
           </div>
         </div>
         
-        <div id="card-element" class="form-control mb-3"></div>
+        <!-- <div id="card-element" class="form-control mb-3"></div>
         <div id="card-errors" class="alert alert-danger" role="alert" v-if="errorMessage">
           {{ errorMessage }}
-        </div>
+        </div> -->
         
         <button 
           @click="handlePayment" 
@@ -45,6 +45,28 @@ const stripePromise = loadStripe(process.env.VUE_APP_STRIPE_PUBLISHABLE_KEY);
 
 export default {
   name: 'PaymentForm',
+  props: {
+    cardId: {
+      type: [String, Number],
+      required: true
+    },
+    userId: {
+      type: [String, Number],
+      required: true
+    },
+    cardNumber: {
+      type: String,
+      required: true
+    },
+    currentBalance: {
+      type: [String, Number],
+      required: true
+    },
+    phoneNumber: {
+      type: String,
+      required: true
+    },
+  },
   data() {
     return {
       stripe: null,
@@ -55,6 +77,12 @@ export default {
       errorMessage: '',
     };
   },
+  // computed: {
+  //   ...mapState("auth", ["user"]),
+  //   userId() {
+  //     return this.user?.UserId;
+  //   },
+  // },
   async mounted() {
     try {
       this.stripe = await stripePromise;
@@ -94,25 +122,19 @@ export default {
       this.errorMessage = '';
 
       try {
-        console.log('Sending payment request...'); // Debug log
-        const response = await axios.post('http://127.0.0.1:5008/makepayment', {
+        const response = await axios.post('http://127.0.0.1:5208/makepayment', {
           amount: Math.round(this.amount * 100), // Convert to cents
+          card_id: this.cardId,
+          card_number: this.cardNumber,
+          user_id: this.userId,
+          phone_number: this.phoneNumber,
+          balance: this.currentBalance
         });
 
-        const { clientSecret } = response.data;
-
-        // Confirm the payment
-        const result = await this.stripe.confirmCardPayment(clientSecret, {
-          payment_method: {
-            card: this.card,
-          },
-        });
-
-        if (result.error) {
-          this.errorMessage = result.error.message;
+        if (response.data.checkout_url) {
+          window.location.href = response.data.checkout_url;
         } else {
-          this.$emit('payment-success', result.paymentIntent);
-          this.$router.push('/payment-success');
+          throw new Error('No checkout URL received');
         }
       } catch (error) {
         console.error('Payment error:', error);

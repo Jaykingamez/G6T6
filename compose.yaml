@@ -191,6 +191,7 @@ services:
       - check_balance
       - user
       - card
+      - notification
       - rabbitmq
     networks:
       - G6T6-net

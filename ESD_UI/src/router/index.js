@@ -6,7 +6,7 @@ import JourneyPlanner from '../views/JourneyPlanner.vue';
 import SavedJourneys from '../views/SavedJourneys.vue';
 import Profile from '../views/Profile.vue';
 import PaymentSuccess from '../views/PaymentSuccess.vue';
-import TestPayment from '../views/TestPayment.vue';
+import TopUp from '../views/TopUp.vue';
 import store from '../store';
 
 const routes = [
@@ -63,14 +63,22 @@ const routes = [
       requiresAuth: true // Requires authentication
     }
   },
+  // {
+  //   path: '/test-payment',
+  //   name: 'TestPayment',
+  //   component: TestPayment,
+  //   meta: {
+  //     requiresAuth: true // Requires authentication
+  //   }
+  // },
   {
-    path: '/test-payment',
-    name: 'TestPayment',
-    component: TestPayment,
+    path: '/top-up/:cardId',
+    name: 'TopUp',
+    component: TopUp,
     meta: {
       requiresAuth: true // Requires authentication
     }
-  },
+  }
 ];
 
 const router = createRouter({
@@ -81,7 +89,7 @@ const router = createRouter({
 // Navigation guard
 router.beforeEach((to, from, next) => {
   const isAuthenticated = store.getters['auth/isAuthenticated'];
-  
+
   // Check if route requires authentication
   if (to.matched.some(record => record.meta.requiresAuth)) {
     if (!isAuthenticated) {
@@ -94,7 +102,7 @@ router.beforeEach((to, from, next) => {
       next(); // User is authenticated, proceed
     }
   }
-  
+
   // Check if route requires guest access (login/register)
   else if (to.matched.some(record => record.meta.requiresGuest)) {
     if (isAuthenticated) {
@@ -104,7 +112,7 @@ router.beforeEach((to, from, next) => {
       next(); // User is not authenticated, proceed
     }
   }
-  
+
   else {
     next(); // No auth requirements, proceed
   }

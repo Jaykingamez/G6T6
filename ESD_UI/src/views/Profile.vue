@@ -400,7 +400,8 @@ export default {
         query: {
           userId: this.userId,
           cardNumber: card.CardSerialNumber,
-          currentBalance: card.Balance
+          currentBalance: card.Balance,
+          phone_number: this.user.Phone || '', // Add phone number from user profile
         }
       });
     }

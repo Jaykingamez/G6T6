@@ -75,20 +75,8 @@ def createCard():
 @app.route("/cards", methods=['GET'])
 def getCards():
     try:
-        # Get user_id from query parameter
-        user_id = request.args.get('user_id', type=int)
-        
-        if user_id:
-            # Filter cards by user_id
-            cards = Card.query.filter_by(UserId=user_id).all()
-        else:
-            # Get all cards if no user_id specified
-            cards = Card.query.all()
-        return jsonify({
-            "code": 200,
-            "data": [card.serialize() for card in cards],
-            "message": "Cards retrieved successfully"
-        }), 200
+        cards = Card.query.all()
+        return jsonify([card.serialize() for card in cards]), 200
     except Exception as e:
         return jsonify({"code": 500, "message": str(e)}), 500
 

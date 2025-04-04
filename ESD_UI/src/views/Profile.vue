@@ -367,25 +367,22 @@ export default {
     async fetchUserCards() {
       try {
         const response = await axios.get(
-          `${process.env.VUE_APP_CARD_API_URL || "http://localhost:5203"}/cards`, {
-          params: {
-            user_id: this.userId
-          }
-        }
+          `${process.env.VUE_APP_CARD_API_URL || "http://localhost:5203"}/cards`
         );
 
-        if (response?.data?.code === 200 && response?.data?.data?.cards) {
-          this.cards = response.data.data.cards;
+        if (response.status === 200) {
+          // Filter cards by current user's ID since the API returns all cards
+          this.cards = response.data.filter(card => card.UserId === this.userId);
+          console.log('Filtered cards:', this.cards); // Debug log
         } else {
-          this.cards = []; // Set empty array if no cards found
-          console.warn("No cards data in response:", response);
+          this.cards = []; // Set empty array if no response
+          console.warn('No cards found:', response);
         }
       } catch (error) {
-        console.error("Error fetching cards:", error);
+        console.error('Error fetching cards:', error);
         this.cards = []; // Set empty array on error
-        // Use toast notification instead of accessing undefined error property
-        this.$toast?.error(
-          error.response?.data?.message || "Failed to fetch cards"
+        this.toast?.error(
+          error.response?.data?.message || 'Failed to fetch cards'
         );
       }
     },

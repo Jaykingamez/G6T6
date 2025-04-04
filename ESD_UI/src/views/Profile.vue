@@ -415,6 +415,32 @@ export default {
     if (this.userId) {
       await this.fetchUserCards();
     }
+
+    // Check for payment status in URL parameters
+    const status = this.$route.query.status;
+    const message = this.$route.query.message;
+    const amount = this.$route.query.amount;
+    const newBalance = this.$route.query.new_balance;
+
+    if (status) {
+      switch (status) {
+        case 'success':
+          this.toast?.success(
+            `Payment successful! Amount: $${amount}${newBalance ? ` (New balance: $${newBalance})` : ''}`
+          );
+          this.fetchUserCards(); // Refresh cards after successful payment
+          break;
+        case 'failed':
+          this.toast?.error(message || 'Payment failed');
+          break;
+        case 'error':
+          this.toast?.error(message || 'An error occurred');
+          break;
+      }
+
+      // Clean up URL parameters
+      this.$router.replace({ query: {} });
+    }
   },
 
   

@@ -128,7 +128,7 @@ services:
     environment:
       - dbURL=mysql+mysqlconnector://is213@host.docker.internal:3306/users
     networks:
-      - G6T6-net
+      - app-network
 
   card:
     build:
@@ -141,7 +141,7 @@ services:
     environment:
       - dbURL=mysql+mysqlconnector://is213@host.docker.internal:3306/cards
     networks:
-      - G6T6-net
+      - app-network
   
   # transaction:
   #   build:
@@ -177,7 +177,7 @@ services:
       - user
       - card
     networks:
-      - G6T6-net
+      - app-network
   
   make_payment:
     build:
@@ -192,7 +192,7 @@ services:
       - notification
       - rabbitmq
     networks:
-      - G6T6-net
+      - app-network
     # environment:
     #   - STRIPE_SECRET_KEY=${STRIPE_SECRET_KEY}
   
@@ -208,7 +208,7 @@ services:
       - make_payment
       - check_balance
     networks:
-      - G6T6-net
+      - app-network
 
 
   redis:

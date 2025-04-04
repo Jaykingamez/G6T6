@@ -24,8 +24,8 @@ def fetch_cards(user_id):
     try:
         response = requests.get(card_URL)
         if response.status_code == 200:
-            response_data = response.json()
-            cards_data = response_data
+            # Extract cards from the 'data' key in the response
+            cards_data = response.json().get('data', [])
             # Filter cards by UserId safely using .get()
             return [
                 card for card in cards_data 

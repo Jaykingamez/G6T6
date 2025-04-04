@@ -31,7 +31,7 @@ create_transaction_url="https://personal-tkjmxw54.outsystemscloud.com/Transactio
 update_card_balance_url = "http://card:5203/cards/{card_id}/balance"  # PATCH endpoint for card balance update
 
 # RabbitMQ
-rabbit_host = "G6T6-rabbit"
+rabbit_host = "rabbitmq"
 rabbit_port = 5672
 exchange_name = "SmartTransport"
 exchange_type = "direct"
@@ -225,15 +225,6 @@ def handle_success():
                 amount=session.amount_total,
                 prevBalance=Decimal(metadata['Balance'])  # Convert to Decimal
             )
-            
-            # if transaction_response.get("Status") == "Success":
-            #     return transaction_response
-            # else:
-            #     # app.logger.error(f"Transaction failed: {transaction_response['message']}")
-            #     return jsonify({
-            #         "status": "partial_failure",
-            #         "message": "Unsuccessful"
-            #     }), 500
 
             # 4. Get updated balance
             balance_response = check_balance(metadata['user_id'])

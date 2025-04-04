@@ -156,14 +156,22 @@ services:
   #   networks:
   #     - app-network
 
-  # notification:
-  #   build:
-  #     context: ./Idea2/notification microservice 
-  #     dockerfile: Dockerfile   
-  #   image: smartTransport/notificaiton:1.0
-  #   container_name: notification            
-  #   ports:
-  #     - "5210:5210"                        
+  notification:
+    build:
+      context: "./Idea2/notification microservice/"  
+      dockerfile: Dockerfile
+    container_name: notification
+    ports:
+      - "5210:5210"
+    networks:
+      - app-network
+    depends_on:
+      - rabbitmq
+    environment:
+      - PYTHONUNBUFFERED=1
+    env_file:
+      - .env 
+                
   
   check_balance:
     build:
@@ -272,27 +280,27 @@ services:
     environment:
       - PYTHONUNBUFFERED=1
 
-  notification:
-    build:
-      context: "./Idea3/Notification/"  
-      dockerfile: Dockerfile
-    container_name: notification
-    ports:
-      - "5210:5210"
-    networks:
-      - app-network
-    depends_on:
-      - rabbitmq
-    environment:
-      - PYTHONUNBUFFERED=1
-    env_file:
-      - .env 
+  # notification:
+  #   build:
+  #     context: "./Idea3/Notification/"  
+  #     dockerfile: Dockerfile
+  #   container_name: notification
+  #   ports:
+  #     - "5210:5210"
+  #   networks:
+  #     - app-network
+  #   depends_on:
+  #     - rabbitmq
+  #   environment:
+  #     - PYTHONUNBUFFERED=1
+    # env_file:
+    #   - .env 
   #IDEA3 - END
     
 
   rabbitmq:
     image: rabbitmq:3-management
-    hostname: G6T6-rabbit
+    hostname: rabbitmq
     restart: always
     ports:
       - "5672:5672"
@@ -301,7 +309,7 @@ services:
       - rabbitmq_data:/var/lib/rabbitmq
     networks:
       - app-network
-
+      
   # mongodb:
   #   image: mongo:6.0  
   #   container_name: mongodb

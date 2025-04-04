@@ -5,12 +5,10 @@ FROM python:3.9-slim
 WORKDIR /app
 
 # Copy requirements.txt if you have one (optional)
-# If you don't have a requirements.txt, you can install packages directly in the next step
 COPY requirements.txt ./
 
 # Install dependencies
 RUN pip install --no-cache-dir -r requirements.txt
-RUN pip install twilio
 
 # Copy the rest of the application code
 COPY . .
@@ -18,5 +16,5 @@ COPY . .
 # Expose the port the app runs on
 EXPOSE 5210
 
-# Command to run the application
-CMD ["python", "notification.py"]
+# Command to run amqp_setup.py first to create queues, then start notification.py
+CMD ["sh", "-c", "python amqp_setup.py && python notification.py"]

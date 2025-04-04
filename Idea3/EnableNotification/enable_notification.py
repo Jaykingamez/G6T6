@@ -22,11 +22,11 @@ bus_tracking_URL = "http://bus_tracking:5030/bus-tracking"
 user_URL = "http://user:5201/users"
 
 # RabbitMQ Configuration
-rabbit_host = "G6T6-rabbit"
+rabbit_host = "rabbitmq"
 rabbit_port = 5672
 notification_exchange = "notification.direct"
 notification_exchange_type = "direct"
-notification_routing_key = "notification"
+notification_routing_key = "bus_notification"
 
 # Global connection variables
 connection = None
@@ -168,16 +168,16 @@ def track_bus_arrival(bus_stop_code, bus_id, user_id):
         # Process bus arrival information
         should_notify, notification_data = process_bus_arrival(bus_stop_code, bus_id)
         
-        # If bus is arriving in less than 2 minutes, publish notification
+        # If bus is arriving in less than 1 minutes, publish notification
         if should_notify and notification_data:
             # Publish notification with phone number
             publish_notification(notification_data, phone_number)
             print(f"Notification sent!", flush=True)
             break
         else:
-            # Wait for 2 minutes before checking again
-            print(f"Bus not arriving soon, checking again in 2 minutes", flush=True)
-            time.sleep(120) # Wait for 2 minutes
+            # Wait for 1 minutes before checking again
+            print(f"Bus not arriving soon, checking again in 1 minutes", flush=True)
+            time.sleep(60) # Wait for 1 minutes
 
 @app.route("/enable_notification/<int:RouteID>", methods=["GET"])
 def enable_notification(RouteID):

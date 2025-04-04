@@ -366,21 +366,28 @@ export default {
 
     async fetchUserCards() {
       try {
+        console.log('Fetching cards for user:', this.userId); // Debug log
+
         const response = await axios.get(
-          `${process.env.VUE_APP_CARD_API_URL || "http://localhost:5203"}/cards`
+          `${process.env.VUE_APP_CARD_API_URL || 'http://localhost:5203'}/cards`, {
+          params: {
+            user_id: this.userId
+          }
+        }
         );
 
-        if (response.status === 200) {
-          // Filter cards by current user's ID since the API returns all cards
-          this.cards = response.data.filter(card => card.UserId === this.userId);
-          console.log('Filtered cards:', this.cards); // Debug log
+        console.log('Card service response:', response.data); // Debug log
+
+        if (response.data.code === 200 && Array.isArray(response.data.data)) {
+          this.cards = response.data.data;
+          console.log('Cards loaded:', this.cards); // Debug log
         } else {
-          this.cards = []; // Set empty array if no response
-          console.warn('No cards found:', response);
+          this.cards = [];
+          console.warn('No cards data in response:', response.data);
         }
       } catch (error) {
         console.error('Error fetching cards:', error);
-        this.cards = []; // Set empty array on error
+        this.cards = [];
         this.toast?.error(
           error.response?.data?.message || 'Failed to fetch cards'
         );
@@ -407,6 +414,32 @@ export default {
     // Add this to fetch cards when component is created
     if (this.userId) {
       await this.fetchUserCards();
+    }
+
+    // Check for payment status in URL parameters
+    const status = this.$route.query.status;
+    const message = this.$route.query.message;
+    const amount = this.$route.query.amount;
+    const newBalance = this.$route.query.new_balance;
+
+    if (status) {
+      switch (status) {
+        case 'success':
+          this.toast?.success(
+            `Payment successful! Amount: $${amount}${newBalance ? ` (New balance: $${newBalance})` : ''}`
+          );
+          this.fetchUserCards(); // Refresh cards after successful payment
+          break;
+        case 'failed':
+          this.toast?.error(message || 'Payment failed');
+          break;
+        case 'error':
+          this.toast?.error(message || 'An error occurred');
+          break;
+      }
+
+      // Clean up URL parameters
+      this.$router.replace({ query: {} });
     }
   },
 

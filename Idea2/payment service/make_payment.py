@@ -176,13 +176,13 @@ def MakePayment():
                 'price_data': {
                     'currency': 'sgd',
                     'product_data': {'name': f'Top-up for Card ID {data["card_id"]}'},
-                    'unit_amount': data["amount"],
+                    'unit_amount': str(Decimal(data["amount"]) / 100),
                 },
                 'quantity': 1,
             }],
             mode='payment',
             success_url=f'http://localhost:5208/success?session_id={{CHECKOUT_SESSION_ID}}',
-            cancel_url='http://localhost:5208/cancel',
+            cancel_url='http://localhost:8080/profile',
             metadata={
                 'user_id': user_id,
                 'card_id': data["card_id"],
@@ -232,17 +232,29 @@ def handle_success():
                 app.logger.error(f"Failed to fetch updated balance: {balance_response['error']}")
             else:
                 app.logger.info(f"Updated balance: {balance_response}")
+            
+            success_url = (
+                f'http://localhost:8080/profile?'
+                f'status=success&'
+                f'amount={session.amount_total/100:.2f}&'
+                f'message=Payment+successful'
+            )
+            return redirect(success_url)
+            # if not 'error' in balance_response:
+            #     success_url += f'&new_balance={balance_response.get("data", {}).get("cards", [{}])[0].get("Balance", 0)}'
 
-            return jsonify({
-                "status": "success",
-                "new_balance": balance_response.get('data', {}).get('cards', [{}])[0].get('Balance')
-            }), 200
+            # return jsonify({
+            #     "status": "success",
+            #     "new_balance": balance_response.get('data', {}).get('cards', [{}])[0].get('Balance')
+            # }), 200
 
         else:
-            return jsonify({"status": "failed", "message": "Payment was not successful"}), 400
+            # return jsonify({"status": "failed", "message": "Payment was not successful"}), 400
+            return redirect('http://localhost:8080/profile?status=failed&message=Payment+was+not+successful')
 
     except Exception as e:
-        return jsonify(error=str(e)), 500
+        # return jsonify(error=str(e)), 500
+        return redirect(f'http://localhost:8080/profile?status=error&message={str(e)}')
     
 
 if __name__ == "__main__":

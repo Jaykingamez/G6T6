@@ -31,6 +31,13 @@
           <strong>Error:</strong> {{ error }}
         </div>
         
+        <!-- Notification Alert -->
+        <div v-if="notificationSuccess" class="alert alert-success mx-auto mt-4 fade-in" style="max-width: 800px;">
+          <i class="bi bi-bell-fill me-2"></i>
+          <strong>Success!</strong> {{ notificationSuccess }}
+          <button type="button" class="btn-close float-end" @click="notificationSuccess = null"></button>
+        </div>
+        
         <!-- Results -->
         <div v-if="journeyResults.length > 0" class="journey-results fade-in">
           <h2 class="text-center mb-4">Available Routes</h2>
@@ -48,6 +55,7 @@
                 :route-index="journey.routeIndex"
                 @save-journey="saveJourney"
                 @view-on-map="viewOnMap(journey)"
+                @notification-enabled="handleNotificationEnabled"
               />
             </div>
           </div>
@@ -74,7 +82,6 @@
 <script>
 import JourneyForm from '../components/JourneyComponents/JourneyForm.vue';
 import JourneyCard from '../components/JourneyComponents/JourneyCard.vue';
-
 import SimplifiedRouteView from '../components/MapComponents/SimplifiedRouteView.vue';
 
 export default {
@@ -91,6 +98,8 @@ export default {
       loading: false,
       error: null,
       rawJourneyResponse: null,
+      notificationSuccess: null,
+      activeNotifications: [] // Track active notifications
     };
   },
   computed: {
@@ -104,6 +113,7 @@ export default {
       this.error = null;
       this.journeyResults = [];
       this.showMap = false;
+      this.notificationSuccess = null;
       
       try {
         console.log('Got journey planning data:', data);
@@ -211,7 +221,8 @@ export default {
                 ...step,
                 bus_load: busInfo.load,
                 bus_load_description: this.translateBusLoad(busInfo.load),
-                next_arrival: busInfo.estimatedArrival
+                next_arrival: busInfo.estimatedArrival,
+                bus_stop_code: busInfo.busStopCode // Add bus stop code to the step
               };
             }
           }
@@ -245,7 +256,7 @@ export default {
         return null;
       }
       
-      // Extract bus service number and bus stop code if available
+      // Extract bus service number and bus stop name
       const busNumber = step.transit_details.line.short_name || step.transit_details.line.name;
       const stopName = step.transit_details.departure_stop.name;
       
@@ -255,11 +266,12 @@ export default {
           for (const service of result.arrival_data.Services) {
             // Check if this is the right bus service
             if (service.ServiceNo === busNumber) {
-              // Return data from NextBus (assuming it's the most relevant)
+              // Return data from NextBus and include bus stop code
               if (service.NextBus) {
                 return {
                   load: service.NextBus.Load,
-                  estimatedArrival: service.NextBus.EstimatedArrival
+                  estimatedArrival: service.NextBus.EstimatedArrival,
+                  busStopCode: result.arrival_data.BusStopCode // Include the bus stop code
                 };
               }
             }
@@ -345,6 +357,25 @@ export default {
           mapSection.scrollIntoView({ behavior: 'smooth' });
         }
       }, 100);
+    },
+    
+    // New method to handle notification-enabled event from JourneyCard
+    handleNotificationEnabled(notificationData) {
+      console.log('Notification enabled:', notificationData);
+      
+      // Add to active notifications
+      this.activeNotifications.push(notificationData);
+      
+      // Show success message
+      const busID = notificationData.busID;
+      this.notificationSuccess = `You will receive notifications for Bus ${busID} arrivals!`;
+      
+      // Auto-dismiss after 5 seconds
+      setTimeout(() => {
+        if (this.notificationSuccess && this.notificationSuccess.includes(`Bus ${busID}`)) {
+          this.notificationSuccess = null;
+        }
+      }, 5000);
     }
   },
 };

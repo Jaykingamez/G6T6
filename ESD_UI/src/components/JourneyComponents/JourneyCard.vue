@@ -57,11 +57,28 @@
               </li>
             </ul>
           </div>
+          
+          <!-- Bus Notification Button - Only show for bus routes -->
+          <div v-if="hasBusTransit" class="mt-3">
+            <button 
+              class="btn btn-sm w-100" 
+              :class="notificationEnabled ? 'btn-success' : 'btn-outline-primary'"
+              @click="toggleBusNotification"
+              :disabled="notificationLoading"
+            >
+              <i class="bi" :class="notificationIcon"></i>
+              {{ notificationButtonText }}
+              <span v-if="notificationLoading" class="spinner-border spinner-border-sm ms-1" role="status" aria-hidden="true"></span>
+            </button>
+            <small v-if="notificationError" class="text-danger d-block mt-1">
+              {{ notificationError }}
+            </small>
+          </div>
         </div>
       </div>
       <div class="card-footer bg-white border-0">
         <div class="d-flex justify-content-between">
-          <button 
+          <!-- <button 
             class="btn btn-outline-primary btn-sm" 
             @click="viewOnMap"
             title="View this route on the map">
@@ -72,7 +89,7 @@
             @click="handleSave"
             title="Save this route to your favorites">
             <i class="bi bi-bookmark-plus"></i> Save
-          </button>
+          </button> -->
         </div>
       </div>
     </div>
@@ -117,6 +134,60 @@ export default {
     routeIndex: {
       type: Number,
       default: 0
+    }
+  },
+  data() {
+    return {
+      notificationEnabled: false,
+      notificationLoading: false,
+      notificationError: null,
+      routeID: null
+    };
+  },
+  computed: {
+    hasBusTransit() {
+      // Check if this journey has any bus transit steps
+      if (!this.steps || this.steps.length === 0) return false;
+      
+      return this.steps.some(step => 
+        step.travel_mode === 'TRANSIT' && 
+        step.transit_details && 
+        step.transit_details.line && 
+        step.transit_details.line.vehicle && 
+        step.transit_details.line.vehicle.name === 'Bus'
+      );
+    },
+    busTransitDetails() {
+      // Get details of the first bus transit step
+      if (!this.hasBusTransit) return null;
+      
+      const busStep = this.steps.find(step => 
+        step.travel_mode === 'TRANSIT' && 
+        step.transit_details && 
+        step.transit_details.line && 
+        step.transit_details.line.vehicle && 
+        step.transit_details.line.vehicle.name === 'Bus'
+      );
+      
+      if (!busStep) return null;
+      
+      return {
+        busID: busStep.transit_details.line.short_name || busStep.transit_details.line.name,
+        busStopCode: this.getBusStopCode(busStep),
+        userID: 3 // Hardcoded for now, should be retrieved from user session/store
+      };
+    },
+    notificationButtonText() {
+      if (this.notificationEnabled) {
+        return 'Bus Notifications Enabled';
+      }
+      return 'Enable Bus Notifications';
+    },
+    notificationIcon() {
+      if (this.notificationEnabled) {
+        return 'bi-bell-fill';
+      }
+      return 'bi-bell';
     }
   },
   methods: {
@@ -222,6 +293,96 @@ export default {
         routeIndex: this.routeIndex,
         steps: this.steps
       });
+    },
+    // New methods for bus notification functionality
+    getBusStopCode(busStep) {
+      // First check if we have the bus stop code from the API response
+      if (busStep.bus_stop_code) {
+        return busStep.bus_stop_code;
+      }
+      
+      // Check if it's available in transit details
+      if (busStep?.transit_details?.departure_stop?.code) {
+        return busStep.transit_details.departure_stop.code;
+      }
+      
+      // If no bus stop code is available, look for it in the raw data
+      const busNumber = busStep?.transit_details?.line?.short_name || 
+                        busStep?.transit_details?.line?.name;
+      
+      // Try to find it in the steps data - this assumes your busTracking data
+      // has been processed and attached to the step somewhere in your journey results
+      
+      // If all else fails, log a warning and return a default
+      console.warn('Could not determine bus stop code for', busNumber);
+      return '00000'; // Use a clearly invalid code instead of 1, so it's obvious something is wrong
+    },
+    async toggleBusNotification() {
+      if (this.notificationEnabled) {
+        // TODO: Add logic to disable notifications if needed
+        this.notificationEnabled = false;
+        return;
+      }
+      
+      if (!this.busTransitDetails) {
+        this.notificationError = "Could not determine bus details";
+        return;
+      }
+      
+      this.notificationLoading = true;
+      this.notificationError = null;
+      
+      try {
+        // Step 1: Create SQL entry
+        const response = await fetch('http://localhost:5301/selectedroute', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            BusStopCode: this.busTransitDetails.busStopCode,
+            BusID: this.busTransitDetails.busID,
+            UserID: this.busTransitDetails.userID
+          }),
+        });
+        
+        const data = await response.json();
+        
+        if (!response.ok) {
+          throw new Error(data.message || 'Failed to save route');
+        }
+        
+        // Store the RouteID for potential future use
+        this.routeID = data.data.RouteID;
+        
+        // Step 2: Enable notification using the RouteID
+        const notificationResponse = await fetch(`http://localhost:5302/enable_notification/${this.routeID}`, {
+          method: 'GET'
+        });
+        
+        const notificationData = await notificationResponse.json();
+        
+        if (!notificationResponse.ok) {
+          throw new Error(notificationData.message || 'Failed to enable notifications');
+        }
+        
+        // Success!
+        this.notificationEnabled = true;
+        
+        // Emit an event to inform parent components
+        this.$emit('notification-enabled', {
+          routeID: this.routeID,
+          busID: this.busTransitDetails.busID,
+          busStopCode: this.busTransitDetails.busStopCode
+        });
+        
+      } catch (error) {
+        console.error('Error setting up notifications:', error);
+        this.notificationError = error.message || 'Failed to set up notifications';
+        this.notificationEnabled = false;
+      } finally {
+        this.notificationLoading = false;
+      }
     }
   }
 };

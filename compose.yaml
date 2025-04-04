@@ -400,9 +400,6 @@ services:
 networks:
   app-network:
     driver: bridge
-  G6T6-net:
-    driver: bridge
-    name: G6T6-net
 
 volumes:
   redis_data:

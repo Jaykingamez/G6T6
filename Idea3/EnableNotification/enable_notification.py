@@ -223,7 +223,7 @@ def process_notification_request(RouteID):
     route_data = selected_route_result["data"]
     bus_stop_code = route_data["BusStopCode"]
     bus_id = route_data["BusID"]
-    user_id = route_data["UserId"]  # Assuming SelectedRoute now returns UserId
+    user_id = route_data["UserID"]  
     
     # 4. Start tracking the bus in a separate thread
     tracking_thread = threading.Thread(
@@ -241,7 +241,7 @@ def process_notification_request(RouteID):
             "RouteID": RouteID,
             "BusStopCode": bus_stop_code,
             "BusID": bus_id,
-            "UserId": user_id,
+            "UserID": user_id,
             "tracking_started": True
         },
         "message": "Notification enabled successfully. You will be notified when the bus is arriving."

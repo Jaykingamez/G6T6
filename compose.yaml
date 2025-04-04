@@ -156,16 +156,14 @@ services:
   #   networks:
   #     - app-network
 
-  notification:
-    build:
-      context: ./Idea2/notification microservice 
-      dockerfile: Dockerfile   
-    image: smartTransport/notificaiton:1.0
-    container_name: notification            
-    ports:
-      - "5210:5210"   
-    networks:
-      - G6T6-net                    
+  # notification:
+  #   build:
+  #     context: ./Idea2/notification microservice 
+  #     dockerfile: Dockerfile   
+  #   image: smartTransport/notificaiton:1.0
+  #   container_name: notification            
+  #   ports:
+  #     - "5210:5210"                        
   
   check_balance:
     build:
@@ -255,9 +253,10 @@ services:
     ports:
       - "5301:5301"
     networks:
-      - G6T6-net
+      - app-network
     environment:
       - dbURL=mysql+mysqlconnector://is213@host.docker.internal:3306/SelectedRoute
+      - PYTHONUNBUFFERED=1
 
   enable_notification:
     build:
@@ -267,9 +266,27 @@ services:
     ports:
       - "5302:5302"
     networks:
-      - G6T6-net
+      - app-network
     depends_on:
       - rabbitmq
+    environment:
+      - PYTHONUNBUFFERED=1
+
+  notification:
+    build:
+      context: "./Idea3/Notification/"  
+      dockerfile: Dockerfile
+    container_name: notification
+    ports:
+      - "5210:5210"
+    networks:
+      - app-network
+    depends_on:
+      - rabbitmq
+    environment:
+      - PYTHONUNBUFFERED=1
+    env_file:
+      - .env 
   #IDEA3 - END
     
 
@@ -283,7 +300,7 @@ services:
     volumes: 
       - rabbitmq_data:/var/lib/rabbitmq
     networks:
-      - G6T6-net
+      - app-network
 
   # mongodb:
   #   image: mongo:6.0  

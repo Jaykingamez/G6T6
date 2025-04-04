@@ -6,7 +6,10 @@ import pika
 import amqp_lib
 from dotenv import load_dotenv
 
-load_dotenv()
+
+
+load_dotenv()  
+
 
 app = Flask(__name__)
 

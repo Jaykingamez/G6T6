@@ -57,6 +57,9 @@
                 <button class="btn btn-sm btn-outline-primary" @click="planSimilar(journey)">
                   Plan Similar
                 </button>
+                <button class="btn btn-sm btn-outline-success" @click="enableNotification(journey.id)">
+                  Enable Notification
+                </button>
                 <button class="btn btn-sm btn-outline-danger" @click="removeJourney(journey.id)">
                   Remove
                 </button>
@@ -88,6 +91,7 @@
 import { mapState, mapGetters } from 'vuex';
 
 const SELECTED_ROUTE_API = 'http://localhost:5301/selectedroute'; // Add this line
+const ENABLE_NOTIFICATION_API = 'http://localhost:5302/enable_notification/';
 
 export default {
   name: 'SavedJourneys',
@@ -95,7 +99,8 @@ export default {
     return {
       showDeleteConfirmation: false,
       journeyToDelete: null,
-      deletingJourney: false
+      deletingJourney: false,
+      routeId: null,
     };
   },
   computed: {
@@ -192,6 +197,23 @@ export default {
     },
     fetchSavedJourneys() {
       this.$store.dispatch('journeys/fetchSavedJourneys');
+    },
+    async enableNotification(routeId) {
+      this.routeId = routeId;
+      try {
+        const response = await  fetch(`${ENABLE_NOTIFICATION_API}/${this.routeId}`, {
+          method: "GET",
+        });
+        const result = await response.json();
+        if (response.ok) {
+          alert(result.message);
+        } else {
+          alert(`Error: ${result.message}`);
+        }
+      } catch (error) {
+        console.error("Failed to enable notification:", error);
+        alert("An error occurred while enabling notifications.");
+      }
     }
   },
   mounted() {

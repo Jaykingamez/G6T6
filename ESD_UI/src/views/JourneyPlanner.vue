@@ -356,7 +356,7 @@ export default {
   background: linear-gradient(135deg, #f8fafc 0%, #edf2f7 100%);
   width: 100%;
   margin: 0;
-  padding: 0;
+  padding: 0px 100px 0px 100px;
 }
 
 .planner-header {
@@ -411,6 +411,7 @@ export default {
   margin-bottom: 3rem;
   border: 1px solid rgba(226, 232, 240, 0.8);
   backdrop-filter: blur(10px);
+  border-radius: 10px;
 }
 
 .journey-results {

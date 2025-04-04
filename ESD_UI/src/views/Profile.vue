@@ -362,24 +362,28 @@ export default {
         await axios.delete(`http://localhost:5201/users/${this.userId}`);
         await this.$store.dispatch("auth/logout");
         this.$router.push("/");
-        this.$toast.success("Your account has been deleted successfully.");
+        this.toast.success("Your account has been deleted successfully.");
       } catch (error) {
         console.error("Error deleting account:", error);
-        this.$toast.error("Failed to delete account. Please try again.");
+        this.toast.error("Failed to delete account. Please try again.");
       } finally {
         this.deleting = false;
       }
     },
     async applyForCard() {
-      this.applyingForCard = true;
       try {
+        this.applyingForCard = true;
+        
+        if (!this.userId) {
+          this.toast.error("Please log in to apply for a card.");
+          return;
+        }
+        
         // Generate a random card serial number
-        const serialNumber =
-          "SN" + Math.random().toString(36).substr(2, 9).toUpperCase();
+        const serialNumber = "SN" + Math.random().toString(36).substr(2, 9).toUpperCase();
 
         const response = await axios.post(
-          `${process.env.VUE_APP_CARD_API_URL || "http://localhost:5203"
-          }/cards`,
+          `${process.env.VUE_APP_CARD_API_URL || "http://localhost:5203"}/cards`,
           {
             UserId: this.userId,
             Balance: 0.0,
@@ -387,19 +391,26 @@ export default {
           }
         );
 
-        if (response.data.code === 201) {
-          // // Add the new card to the cards array
-          // this.cards = [...this.cards, response.data.data];
-          await this.fetchUserCards(); // Refresh cards list after successful application
-          this.$toast.success("Card application successful!");
-        } else {
-          throw new Error(response.data.message || "Failed to apply for card");
+        // Check if response exists and has the expected structure
+        if (!response || !response.data) {
+          throw new Error("Invalid server response");
         }
+
+        // Success case
+        if (response.data.code === 201) {
+          await this.fetchUserCards();
+          this.toast.success("Card application successful!");
+          return;
+        }
+
+        // Server returned an error
+        throw new Error(response.data.message || "Failed to apply for card");
+
       } catch (error) {
         console.error("Error applying for card:", error);
-        this.$toast.error(
-          error?.response?.data?.message || "Failed to apply for card"
-        );
+        // Improved error handling that doesn't try to access properties that might not exist
+        const errorMessage = error.message || "An unexpected error occurred";
+        this.toast.error(errorMessage);
       } finally {
         this.applyingForCard = false;
       }
@@ -429,7 +440,7 @@ export default {
       } catch (error) {
         console.error('Error fetching cards:', error);
         this.cards = [];
-        this.$toast.error(
+        this.toast.error(
           error.response?.data?.message || 'Failed to fetch cards'
         );
       }
@@ -472,16 +483,16 @@ export default {
     if (status) {
       switch (status) {
         case 'success':
-          this.$toast.success(
+          this.toast.success(
             `Payment successful! Amount: $${amount}${newBalance ? ` (New balance: $${newBalance})` : ''}`
           );
           this.fetchUserCards(); // Refresh cards after successful payment
           break;
         case 'failed':
-          this.$toast.error(message || 'Payment failed');
+          this.toast.error(message || 'Payment failed');
           break;
         case 'error':
-          this.$toast.error(message || 'An error occurred');
+          this.toast.error(message || 'An error occurred');
           break;
       }
 
@@ -771,6 +782,12 @@ export default {
 
 .btn-primary:active {
   transform: translateY(0);
+}
+
+.empty-card-placeholder {
+  font-size: 4rem;
+  color: #ccc;
+  margin-bottom: 1rem;
 }
 
 /* Responsive Adjustments */

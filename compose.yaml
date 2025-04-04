@@ -318,6 +318,77 @@ services:
   #     retries: 5
   #     start_period: 30s
 
+  #######################################
+  # PostgreSQL Database for Kong
+  #######################################
+  kong-database:
+    image: postgres:16  # Adjust version as needed
+    platform: linux/amd64  # <- required for Mac M1 chip. Otherwise, can remove
+    restart: always
+    environment:
+      POSTGRES_DB: kong
+      POSTGRES_USER: kong
+      POSTGRES_PASSWORD: password
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "kong"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    networks:
+      - app-network
+
+  #######################################
+  # Kong Database Migration
+  #######################################
+  kong-migration:
+    image: kong/kong-gateway:3.9
+    platform: linux/amd64  # <- required for Mac M1 chip. Otherwise, can remove
+    command: "kong migrations bootstrap"
+    restart: on-failure
+    environment:
+      KONG_DATABASE: postgres
+      KONG_PG_HOST: kong-database
+      KONG_PG_USER: kong
+      KONG_PG_PASSWORD: password
+    depends_on:
+      kong-database:
+        condition: service_healthy
+    networks:
+      - app-network
+
+  #######################################
+  # Kong API Gateway
+  #######################################
+  kong:
+    image: kong/kong-gateway:3.9
+    platform: linux/amd64  # <- required for Mac M1 chip. Otherwise, can remove
+    restart: always
+    environment:
+      KONG_DATABASE: postgres
+      KONG_PG_HOST: kong-database
+      KONG_PG_USER: kong
+      KONG_PG_PASSWORD: password
+      KONG_PROXY_ACCESS_LOG: /dev/stdout
+      KONG_ADMIN_ACCESS_LOG: /dev/stdout
+      KONG_PROXY_ERROR_LOG: /dev/stderr
+      KONG_ADMIN_ERROR_LOG: /dev/stderr
+      KONG_ADMIN_LISTEN: 0.0.0.0:8001
+      KONG_ADMIN_GUI_URL: http://localhost:8002
+    depends_on:
+      kong-migration:
+        condition: service_completed_successfully
+    ports:
+      - "8000:8000"  # HTTP traffic from consumers
+      - "8001:8001"  # Admin API
+      - "8002:8002"  # Kong Manager GUI
+    networks:
+      - app-network
+
+
 networks:
   app-network:
     driver: bridge
@@ -330,3 +401,5 @@ volumes:
   # mongo-data:
   rabbitmq_data:
     name: G6T6_rabbitmq_data
+  pgdata:
+    name: transport_pgdata

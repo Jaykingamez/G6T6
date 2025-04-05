@@ -1,9 +1,9 @@
 import axios from 'axios';
 
 // Replace with your actual API base URLs - adjust based on your deployment configuration
-const API_BASE_URL = process.env.VUE_APP_API_BASE_URL || 'http://localhost:5004'; // Composite service
+const API_BASE_URL = process.env.VUE_APP_API_BASE_URL || 'http://localhost:8000'; // Composite service
 const SAVED_ROUTES_SERVICE_URL = process.env.VUE_APP_SAVED_ROUTES_URL || 'http://localhost:5006'; // Atomic service
-const PLAN_JOURNEY_API = process.env.VUE_APP_PLAN_JOURNEY_API || 'http://localhost:5031'; // Plan Journey service
+const PLAN_JOURNEY_API = 'http://localhost:8000'; // Plan Journey service
 
 // Function to get journey options based on start and end points
 export const getJourneyOptions = async (startPoint, endPoint) => {
@@ -62,7 +62,7 @@ export const getSavedJourneys = async (userId) => {
     
     try {
         // Direct call to the selectedRoute microservice
-        const directResponse = await axios.get(`http://localhost:5301/selectedroute/user/${userId}`, {
+        const directResponse = await axios.get(`http://localhost:8000/selectedroute/user/${userId}`, {
             // Add timeout and additional headers
             timeout: 10000,
             headers: {

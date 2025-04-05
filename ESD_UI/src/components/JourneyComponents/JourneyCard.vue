@@ -350,7 +350,7 @@ export default {
         
         try {
           // Call the bus stop lookup microservice
-          const response = await fetch('http://localhost:5002/bus_stop_lookup', {
+          const response = await fetch('http://localhost:8000/bus_stop_lookup', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json'
@@ -442,7 +442,7 @@ export default {
           console.log(`Creating route for bus ${busDetail.busID} at stop ${busDetail.busStopCode}`);
           
           // Create the route
-          const response = await fetch('http://localhost:5301/selectedroute', {
+          const response = await fetch('http://localhost:8000/selectedroute', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json'
@@ -467,7 +467,7 @@ export default {
           
           // Enable notification only for the first bus using the RouteID
           if (isFirstBus) {
-            const notificationResponse = await fetch(`http://localhost:5302/enable_notification/${routeID}`, {
+            const notificationResponse = await fetch(`http://localhost:8000/enable_notification/${routeID}`, {
               method: 'GET'
             });
             

@@ -202,7 +202,7 @@ export default {
       this.error = null;
       
       try {
-        const response = await fetch('http://localhost:5301/selectedroute');
+        const response = await fetch('http://localhost:8000/selectedroute');
         const data = await response.json();
         
         if (data.code === 200) {
@@ -222,7 +222,7 @@ export default {
     },
     async enableNotification(routeId) {
       try {
-        const response = await fetch(`http://localhost:5302/enable_notification/${routeId}`, {
+        const response = await fetch(`http://localhost:8000/enable_notification/${routeId}`, {
           method: "GET",
         });
         
@@ -278,7 +278,7 @@ export default {
       this.deletingJourney = true;
       
       try {
-        const response = await fetch(`http://localhost:5301/selectedroute/${this.journeyToDelete}`, {
+        const response = await fetch(`http://localhost:8000/selectedroute/${this.journeyToDelete}`, {
           method: 'DELETE'
         });
 

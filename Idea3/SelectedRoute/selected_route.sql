@@ -11,13 +11,16 @@ CREATE TABLE IF NOT EXISTS `SelectedRoute` (
   `BusStopCode` int(11) NOT NULL,
   `BusID` char(11) NOT NULL,
   `UserID` int(11) NOT NULL,
+  `RouteName` char (100) NOT NULL,
   PRIMARY KEY (`RouteID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- Add some sample data (optional)
-INSERT INTO `SelectedRoute` (`BusStopCode`, `BusID`, `UserID`) VALUES
-(1001, '501', 1),
-(1002, '502', 2),
-(83139, '15', 1);
+INSERT INTO `SelectedRoute` (`BusStopCode`, `BusID`,`UserID`, `RouteName`) VALUES
+(4121, 147,"3", "From 520817 to SMU SCIS"),
+(75209, 46,"3", "From 520817 to SMU SCIS"),
+(75089, 293,"3", "From 520717 to Pasir Ris"),
+(75209, 46,"3", "From 520717 to Pasir Ris")
+;
 
 COMMIT;

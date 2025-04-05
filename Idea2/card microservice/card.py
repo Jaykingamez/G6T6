@@ -7,10 +7,18 @@ from flask_sqlalchemy import SQLAlchemy
 from os import environ
 from decimal import Decimal, ROUND_HALF_UP
 import os
+import traceback
 
 app = Flask(__name__)
 
-CORS(app)
+# Configure CORS properly
+CORS(app, resources={
+    r"/*": {
+        "origins": ["http://localhost:8080", "http://127.0.0.1:8080"],
+        "methods": ["GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"],
+        "allow_headers": ["Content-Type", "Authorization"]
+    }
+})
 
 app.config["SQLALCHEMY_DATABASE_URI"] = (
      environ.get("dbURL") or "mysql+mysqlconnector://root@localhost:3306/cards"
@@ -61,14 +69,42 @@ def createCard():
     if request.is_json:
         try:
             data = request.get_json()
+            print("Received card creation request with data:", data)  # Debug log
+            
+            # Validate required fields
+            if 'UserId' not in data:
+                return jsonify({
+                    "code": 400,
+                    "message": "UserId is required"
+                }), 400
+                
+            # Ensure UserId is an integer
+            try:
+                user_id = int(data['UserId'])
+                data['UserId'] = user_id
+            except (ValueError, TypeError):
+                return jsonify({
+                    "code": 400,
+                    "message": "UserId must be an integer"
+                }), 400
+                
             result = processCreateCard(data)
             return jsonify(result), result["code"]
         except Exception as e:
-            return jsonify({"code": 500, "message": str(e)}), 500
+            # Get the full stack trace
+            stack_trace = traceback.format_exc()
+            print("Error in card creation:", str(e))
+            print("Stack trace:", stack_trace)
+            
+            return jsonify({
+                "code": 500,
+                "message": f"Error creating card: {str(e)}",
+                "details": stack_trace
+            }), 500
     else:
         return jsonify({
             "code": 400,
-            "message": "Card should be in JSON."
+            "message": "Request must be JSON"
         }), 400
 
 # READ
@@ -130,19 +166,41 @@ def deleteCard(card_id):
 
 def processCreateCard(data):
     try:
+        print("Processing card creation with data:", data)
+        
+        # Generate serial number if not provided
+        serial_number = data.get('CardSerialNumber') or generate_serial_number()
+        
+        # Convert Balance to Decimal if provided, default to 0
+        try:
+            balance = Decimal(str(data.get('Balance', 0))).quantize(Decimal('0.00'))
+        except (ValueError, TypeError, decimal.InvalidOperation) as e:
+            raise ValueError(f"Invalid balance value: {str(e)}")
+        
+        print(f"Creating new card with serial number: {serial_number}")
+        
         new_card = Card(
             UserId=data['UserId'],
-            Balance=Decimal(data['Balance']),
-            CardSerialNumber=data['CardSerialNumber']
+            Balance=balance,
+            CardSerialNumber=serial_number
         )
+        
+        print("Attempting database session operations...")
         db.session.add(new_card)
         db.session.commit()
+        print("Database commit successful")
+        
+        created_card = new_card.serialize()
+        print("Card created successfully:", created_card)
+        
         return {
             "code": 201,
-            "data": new_card.serialize(),
+            "data": created_card,
             "message": "Card created successfully"
         }
     except Exception as e:
+        print("Error in processCreateCard:", str(e))
+        print("Stack trace:", traceback.format_exc())
         db.session.rollback()
         raise e
 

@@ -25,7 +25,7 @@
             <div class="col-md-5">
               <div class="card shadow profile-card">
                 <div class="card-header">
-                  <h2 class="mb-0"><i class="bi bi-person-badge me-2"></i>Account Profile</h2>
+                  <h4 class="mb-0"><i class="bi bi-person-badge me-2"></i>Account Profile</h4>
                 </div>
                 <div class="card-body">
                   <div class="text-center mb-4">
@@ -102,7 +102,7 @@
               <!-- Account Settings Card -->
               <div class="card mt-4 shadow settings-card">
                 <div class="card-header">
-                  <h3 class="mb-0"><i class="bi bi-gear-fill me-2"></i>Account Settings</h3>
+                  <h4 class="mb-0"><i class="bi bi-gear-fill me-2"></i>Account Settings</h4>
                 </div>
                 <div class="card-body">
                   <div class="setting-group">
@@ -134,9 +134,9 @@
             <div class="col-md-7">
               <div class="card shadow transit-card-section">
                 <div class="card-header">
-                  <h3 class="mb-0">
+                  <h4 class="mb-0">
                     <i class="bi bi-credit-card-2-front me-2"></i>My Transit Cards
-                  </h3>
+                  </h4>
                 </div>
                 <div class="card-body">
                   <div v-if="loading" class="text-center">
@@ -208,11 +208,46 @@
               <!-- Recent Activities Card -->
               <div class="card mt-4 shadow activity-card">
                 <div class="card-header">
-                  <h3 class="mb-0"><i class="bi bi-activity me-2"></i>Recent Activities</h3>
+                  <h4 class="mb-0"><i class="bi bi-activity me-2"></i>Recent Activities</h4>
                 </div>
                 <div class="card-body">
-                  <!-- If no activities yet -->
-                  <div class="text-center py-3">
+                  <!-- Loading state -->
+                  <div v-if="loadingTransactions" class="text-center py-3">
+                    <div class="spinner-border spinner-border-sm text-primary" role="status">
+                      <span class="visually-hidden">Loading transactions...</span>
+                    </div>
+                    <p class="mt-2">Loading your recent activities...</p>
+                  </div>
+                  
+                  <!-- If there are transactions -->
+                  <div v-else-if="transactions.length > 0" class="transaction-list">
+                    <div v-for="transaction in transactions" :key="transaction.TransactionId" class="transaction-item">
+                      <div class="transaction-icon" :class="getTransactionTypeClass(transaction)">
+                        <i class="bi" :class="getTransactionTypeIcon(transaction)"></i>
+                      </div>
+                      <div class="transaction-details">
+                        <div class="transaction-title">
+                          {{ getTransactionTitle(transaction) }}
+                        </div>
+                        <div class="transaction-meta">
+                          <span class="transaction-card">{{ formatCardNumber(transaction.CardNumber) }}</span>
+                          <span class="transaction-date">{{ formatTransactionDate(transaction.CreatedAt) }}</span>
+                        </div>
+                      </div>
+                      <div class="transaction-amount" :class="{'text-success': transaction.Amount > 0, 'text-danger': transaction.Amount < 0}">
+                        {{ transaction.Amount > 0 ? '+' : '' }}${{ parseFloat(transaction.Amount).toFixed(2) }}
+                      </div>
+                    </div>
+                    
+                    <div v-if="hasMoreTransactions" class="text-center mt-3">
+                      <button class="btn btn-link" @click="viewAllTransactions">
+                        View All Transactions <i class="bi bi-chevron-right"></i>
+                      </button>
+                    </div>
+                  </div>
+                  
+                  <!-- If no transactions -->
+                  <div v-else class="text-center py-3">
                     <i class="bi bi-clock-history display-4 text-muted"></i>
                     <p class="mt-3">No recent activities to display.</p>
                     <p class="text-muted small">Your transit activities will appear here once you start using your card.</p>
@@ -259,6 +294,10 @@ export default {
       applyingForCard: false,
       isProcessing: false,
       selectedCard: null,
+      loadingTransactions: false,
+      transactions: [],
+      hasMoreTransactions: false,
+      transactionLimit: 5,
     };
   },
   computed: {
@@ -467,11 +506,195 @@ export default {
       // Direct property assignment works with reactive objects in Vue 3
       this.cardStates[cardId] = !this.cardStates[cardId];
     },
+    async fetchTransactions() {
+      if (!this.cards || this.cards.length === 0) {
+        console.log('No cards found, skipping transaction fetch');
+        this.transactions = [];
+        this.hasMoreTransactions = false;
+        return;
+      }
+      
+      this.loadingTransactions = true;
+      const allTransactions = [];
+      
+      try {
+        // Create an array of promises to fetch transactions for all cards
+        const transactionPromises = this.cards.map(card => {
+          const apiUrl = new URL('https://personal-tkjmxw54.outsystemscloud.com/TransactionManagement/rest/TransactionsAPI/GetTransactionsByCardId');
+          // Add CardId as a query parameter
+          apiUrl.searchParams.append('CardId', card.CardId);
+          
+          console.log(`Fetching transactions for card ${card.CardId} from URL:`, apiUrl.toString());
+          
+          return axios.get(apiUrl.toString())
+            .then(response => {
+              console.log(`Received transactions for card ${card.CardId}:`, response.data);
+              // Process successful response
+              if (response.data && Array.isArray(response.data)) {
+                // Add card information to each transaction
+                return response.data.map(transaction => ({
+                  ...transaction,
+                  CardNumber: card.CardSerialNumber,
+                  CardId: card.CardId
+                }));
+              }
+              console.warn(`No valid transaction data for card ${card.CardId}`);
+              return [];
+            })
+            .catch(error => {
+              // Individual card transaction fetch failed - log but don't throw
+              console.warn(`Failed to fetch transactions for card ${card.CardId}:`, error);
+              return [];
+            });
+        });
+        
+        // Use Promise.allSettled to handle both fulfilled and rejected promises
+        const results = await Promise.allSettled(transactionPromises);
+        
+        // Process all results, including those that succeeded
+        results.forEach(result => {
+          if (result.status === 'fulfilled' && Array.isArray(result.value)) {
+            allTransactions.push(...result.value);
+          }
+        });
+        
+        // Sort all transactions by date, newest first
+        allTransactions.sort((a, b) => new Date(b.CreatedAt) - new Date(a.CreatedAt));
+        
+        // Check if there are more transactions than our limit
+        this.hasMoreTransactions = allTransactions.length > this.transactionLimit;
+        
+        // Store only the latest few transactions
+        this.transactions = allTransactions.slice(0, this.transactionLimit);
+        
+        console.log('Processed transactions:', this.transactions);
+        
+      } catch (error) {
+        console.error("Error in transaction processing:", error);
+        this.toast.error("Failed to fetch transaction history");
+      } finally {
+        this.loadingTransactions = false;
+      }
+    },
+
+    // Add this method to provide sample transactions when API fails
+    getMockTransactions() {
+      const now = new Date();
+      const yesterday = new Date(now);
+      yesterday.setDate(yesterday.getDate() - 1);
+      const lastWeek = new Date(now);
+      lastWeek.setDate(lastWeek.getDate() - 7);
+      
+      return [
+        {
+          TransactionId: 1001,
+          UserId: this.userId,
+          CardId: this.cards?.[0]?.CardId || 0,
+          CardNumber: this.cards?.[0]?.CardSerialNumber || 'SN12345678',
+          Amount: 10.00,
+          PreviousBalance: 5.00,
+          NewBalance: 15.00,
+          CreatedAt: now.toISOString()
+        },
+        {
+          TransactionId: 1002,
+          UserId: this.userId,
+          CardId: this.cards?.[0]?.CardId || 0,
+          CardNumber: this.cards?.[0]?.CardSerialNumber || 'SN12345678',
+          Amount: -2.50,
+          PreviousBalance: 17.50,
+          NewBalance: 15.00,
+          CreatedAt: yesterday.toISOString()
+        },
+        {
+          TransactionId: 1003,
+          UserId: this.userId,
+          CardId: this.cards?.[0]?.CardId || 0,
+          CardNumber: this.cards?.[0]?.CardSerialNumber || 'SN12345678',
+          Amount: 20.00,
+          PreviousBalance: 0.00,
+          NewBalance: 20.00,
+          CreatedAt: lastWeek.toISOString()
+        }
+      ];
+    },
+    
+    formatTransactionDate(dateString) {
+      if (!dateString) return "N/A";
+      const date = new Date(dateString);
+      
+      const today = new Date();
+      const yesterday = new Date();
+      yesterday.setDate(yesterday.getDate() - 1);
+      
+      // Format as "Today" or "Yesterday" or the actual date
+      if (date.toDateString() === today.toDateString()) {
+        return `Today, ${date.toLocaleTimeString('en-US', {
+          hour: '2-digit',
+          minute: '2-digit',
+          hour12: true
+        })}`;
+      } else if (date.toDateString() === yesterday.toDateString()) {
+        return `Yesterday, ${date.toLocaleTimeString('en-US', {
+          hour: '2-digit',
+          minute: '2-digit',
+          hour12: true
+        })}`;
+      } else {
+        return date.toLocaleDateString('en-US', {
+          month: 'short',
+          day: 'numeric',
+          year: date.getFullYear() !== today.getFullYear() ? 'numeric' : undefined,
+          hour: '2-digit',
+          minute: '2-digit',
+          hour12: true
+        });
+      }
+    },
+    
+    getTransactionTypeIcon(transaction) {
+      if (transaction.Amount > 0) {
+        return "bi-plus-circle-fill"; // Top-up
+      } else {
+        return "bi-dash-circle-fill"; // Fare payment
+      }
+    },
+    
+    getTransactionTypeClass(transaction) {
+      if (transaction.Amount > 0) {
+        return "bg-success-soft"; // Top-up
+      } else {
+        return "bg-danger-soft"; // Fare payment
+      }
+    },
+    
+    getTransactionTitle(transaction) {
+      if (transaction.Amount > 0) {
+        return "Card Top-Up";
+      } else {
+        return "Transit Fare";
+      }
+    },
+    
+    formatCardNumber(cardNumber) {
+      if (!cardNumber) return '';
+      // Show only the last 4 characters of card number for privacy
+      return `Card: ${cardNumber.slice(-4)}`;
+    },
+    
+    viewAllTransactions() {
+      // In a real app, you'd navigate to a dedicated transactions page
+      // For now, we'll just show all transactions by fetching them again without a limit
+      this.transactionLimit = 999;
+      this.fetchTransactions();
+      this.hasMoreTransactions = false; // Hide the "View All" button after expanding
+    },
   },
   async created() {
-    // Add this to fetch cards when component is created
+    // Add this to fetch cards and transactions when component is created
     if (this.userId) {
       await this.fetchUserCards();
+      await this.fetchTransactions();
     }
 
     // Check for payment status in URL parameters
@@ -487,6 +710,7 @@ export default {
             `Payment successful! Amount: $${amount}${newBalance ? ` (New balance: $${newBalance})` : ''}`
           );
           this.fetchUserCards(); // Refresh cards after successful payment
+          this.fetchTransactions(); // Also refresh transaction history
           break;
         case 'failed':
           this.toast.error(message || 'Payment failed');
@@ -527,9 +751,9 @@ export default {
 /* Header Section */
 .profile-header {
   background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-light) 100%);
-  color: white;
+  color: #4299e1;
   padding: 2.5rem 1rem;
-  margin: -2rem -1rem 2rem;
+  margin: -2rem -1rem 0;
   position: relative;
 }
 
@@ -803,5 +1027,83 @@ export default {
   .btn-primary {
     padding: 0.625rem 1.25rem;
   }
+}
+
+/* Transaction list styling */
+.transaction-list {
+  margin: 0;
+}
+
+.transaction-item {
+  display: flex;
+  align-items: center;
+  padding: 1rem;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+  transition: background-color 0.2s ease;
+}
+
+.transaction-item:hover {
+  background-color: rgba(0, 0, 0, 0.02);
+}
+
+.transaction-item:last-child {
+  border-bottom: none;
+}
+
+.transaction-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 1rem;
+  flex-shrink: 0;
+}
+
+.bg-success-soft {
+  background-color: rgba(0, 168, 84, 0.1);
+}
+
+.bg-success-soft i {
+  color: #00a854;
+  font-size: 1.25rem;
+}
+
+.bg-danger-soft {
+  background-color: rgba(237, 76, 103, 0.1);
+}
+
+.bg-danger-soft i {
+  color: #ed4c67;
+  font-size: 1.25rem;
+}
+
+.transaction-details {
+  flex: 1;
+}
+
+.transaction-title {
+  font-weight: 500;
+  font-size: 0.95rem;
+  color: #212529;
+}
+
+.transaction-meta {
+  display: flex;
+  gap: 0.75rem;
+  font-size: 0.8125rem;
+  color: #6c757d;
+  margin-top: 0.25rem;
+}
+
+.transaction-card {
+  color: #495057;
+  font-weight: 500;
+}
+
+.transaction-amount {
+  font-weight: 600;
+  font-size: 1rem;
 }
 </style>

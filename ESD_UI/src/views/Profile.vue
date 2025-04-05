@@ -14,243 +14,277 @@
 
         <template v-else>
           <!-- Main Profile Section -->
-          <div class="profile-header">
-            <div class="transit-banner">                
-              <h1>My Transit Account</h1>
-            </div>
-          </div>
-
-          <div class="row g-4">
-            <!-- User Profile Card -->
-            <div class="col-md-5">
-              <div class="card shadow profile-card">
-                <div class="card-header">
-                  <h4 class="mb-0"><i class="bi bi-person-badge me-2"></i>Account Profile</h4>
-                </div>
-                <div class="card-body">
-                  <div class="text-center mb-4">
-                    <div class="avatar-container">
-                      <img :src="avatarUrl" :alt="user.FullName" class="rounded-circle img-fluid" />
+          <div class="profile-page">
+            <div class="profile-header">
+              <div class="header-background"></div>
+              <div class="header-content">
+                <div class="header-left">
+                  <div class="title-with-animation">
+                    <div class="header-title">
+                      <h1>My Transit Account</h1>
+                      <p class="header-subtitle">Manage your transit cards and view your journey history</p>
                     </div>
-                    <h3 class="user-name mt-3">{{ user.FullName }}</h3>
-                    <span class="account-id">User ID: #{{ userId }}</span>
-                  </div>
-
-                  <div v-if="!editMode">
-                    <dl class="row profile-details">
-                      <dt class="col-sm-4"><i class="bi bi-envelope me-2"></i>Email:</dt>
-                      <dd class="col-sm-8">{{ user.Email }}</dd>
-
-                      <dt class="col-sm-4"><i class="bi bi-telephone me-2"></i>Phone:</dt>
-                      <dd class="col-sm-8">
-                        {{ user.Phone || "Not provided" }}
-                      </dd>
-
-                      <dt class="col-sm-4"><i class="bi bi-calendar-check me-2"></i>Member Since:</dt>
-                      <dd class="col-sm-8">{{ formatDate(user.CreatedAt) }}</dd>
-                    </dl>
-
-                    <button class="btn btn-primary w-100" @click="toggleEditMode">
-                      <i class="bi bi-pencil-square me-2"></i> Edit Profile
-                    </button>
-                  </div>
-
-                  <div v-else>
-                    <form @submit.prevent="saveProfile">
-                      <div class="form-group mb-3">
-                        <label for="name"><i class="bi bi-person me-2"></i>Name</label>
-                        <input type="text" id="name" class="form-control" v-model="editedUser.FullName" required
-                          :class="{ 'is-invalid': validationErrors.FullName }" />
-                        <div class="invalid-feedback">
-                          {{ validationErrors.FullName }}
-                        </div>
-                      </div>
-
-                      <div class="form-group mb-3">
-                        <label for="email"><i class="bi bi-envelope me-2"></i>Email</label>
-                        <input type="email" id="email" class="form-control" v-model="editedUser.Email" required
-                          :class="{ 'is-invalid': validationErrors.Email }" />
-                        <div class="invalid-feedback">
-                          {{ validationErrors.Email }}
-                        </div>
-                      </div>
-
-                      <div class="form-group mb-3">
-                        <label for="phone"><i class="bi bi-telephone me-2"></i>Phone</label>
-                        <input type="tel" id="phone" class="form-control" v-model="editedUser.Phone"
-                          :class="{ 'is-invalid': validationErrors.Phone }" />
-                        <div class="invalid-feedback">
-                          {{ validationErrors.Phone }}
-                        </div>
-                      </div>
-
-                      <div class="d-flex">
-                        <button type="submit" class="btn btn-success me-2 flex-grow-1" :disabled="updating">
-                          <span v-if="updating" class="spinner-border spinner-border-sm me-2"></span>
-                          <i v-else class="bi bi-check-circle me-2"></i>
-                          {{ updating ? "Saving..." : "Save Changes" }}
-                        </button>
-                        <button type="button" class="btn btn-secondary flex-grow-1" @click="cancelEdit" :disabled="updating">
-                          <i class="bi bi-x-circle me-2"></i> Cancel
-                        </button>
-                      </div>
-                    </form>
+                    <div class="lottie-container" ref="lottieContainer"></div>
                   </div>
                 </div>
-              </div>
-
-              <!-- Account Settings Card -->
-              <div class="card mt-4 shadow settings-card">
-                <div class="card-header">
-                  <h4 class="mb-0"><i class="bi bi-gear-fill me-2"></i>Account Settings</h4>
-                </div>
-                <div class="card-body">
-                  <div class="setting-group">
-                    <h5><i class="bi bi-shield-lock me-2"></i>Account Security</h5>
-                    <p class="text-muted">
-                      Managing your account security options
-                    </p>
-                    <button class="btn btn-outline-primary mb-3">
-                      <i class="bi bi-key me-2"></i>Change Password
-                    </button>
-                  </div>
-
-                  <div class="setting-group border-top pt-4">
-                    <h5><i class="bi bi-exclamation-triangle me-2"></i>Danger Zone</h5>
-                    <p class="text-danger">
-                      This action is irreversible. All your data will be permanently deleted.
-                    </p>
-                    <button class="btn btn-danger" @click="confirmDeleteAccount" :disabled="deleting">
-                      <span v-if="deleting" class="spinner-border spinner-border-sm me-2"></span>
-                      <i v-else class="bi bi-trash me-2"></i>
-                      {{ deleting ? "Deleting..." : "Delete Account" }}
-                    </button>
+                <div class="header-right">
+                  <div class="header-stats">
+                    <div class="stat-card">
+                      <div class="stat-icon">
+                        <i class="bi bi-credit-card"></i>
+                      </div>
+                      <div class="stat-info">
+                        <span class="stat-value">{{ cards.length }}</span>
+                        <span class="stat-label">Active Cards</span>
+                      </div>
+                    </div>
+                    <div class="stat-card">
+                      <div class="stat-icon">
+                        <i class="bi bi-clock-history"></i>
+                      </div>
+                      <div class="stat-info">
+                        <span class="stat-value">{{ transactions.length }}</span>
+                        <span class="stat-label">Transactions</span>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
-            
-            <!-- Transit Cards Section -->
-            <div class="col-md-7">
-              <div class="card shadow transit-card-section">
-                <div class="card-header">
-                  <h4 class="mb-0">
-                    <i class="bi bi-credit-card-2-front me-2"></i>My Transit Cards
-                  </h4>
-                </div>
-                <div class="card-body">
-                  <div v-if="loading" class="text-center">
-                    <div class="spinner-border text-primary" role="status">
-                      <span class="visually-hidden">Loading cards...</span>
+            <div class="profile-content">
+              <div class="row g-4">
+                <!-- User Profile Card -->
+                <div class="col-md-5">
+                  <div class="card shadow profile-card">
+                    <div class="card-header">
+                      <h4 class="mb-0"><i class="bi bi-person-badge me-2"></i>Account Profile</h4>
+                    </div>
+                    <div class="card-body">
+                      <div class="text-center mb-4">
+                        <div class="avatar-container">
+                          <img :src="avatarUrl" :alt="user.FullName" class="rounded-circle img-fluid" />
+                        </div>
+                        <h3 class="user-name mt-3">{{ user.FullName }}</h3>
+                        <span class="account-id">User ID: #{{ userId }}</span>
+                      </div>
+
+                      <div v-if="!editMode">
+                        <dl class="row profile-details">
+                          <dt class="col-sm-4"><i class="bi bi-envelope me-2"></i>Email:</dt>
+                          <dd class="col-sm-8">{{ user.Email }}</dd>
+
+                          <dt class="col-sm-4"><i class="bi bi-telephone me-2"></i>Phone:</dt>
+                          <dd class="col-sm-8">
+                            {{ user.Phone || "Not provided" }}
+                          </dd>
+
+                          <dt class="col-sm-4"><i class="bi bi-calendar-check me-2"></i>Member Since:</dt>
+                          <dd class="col-sm-8">{{ formatDate(user.CreatedAt) }}</dd>
+                        </dl>
+
+                        <button class="btn btn-primary w-100" @click="toggleEditMode">
+                          <i class="bi bi-pencil-square me-2"></i> Edit Profile
+                        </button>
+                      </div>
+
+                      <div v-else>
+                        <form @submit.prevent="saveProfile">
+                          <div class="form-group mb-3">
+                            <label for="name"><i class="bi bi-person me-2"></i>Name</label>
+                            <input type="text" id="name" class="form-control" v-model="editedUser.FullName" required
+                              :class="{ 'is-invalid': validationErrors.FullName }" />
+                            <div class="invalid-feedback">
+                              {{ validationErrors.FullName }}
+                            </div>
+                          </div>
+
+                          <div class="form-group mb-3">
+                            <label for="email"><i class="bi bi-envelope me-2"></i>Email</label>
+                            <input type="email" id="email" class="form-control" v-model="editedUser.Email" required
+                              :class="{ 'is-invalid': validationErrors.Email }" />
+                            <div class="invalid-feedback">
+                              {{ validationErrors.Email }}
+                            </div>
+                          </div>
+
+                          <div class="form-group mb-3">
+                            <label for="phone"><i class="bi bi-telephone me-2"></i>Phone</label>
+                            <input type="tel" id="phone" class="form-control" v-model="editedUser.Phone"
+                              :class="{ 'is-invalid': validationErrors.Phone }" />
+                            <div class="invalid-feedback">
+                              {{ validationErrors.Phone }}
+                            </div>
+                          </div>
+
+                          <div class="d-flex">
+                            <button type="submit" class="btn btn-success me-2 flex-grow-1" :disabled="updating">
+                              <span v-if="updating" class="spinner-border spinner-border-sm me-2"></span>
+                              <i v-else class="bi bi-check-circle me-2"></i>
+                              {{ updating ? "Saving..." : "Save Changes" }}
+                            </button>
+                            <button type="button" class="btn btn-secondary flex-grow-1" @click="cancelEdit" :disabled="updating">
+                              <i class="bi bi-x-circle me-2"></i> Cancel
+                            </button>
+                          </div>
+                        </form>
+                      </div>
                     </div>
                   </div>
 
-                  <div v-else-if="cards && cards.length" class="transit-cards">
-                    <div v-for="card in cards" :key="card.CardId" class="mb-4">
-                      <div class="transit-card">
-                        <div class="card-header-strip"></div>
-                        <div class="card-content">
-                          <div class="card-top">
-                            <div class="card-chip"></div>
-                            <div class="card-logo">
-                              <i class="fas fa-bus"></i>
-                              Transit Card
+                  <!-- Account Settings Card -->
+                  <div class="card mt-4 shadow settings-card">
+                    <div class="card-header">
+                      <h4 class="mb-0"><i class="bi bi-gear-fill me-2"></i>Account Settings</h4>
+                    </div>
+                    <div class="card-body">
+                      <div class="setting-group">
+                        <h5><i class="bi bi-shield-lock me-2"></i>Account Security</h5>
+                        <p class="text-muted">
+                          Managing your account security options
+                        </p>
+                        <button class="btn btn-outline-primary mb-3">
+                          <i class="bi bi-key me-2"></i>Change Password
+                        </button>
+                      </div>
+
+                      <div class="setting-group border-top pt-4">
+                        <h5><i class="bi bi-exclamation-triangle me-2"></i>Danger Zone</h5>
+                        <p class="text-danger">
+                          This action is irreversible. All your data will be permanently deleted.
+                        </p>
+                        <button class="btn btn-danger" @click="confirmDeleteAccount" :disabled="deleting">
+                          <span v-if="deleting" class="spinner-border spinner-border-sm me-2"></span>
+                          <i v-else class="bi bi-trash me-2"></i>
+                          {{ deleting ? "Deleting..." : "Delete Account" }}
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                
+                <!-- Transit Cards Section -->
+                <div class="col-md-7">
+                  <div class="card shadow transit-card-section">
+                    <div class="card-header">
+                      <h4 class="mb-0">
+                        <i class="bi bi-credit-card-2-front me-2"></i>My Transit Cards
+                      </h4>
+                    </div>
+                    <div class="card-body">
+                      <div v-if="loading" class="text-center">
+                        <div class="spinner-border text-primary" role="status">
+                          <span class="visually-hidden">Loading cards...</span>
+                        </div>
+                      </div>
+
+                      <div v-else-if="cards && cards.length" class="transit-cards">
+                        <div v-for="card in cards" :key="card.CardId" class="mb-4">
+                          <div class="transit-card">
+                            <div class="card-header-strip"></div>
+                            <div class="card-content">
+                              <div class="card-top">
+                                <div class="card-chip"></div>
+                                <div class="card-logo">
+                                  <i class="fas fa-bus"></i>
+                                  Transit Card
+                                </div>
+                              </div>
+                              <div class="card-details">
+                                <div class="card-number">{{ card.CardSerialNumber }}</div>
+                                <div class="card-holder-name">{{ user.FullName }}</div>
+                                <div class="card-info">
+                                  <div class="card-type">Transit Pass</div>
+                                  <div class="card-valid">ACTIVE</div>
+                                </div>
+                              </div>
+                              <div class="card-balance">
+                                Balance: ${{ card.Balance.toFixed(2) }}
+                              </div>
                             </div>
                           </div>
-                          <div class="card-details">
-                            <div class="card-number">{{ card.CardSerialNumber }}</div>
-                            <div class="card-holder-name">{{ user.FullName }}</div>
-                            <div class="card-info">
-                              <div class="card-type">Transit Pass</div>
-                              <div class="card-valid">ACTIVE</div>
+
+                          <!-- Card balance and actions -->
+                          <div class="card-actions mt-3">
+                            <div class="balance-section">
+                              <div class="balance-info">
+                                <div class="balance-label">Available Balance</div>
+                                <div class="balance-amount">${{ card.Balance.toFixed(2) }}</div>
+                              </div>
+                              <button class="btn btn-primary" @click="topUpCard(card)" :disabled="isProcessing">
+                                <span v-if="isProcessing" class="spinner-border spinner-border-sm me-2"></span>
+                                <i v-else class="bi bi-plus-circle me-2"></i>
+                                Top Up
+                              </button>
                             </div>
-                          </div>
-                          <div class="card-balance">
-                            Balance: ${{ card.Balance.toFixed(2) }}
                           </div>
                         </div>
                       </div>
 
-                      <!-- Card balance and actions -->
-                      <div class="card-actions mt-3">
-                        <div class="balance-section">
-                          <div class="balance-info">
-                            <div class="balance-label">Available Balance</div>
-                            <div class="balance-amount">${{ card.Balance.toFixed(2) }}</div>
+                      <div v-else class="text-center py-4 no-cards">
+                        <div class="empty-card-placeholder">
+                          <i class="bi bi-credit-card-2-front"></i>
+                        </div>
+                        <h4 class="mt-4">No Transit Cards Found</h4>
+                        <p class="text-muted">
+                          You don't have any transit cards yet. Apply for a card to start using our transit system.
+                        </p>
+                        <button class="btn btn-primary mt-3" @click="applyForCard" :disabled="applyingForCard">
+                          <span v-if="applyingForCard" class="spinner-border spinner-border-sm me-2"></span>
+                          <i v-else class="bi bi-plus-circle me-2"></i>
+                          {{ applyingForCard ? "Processing..." : "Apply for Transit Card" }}
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Recent Activities Card -->
+                  <div class="card mt-4 shadow activity-card">
+                    <div class="card-header">
+                      <h4 class="mb-0"><i class="bi bi-activity me-2"></i>Recent Activities</h4>
+                    </div>
+                    <div class="card-body">
+                      <!-- Loading state -->
+                      <div v-if="loadingTransactions" class="text-center py-3">
+                        <div class="spinner-border spinner-border-sm text-primary" role="status">
+                          <span class="visually-hidden">Loading transactions...</span>
+                        </div>
+                        <p class="mt-2">Loading your recent activities...</p>
+                      </div>
+                      
+                      <!-- If there are transactions -->
+                      <div v-else-if="transactions.length > 0" class="transaction-list">
+                        <div v-for="transaction in transactions" :key="transaction.TransactionId" class="transaction-item">
+                          <div class="transaction-icon" :class="getTransactionTypeClass(transaction)">
+                            <i class="bi" :class="getTransactionTypeIcon(transaction)"></i>
                           </div>
-                          <button class="btn btn-primary" @click="topUpCard(card)" :disabled="isProcessing">
-                            <span v-if="isProcessing" class="spinner-border spinner-border-sm me-2"></span>
-                            <i v-else class="bi bi-plus-circle me-2"></i>
-                            Top Up
+                          <div class="transaction-details">
+                            <div class="transaction-title">
+                              {{ getTransactionTitle(transaction) }}
+                            </div>
+                            <div class="transaction-meta">
+                              <span class="transaction-card">{{ formatCardNumber(transaction.CardNumber) }}</span>
+                              <span class="transaction-date">{{ formatTransactionDate(transaction.CreatedAt) }}</span>
+                            </div>
+                          </div>
+                          <div class="transaction-amount" :class="{'text-success': transaction.Amount > 0, 'text-danger': transaction.Amount < 0}">
+                            {{ transaction.Amount > 0 ? '+' : '' }}${{ parseFloat(transaction.Amount).toFixed(2) }}
+                          </div>
+                        </div>
+                        
+                        <div v-if="hasMoreTransactions" class="text-center mt-3">
+                          <button class="btn btn-link" @click="viewAllTransactions">
+                            View All Transactions <i class="bi bi-chevron-right"></i>
                           </button>
                         </div>
                       </div>
-                    </div>
-                  </div>
-
-                  <div v-else class="text-center py-4 no-cards">
-                    <div class="empty-card-placeholder">
-                      <i class="bi bi-credit-card-2-front"></i>
-                    </div>
-                    <h4 class="mt-4">No Transit Cards Found</h4>
-                    <p class="text-muted">
-                      You don't have any transit cards yet. Apply for a card to start using our transit system.
-                    </p>
-                    <button class="btn btn-primary mt-3" @click="applyForCard" :disabled="applyingForCard">
-                      <span v-if="applyingForCard" class="spinner-border spinner-border-sm me-2"></span>
-                      <i v-else class="bi bi-plus-circle me-2"></i>
-                      {{ applyingForCard ? "Processing..." : "Apply for Transit Card" }}
-                    </button>
-                  </div>
-                </div>
-              </div>
-
-              <!-- Recent Activities Card -->
-              <div class="card mt-4 shadow activity-card">
-                <div class="card-header">
-                  <h4 class="mb-0"><i class="bi bi-activity me-2"></i>Recent Activities</h4>
-                </div>
-                <div class="card-body">
-                  <!-- Loading state -->
-                  <div v-if="loadingTransactions" class="text-center py-3">
-                    <div class="spinner-border spinner-border-sm text-primary" role="status">
-                      <span class="visually-hidden">Loading transactions...</span>
-                    </div>
-                    <p class="mt-2">Loading your recent activities...</p>
-                  </div>
-                  
-                  <!-- If there are transactions -->
-                  <div v-else-if="transactions.length > 0" class="transaction-list">
-                    <div v-for="transaction in transactions" :key="transaction.TransactionId" class="transaction-item">
-                      <div class="transaction-icon" :class="getTransactionTypeClass(transaction)">
-                        <i class="bi" :class="getTransactionTypeIcon(transaction)"></i>
-                      </div>
-                      <div class="transaction-details">
-                        <div class="transaction-title">
-                          {{ getTransactionTitle(transaction) }}
-                        </div>
-                        <div class="transaction-meta">
-                          <span class="transaction-card">{{ formatCardNumber(transaction.CardNumber) }}</span>
-                          <span class="transaction-date">{{ formatTransactionDate(transaction.CreatedAt) }}</span>
-                        </div>
-                      </div>
-                      <div class="transaction-amount" :class="{'text-success': transaction.Amount > 0, 'text-danger': transaction.Amount < 0}">
-                        {{ transaction.Amount > 0 ? '+' : '' }}${{ parseFloat(transaction.Amount).toFixed(2) }}
+                      
+                      <!-- If no transactions -->
+                      <div v-else class="text-center py-3">
+                        <i class="bi bi-clock-history display-4 text-muted"></i>
+                        <p class="mt-3">No recent activities to display.</p>
+                        <p class="text-muted small">Your transit activities will appear here once you start using your card.</p>
                       </div>
                     </div>
-                    
-                    <div v-if="hasMoreTransactions" class="text-center mt-3">
-                      <button class="btn btn-link" @click="viewAllTransactions">
-                        View All Transactions <i class="bi bi-chevron-right"></i>
-                      </button>
-                    </div>
-                  </div>
-                  
-                  <!-- If no transactions -->
-                  <div v-else class="text-center py-3">
-                    <i class="bi bi-clock-history display-4 text-muted"></i>
-                    <p class="mt-3">No recent activities to display.</p>
-                    <p class="text-muted small">Your transit activities will appear here once you start using your card.</p>
                   </div>
                 </div>
               </div>
@@ -266,13 +300,45 @@
 import axios from "axios";
 import { mapState } from "vuex";
 import { useToast } from 'vue-toastification';
-import { ref, reactive } from 'vue';
+import { ref, reactive, onMounted } from 'vue';
 
 export default {
   setup() {
     const toast = useToast();
     const cardStates = reactive({});
-    return { toast, cardStates }
+    const lottieContainer = ref(null);
+
+    onMounted(async () => {
+      // Load the Lottie script
+      if (!document.querySelector('script[src*="dotlottie-player"]')) {
+        await new Promise((resolve, reject) => {
+          const script = document.createElement('script');
+          script.src = "https://unpkg.com/@dotlottie/player-component@2.7.12/dist/dotlottie-player.mjs";
+          script.type = "module";
+          script.onload = resolve;
+          script.onerror = reject;
+          document.head.appendChild(script);
+        });
+      }
+
+      // Wait a bit for the component to be registered
+      setTimeout(() => {
+        if (lottieContainer.value) {
+          const player = document.createElement('dotlottie-player');
+          player.setAttribute('src', 'https://lottie.host/dad50be8-9e8b-4602-b747-5fa46357ae7e/g90VC9zJ3c.lottie');
+          player.setAttribute('background', 'transparent');
+          player.setAttribute('speed', '1');
+          player.setAttribute('loop', '');
+          player.setAttribute('autoplay', '');
+          player.style.width = '300px';
+          player.style.height = '300px';
+          player.style.margin = '-1rem 0';
+          lottieContainer.value.appendChild(player);
+        }
+      }, 100);
+    });
+
+    return { toast, cardStates, lottieContainer }
   },
   data() {
     return {
@@ -728,8 +794,8 @@ export default {
 </script>
 
 <style scoped>
-/* Import Google Fonts */
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+/* Import Google Fonts - with additional weights and features */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
 
 /* Variables */
 :root {
@@ -738,37 +804,179 @@ export default {
   --primary-dark: #4338CA;
   --secondary-color: #818CF8;
   --accent-color: #C7D2FE;
+  --font-family-base: Avenir, Helvetica, Arial, sans-serif;
 }
 
 /* Base Styles */
 .container {
-  padding: 2rem 1rem;
+  padding: 0px 1rem;
   background: #f8f9fa;
   min-height: calc(100vh - 60px);
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-}
-
-/* Header Section */
-.profile-header {
-  background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-light) 100%);
-  color: #4299e1;
-  padding: 2.5rem 1rem;
-  margin: -2rem -1rem 0;
-  position: relative;
-}
-
-.transit-banner {
-  position: relative;
+  font-family: var(--font-family-base);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  color: #2c3e50;
   max-width: 1200px;
   margin: 0 auto;
-  padding: 0 1rem;
 }
 
-.transit-banner h1 {
-  font-size: 1.75rem;
-  font-weight: 600;
+/* Main Profile Section */
+.profile-page {
+  width: 100vw;
+  margin-left: calc(-50vw + 50%);
+  margin-right: calc(-50vw + 50%);
+  overflow-x: hidden;
+}
+
+.profile-header {
+  position: relative;
+  padding: 4rem 0;
+  overflow: visible;
+  color: white;
+  min-height: 300px;
+  width: 100%;
+  background: linear-gradient(135deg, #1e4d8e 0%, #2870c4 100%);
+}
+
+.header-background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="%23ffffff10" fill-opacity="1" d="M0,32L48,42.7C96,53,192,75,288,101.3C384,128,480,160,576,165.3C672,171,768,149,864,128C960,107,1056,85,1152,80C1248,75,1344,85,1392,90.7L1440,96L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path></svg>');
+  background-position: bottom;
+  background-repeat: no-repeat;
+  background-size: cover;
+  opacity: 0.1;
+  z-index: 1;
+}
+
+.header-content {
+  position: relative;
+  z-index: 2;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.header-left {
+  position: relative;
+  flex: 1;
+  min-width: 0;
+  max-width: 650px;
+}
+
+.header-right {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-left: 2rem;
+}
+
+.header-stats {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-top: 0;
+}
+
+.stat-card {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  padding: 1.25rem;
+  border-radius: 16px;
+  width: 220px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  transition: all 0.3s ease;
+}
+
+.title-with-animation {
+  position: relative;
+  min-height: 250px;
+  display: flex;
+  align-items: center;
+}
+
+.header-title {
+  position: relative;
+  z-index: 10;
+  max-width: 600px;
+}
+
+.header-title h1 {
+  font-size: 3rem;
+  font-weight: 700;
   margin: 0;
+  color: #ffffff;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  line-height: 1.2;
   letter-spacing: -0.02em;
+}
+
+.header-subtitle {
+  font-size: 1.25rem;
+  margin: 1.5rem 0 0;
+  color: rgba(255, 255, 255, 0.9);
+  font-weight: 400;
+  line-height: 1.6;
+  max-width: 500px;
+}
+
+/* Decorative elements */
+.header-decoration {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 100px;
+  background: linear-gradient(to bottom, transparent, rgba(255, 255, 255, 0.1));
+  z-index: 1;
+}
+
+@media (max-width: 1024px) {
+  .header-content {
+    flex-direction: column;
+    gap: 2rem;
+  }
+
+  .header-right {
+    margin-left: 0;
+    width: 100%;
+  }
+
+  .header-stats {
+    flex-direction: row;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .stat-card {
+    width: calc(50% - 1rem);
+    min-width: 200px;
+  }
+}
+
+@media (max-width: 768px) {
+  .header-content {
+    padding: 0 1rem;
+  }
+
+  .stat-card {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .profile-content {
+    padding: 1.5rem;
+  }
+
+  .container {
+    padding: 1rem;
+  }
 }
 
 /* Card Base Styles */
@@ -824,6 +1032,7 @@ export default {
   font-weight: 600;
   color: #1a1a1a;
   margin-bottom: 0.25rem;
+  letter-spacing: -0.01em;
 }
 
 .account-id {
@@ -923,7 +1132,7 @@ export default {
 .card-holder-name {
   font-size: 1.5rem;
   font-weight: 600;
-  letter-spacing: 1px;
+  letter-spacing: -0.01em;
   text-transform: uppercase;
   margin-bottom: 1rem;
 }
@@ -988,6 +1197,7 @@ export default {
   font-weight: 600;
   color: #005BAC;
   line-height: 1;
+  letter-spacing: -0.01em;
 }
 
 .btn-primary {
@@ -1086,7 +1296,8 @@ export default {
 .transaction-title {
   font-weight: 500;
   font-size: 0.95rem;
-  color: #212529;
+  color: #2c3e50;
+  letter-spacing: -0.01em;
 }
 
 .transaction-meta {
@@ -1105,5 +1316,44 @@ export default {
 .transaction-amount {
   font-weight: 600;
   font-size: 1rem;
+}
+
+.profile-content {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+/* Container adjustments */
+.container {
+  padding: 2rem 1rem;
+  background: #f8f9fa;
+  min-height: calc(100vh - 60px);
+  font-family: var(--font-family-base);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  color: #2c3e50;
+}
+
+.row {
+  margin: 0;
+}
+
+.col-lg-10 {
+  padding: 0;
+}
+
+@media (max-width: 768px) {
+  .profile-content {
+    padding: 1rem;
+  }
+
+  .card {
+    margin-bottom: 1rem;
+  }
+
+  .card-header {
+    padding: 1rem;
+  }
 }
 </style>

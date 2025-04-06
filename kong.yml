@@ -1,6 +1,6 @@
 _format_version: "1.1"
 services:
-  - name: journeyplannerapi
+  - name: planjourney-service
     host: plan_journey
     port: 5031
     path: /plan_journey
@@ -10,7 +10,7 @@ services:
     write_timeout: 60000
     retries: 5
     routes:
-      - name: planJourney
+      - name: planjourney-route
         paths:
           - /plan_journey
         methods:
@@ -26,7 +26,7 @@ services:
         response_buffering: true
         path_handling: v0
 
-  - name: bus
+  - name: bustracking-service
     host: bus_tracking
     port: 5030
     path: /bus-tracking
@@ -36,7 +36,7 @@ services:
     write_timeout: 60000
     retries: 5
     routes:
-      - name: trackBus
+      - name: bustracking-route
         paths:
           - /bus_tracking
         methods:
@@ -60,12 +60,10 @@ services:
     write_timeout: 60000
     retries: 5
     routes:
-      - name: topup-route
-        path_handling: v1
+      - name: topup-route-user-card
         paths:
-          - /top_up
+          - /top_up/\d+/\d+$
         methods:
-          - GET
           - POST
           - OPTIONS
         strip_path: false
@@ -74,9 +72,10 @@ services:
           - http
           - https
         https_redirect_status_code: 426
-        regex_priority: 0
+        regex_priority: 100
         request_buffering: true
-        response_buffering: true  
+        response_buffering: true
+        path_handling: v1
 
   - name: trainfare-service
     host: train_fare
@@ -179,18 +178,19 @@ services:
         path_handling: v1
 
   - name: notification-service
-    url: http://enable_notification:5302
+    url: http://notify_me_starter:5302
     protocol: http
     connect_timeout: 60000
     read_timeout: 60000
     write_timeout: 60000
     retries: 5
     routes:
-      - name: enable-notification-route
+      - name: notify-me-route
         paths:
-          - /enable_notification/
+          - /notify-me/\d+$
         methods:
           - GET
+          - OPTIONS
         strip_path: false
         preserve_host: false
         protocols:
@@ -209,19 +209,6 @@ services:
     read_timeout: 60000
     write_timeout: 60000
     retries: 5
-    plugins:
-      - name: cors
-        config:
-          methods:
-            - GET
-            - POST
-            - OPTIONS
-          headers:
-            - Content-Type
-            - Authorization
-          credentials: true
-          max_age: 3600
-          preflight_continue: false
     routes:
       - name: bus-stop-lookup-route
         paths:
@@ -239,3 +226,183 @@ services:
         request_buffering: true
         response_buffering: true
         path_handling: v1
+
+  - name: card-service
+    url: http://cards:5203
+    protocol: http
+    connect_timeout: 60000
+    read_timeout: 60000
+    write_timeout: 60000
+    retries: 5
+    routes:
+      - name: card-all
+        paths:
+          - /cards$
+        methods:
+          - GET
+          - POST
+          - OPTIONS
+        strip_path: false
+        preserve_host: false
+        protocols:
+          - http
+          - https
+        https_redirect_status_code: 426
+        regex_priority: 100
+        request_buffering: true
+        response_buffering: true
+        path_handling: v1
+      - name: card-by-id
+        paths:
+          - /cards/\d+$
+        methods:
+          - GET
+          - PUT
+          - DELETE
+          - OPTIONS
+        strip_path: false
+        preserve_host: false
+        protocols:
+          - http
+          - https
+        https_redirect_status_code: 426
+        regex_priority: 90
+        request_buffering: true
+        response_buffering: true
+        path_handling: v1
+      - name: card-balance
+        paths:
+          - /cards/\d+/balance
+        methods:
+          - PATCH
+          - OPTIONS
+        strip_path: false
+        preserve_host: false
+        protocols:
+          - http
+          - https
+        https_redirect_status_code: 426
+        regex_priority: 80
+        request_buffering: true
+        response_buffering: true
+        path_handling: v1
+
+  - name: user-service
+    url: http://users:5201
+    protocol: http
+    connect_timeout: 60000
+    read_timeout: 60000
+    write_timeout: 60000
+    retries: 5
+    routes:
+      - name: create-user
+        paths:
+          - /users
+        methods:
+          - POST
+          - OPTIONS
+        strip_path: false
+        preserve_host: false
+        protocols:
+          - http
+          - https
+        https_redirect_status_code: 426
+        regex_priority: 100
+        request_buffering: true
+        response_buffering: true
+        path_handling: v1
+      - name: get-users
+        paths:
+          - /users
+        methods:
+          - GET
+        strip_path: false
+        preserve_host: false
+        protocols:
+          - http
+          - https
+        https_redirect_status_code: 426
+        regex_priority: 100
+        request_buffering: true
+        response_buffering: true
+        path_handling: v1
+      - name: get-user-by-id
+        paths:
+          - /users/\d+$
+        methods:
+          - GET
+        strip_path: false
+        preserve_host: false
+        protocols:
+          - http
+          - https
+        https_redirect_status_code: 426
+        regex_priority: 100
+        request_buffering: true
+        response_buffering: true
+        path_handling: v1
+      - name: update-user
+        paths:
+          - /users/\d+$
+        methods:
+          - PUT
+          - OPTIONS
+        strip_path: false
+        preserve_host: false
+        protocols:
+          - http
+          - https
+        https_redirect_status_code: 426
+        regex_priority: 100
+        request_buffering: true
+        response_buffering: true
+        path_handling: v1
+      - name: delete-user
+        paths:
+          - /users/\d+$
+        methods:
+          - DELETE
+          - OPTIONS
+        strip_path: false
+        preserve_host: false
+        protocols:
+          - http
+          - https
+        https_redirect_status_code: 426
+        regex_priority: 100
+        request_buffering: true
+        response_buffering: true
+        path_handling: v1
+      - name: authenticate-user
+        paths:
+          - /authenticate
+        methods:
+          - POST
+          - OPTIONS
+        strip_path: false
+        preserve_host: false
+        protocols:
+          - http
+          - https
+        https_redirect_status_code: 426
+        regex_priority: 100
+        request_buffering: true
+        response_buffering: true
+        path_handling: v1
+
+plugins:
+  - name: cors
+    config:
+      methods:
+        - GET
+        - POST
+        - PUT
+        - DELETE
+        - PATCH
+        - OPTIONS
+      headers:
+        - Content-Type
+        - Authorization
+      credentials: true
+      max_age: 3600
+      preflight_continue: false

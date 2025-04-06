@@ -422,7 +422,7 @@ export default {
 
       try {
         const response = await axios.put(
-          `${process.env.VUE_APP_USER_API_URL || "http://localhost:5201"
+          `${process.env.VUE_APP_USER_API_URL || "http://localhost:8000"
           }/users/${this.userId}`,
           this.editedUser
         );
@@ -464,7 +464,7 @@ export default {
       this.deleting = true;
 
       try {
-        await axios.delete(`http://localhost:5201/users/${this.userId}`);
+        await axios.delete(`http://localhost:8000/users/${this.userId}`);
         await this.$store.dispatch("auth/logout");
         this.$router.push("/");
         this.toast.success("Your account has been deleted successfully.");
@@ -488,7 +488,7 @@ export default {
         const serialNumber = "SN" + Math.random().toString(36).substr(2, 9).toUpperCase();
 
         const response = await axios.post(
-          `${process.env.VUE_APP_CARD_API_URL || "http://localhost:5203"}/cards`,
+          `${process.env.VUE_APP_CARD_API_URL || "http://localhost:8000"}/cards`,
           {
             UserId: this.userId,
             Balance: 0.0,
@@ -526,7 +526,7 @@ export default {
         console.log('Fetching cards for user:', this.userId); // Debug log
 
         const response = await axios.get(
-          `${process.env.VUE_APP_CARD_API_URL || 'http://localhost:5203'}/cards`, {
+          `${process.env.VUE_APP_CARD_API_URL || 'http://localhost:8000'}/cards`, {
           params: {
             user_id: this.userId
           }

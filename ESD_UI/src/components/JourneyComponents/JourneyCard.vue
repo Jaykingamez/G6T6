@@ -467,7 +467,7 @@ export default {
           
           // Enable notification only for the first bus using the RouteID
           if (isFirstBus) {
-            const notificationResponse = await fetch(`http://localhost:8000/enable_notification/${routeID}`, {
+            const notificationResponse = await fetch(`http://localhost:8000/notify-me/${routeID}`, {
               method: 'GET'
             });
             

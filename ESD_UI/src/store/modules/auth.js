@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 // Get the API URL from environment variables or use a default
-const API_URL = process.env.VUE_APP_USER_API_URL || 'http://localhost:5201';
+const API_URL = process.env.VUE_APP_USER_API_URL || 'http://localhost:8000';
 
 export default {
   namespaced: true,

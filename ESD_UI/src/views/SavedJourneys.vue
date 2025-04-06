@@ -222,7 +222,7 @@ export default {
     },
     async enableNotification(routeId) {
       try {
-        const response = await fetch(`http://localhost:8000/enable_notification/${routeId}`, {
+        const response = await fetch(`http://localhost:8000/notify-me/${routeId}`, {
           method: "GET",
         });
         

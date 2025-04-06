@@ -122,7 +122,7 @@ export default {
       this.errorMessage = '';
 
       try {
-        const response = await axios.post(`http://127.0.0.1:5212/top_up/${this.userId}/${this.cardId}`, {
+        const response = await axios.post(`http://localhost:8000/top_up/${this.userId}/${this.cardId}`, {
           amount: Math.round(this.amount * 100), // Convert to cents
           // card_id: this.cardId,
           card_number: this.cardNumber,

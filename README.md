@@ -24,6 +24,10 @@ Project consists of the following microservices:
 13. **Check Balance** - Orchestrator that retrieve user's card balance ✅
 14. **Top Up** - Orchestrator that top up user's card balance
 15. **Make Payment** - Orchestrator that process payment and update card balance
+16. **Notify Me Starter** - Orchestrator Starter for Notify Me service
+17. **Notify Me** - Orchestrator that process notification request
+18. **Routes** - Stores Routes data with CRUD operation
+
 
 
 
@@ -31,6 +35,8 @@ Project consists of the following microservices:
 
 - Docker
 - Google Maps API key
+- LTA API Key
+- Twilio Credentials
 
 ## Environment Variables
 

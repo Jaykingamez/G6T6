@@ -270,7 +270,7 @@ export default {
     },
     getStepIcon(step) {
       if (step.includes('Bus')) return 'bi bi-bus-front';
-      if (step.includes('MRT') || step.includes('train')) return 'bi bi-train-front';
+      if (step.includes('MRT') || step.includes('train') || step.includes('subway')) return 'bi bi-train-front';
       if (step.includes('Walk')) return 'bi bi-person-walking';
       return 'bi bi-arrow-right';
     },
@@ -282,7 +282,13 @@ export default {
         if (step.travel_mode === 'TRANSIT') {
           const transit = step.transit_details;
           if (transit) {
-            const vehicleType = transit.line?.vehicle?.name || 'Transit';
+            let vehicleType = transit.line?.vehicle?.name || 'Transit';
+            
+            // Standardize subway references to MRT
+            if (vehicleType.toLowerCase() === 'subway') {
+              vehicleType = 'MRT';
+            }
+            
             const routeName = transit.line?.short_name || transit.line?.name || '';
             const stops = transit.num_stops || 0;
             let stepText = `${vehicleType} ${routeName} (${stops} stops)`;

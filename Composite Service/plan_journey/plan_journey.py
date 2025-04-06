@@ -1,4 +1,3 @@
-# TODO Handling erroneous inputs and exceptions
 from flask import Flask, request, jsonify
 import asyncio
 import aiohttp  # Async HTTP requests
@@ -41,39 +40,50 @@ async def orchestrate_journey_planning(origin, destination, passenger_type, peak
     """Orchestrate the calls to various APIs to plan a complete journey"""
     async with aiohttp.ClientSession() as session:
         try:
-            # Step 1: Get directions
+            # Step 1: Get directions (this must complete first)
             directions_response = await get_directions(session, origin, destination)
             if "error" in directions_response:
                 return jsonify(directions_response), 500
             
-            # Step 2, 3, & 4: Look up bus stops, calculate fare, and get emissions in parallel
-            # All depend on directions_response
-            bus_stops_task = asyncio.create_task(lookup_bus_stops(session, directions_response))
-            fare_calc_task = asyncio.create_task(calculate_fare(session, directions_response, passenger_type, peak_hour))
-            emissions_task = asyncio.create_task(get_route_emissions(session, directions_response))
+            # Step 2: Create three parallel tasks:
+            # - Task 1: Get bus stops and then immediately get bus tracking (in sequence)
+            # - Task 2: Calculate fare
+            # - Task 3: Calculate emissions
             
-            # Await all tasks to complete
-            bus_stops_response, fare_response, emissions_response = await asyncio.gather(
-                bus_stops_task, fare_calc_task, emissions_task
+            # Task 1: Bus stops lookup followed immediately by bus tracking
+            bus_chain_task = asyncio.create_task(
+                get_bus_stops_and_tracking(session, directions_response)
             )
             
-            # Check for errors in parallel responses
+            # Task 2: Fare calculation
+            fare_calc_task = asyncio.create_task(
+                calculate_fare(session, directions_response, passenger_type, peak_hour)
+            )
+            
+            # Task 3: Emissions calculation
+            emissions_task = asyncio.create_task(
+                get_route_emissions(session, directions_response)
+            )
+            
+            # Await all three parallel tasks
+            (bus_stops_response, bus_tracking_response), fare_response, emissions_response = await asyncio.gather(
+                bus_chain_task, fare_calc_task, emissions_task
+            )
+            
+            # Check for errors in responses
             if "error" in bus_stops_response:
                 return jsonify(bus_stops_response), 500
+            if "error" in bus_tracking_response:
+                return jsonify(bus_tracking_response), 500
             if "error" in fare_response:
                 return jsonify(fare_response), 500
             if "error" in emissions_response:
                 return jsonify(emissions_response), 500
             
-            # Step 5: Get bus tracking info (depends on bus_stops_response)
-            bus_tracking_response = await get_bus_tracking(session, bus_stops_response)
-            if "error" in bus_tracking_response:
-                return jsonify(bus_tracking_response), 500
-            
-            # Step 6: Combine all responses
+            # Combine all responses
             combined_response = {
                 "directions": directions_response,
-                # "busStops": bus_stops_response,
+                # "busStops": bus_stops_response,  # Uncomment if needed in the response
                 "fareCosts": fare_response,
                 "emissions": emissions_response,
                 "busTracking": bus_tracking_response
@@ -83,6 +93,25 @@ async def orchestrate_journey_planning(origin, destination, passenger_type, peak
             
         except Exception as e:
             return jsonify({"error": f"Error in journey planning: {str(e)}"}), 500
+
+async def get_bus_stops_and_tracking(session, directions_response):
+    """
+    Chain the bus stop lookup and bus tracking calls.
+    Bus tracking starts immediately after bus stop lookup completes.
+    Returns both responses.
+    """
+    # First get bus stops
+    bus_stops_response = await lookup_bus_stops(session, directions_response)
+    
+    # If bus stops lookup failed, don't attempt bus tracking
+    if "error" in bus_stops_response:
+        return bus_stops_response, {"error": "Bus tracking skipped due to bus stop lookup failure"}
+    
+    # Immediately proceed to bus tracking with the bus stops data
+    bus_tracking_response = await get_bus_tracking(session, bus_stops_response)
+    
+    # Return both responses
+    return bus_stops_response, bus_tracking_response
 
 async def get_directions(session, origin, destination):
     """Get directions from the directions API"""
@@ -155,11 +184,6 @@ async def get_route_emissions(session, directions_data):
                 return {"error": f"Route Emissions API error: {error_text}"}
     except Exception as e:
         return {"error": f"Error connecting to emissions service: {str(e)}"}
-
-# This function is no longer needed as the logic has been moved to the Emissions service
-# async def get_emissions_for_routes(session, directions_data):
-#     """Get emissions data for all routes in the directions response"""
-#     ...
 
 async def get_emissions(session, mode, distance):
     """Call the emissions API for a specific mode and distance"""

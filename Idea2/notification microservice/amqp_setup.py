@@ -23,6 +23,12 @@ exchanges_and_queues = [
         "exchange_type": "direct",
         "queue_name": "Notification",
         "routing_key": "notification"
+    },
+    {
+        "exchange_name": "NotifyMe",
+        "exchange_type": "direct",
+        "queue_name": "NotifyMe",
+        "routing_key": "notify_me"
     }
 ]
 
@@ -51,6 +57,7 @@ def create_connection_with_retry(hostname, port, max_retries=12, retry_interval=
 def setup_exchanges_and_queues(connection, configurations):
     """Set up exchanges and queues based on provided configurations."""
     channel = connection.channel()
+    
     for config in configurations:
         # Declare exchange
         print(f"Declaring exchange: {config['exchange_name']}")
@@ -59,11 +66,11 @@ def setup_exchanges_and_queues(connection, configurations):
             exchange_type=config['exchange_type'],
             durable=True
         )
-
+        
         # Declare queue
         print(f"Declaring queue: {config['queue_name']}")
         channel.queue_declare(queue=config['queue_name'], durable=True)
-
+        
         # Bind queue to exchange with routing key
         print(f"Binding queue {config['queue_name']} to exchange {config['exchange_name']} with routing key {config['routing_key']}")
         channel.queue_bind(
@@ -76,10 +83,10 @@ def setup_exchanges_and_queues(connection, configurations):
 try:
     # Create connection with retry logic
     connection = create_connection_with_retry(amqp_host, amqp_port)
-
+    
     # Set up exchanges and queues
     setup_exchanges_and_queues(connection, exchanges_and_queues)
-
+    
     # Close connection
     print("Closing connection...")
     connection.close()

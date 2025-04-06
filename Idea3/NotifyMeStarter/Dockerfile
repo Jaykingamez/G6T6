@@ -11,10 +11,14 @@ COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Copy application files
-COPY enable_notification.py invokes.py amqp_lib.py ./
+COPY amqp_lib.py .
+COPY notify_me_starter.py .
 
-# Expose the port the app runs on
+# Expose Port Number
 EXPOSE 5302
 
+# Set environment variables if needed
+ENV PYTHONUNBUFFERED=1
+
 # Command to run the application
-CMD ["python", "enable_notification.py"]
+CMD ["python", "notify_me_starter.py"]

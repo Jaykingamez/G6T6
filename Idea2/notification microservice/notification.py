@@ -210,7 +210,6 @@ def start_smart_transport_consumer():
     except Exception as e:
         print(f"Error starting SmartTransport consumer: {str(e)}")
 
-@app.route('/notify', methods=['POST'])
 def send_notification():
     """Endpoint for sending notifications via SMS/WhatsApp"""
     try:

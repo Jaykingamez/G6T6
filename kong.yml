@@ -1,0 +1,241 @@
+_format_version: "1.1"
+services:
+  - name: journeyplannerapi
+    host: plan_journey
+    port: 5031
+    path: /plan_journey
+    protocol: http
+    connect_timeout: 60000
+    read_timeout: 60000
+    write_timeout: 60000
+    retries: 5
+    routes:
+      - name: planJourney
+        paths:
+          - /plan_journey
+        methods:
+          - GET
+        strip_path: true
+        preserve_host: false
+        protocols:
+          - http
+          - https
+        https_redirect_status_code: 426
+        regex_priority: 0
+        request_buffering: true
+        response_buffering: true
+        path_handling: v0
+
+  - name: bus
+    host: bus_tracking
+    port: 5030
+    path: /bus-tracking
+    protocol: http
+    connect_timeout: 60000
+    read_timeout: 60000
+    write_timeout: 60000
+    retries: 5
+    routes:
+      - name: trackBus
+        paths:
+          - /bus_tracking
+        methods:
+          - POST
+        strip_path: true
+        preserve_host: false
+        protocols:
+          - http
+          - https
+        https_redirect_status_code: 426
+        regex_priority: 0
+        request_buffering: true
+        response_buffering: true
+        path_handling: v0
+
+  - name: topup-service
+    url: http://topup:5212  
+    protocol: http
+    connect_timeout: 60000
+    read_timeout: 60000
+    write_timeout: 60000
+    retries: 5
+    routes:
+      - name: topup-route
+        path_handling: v1
+        paths:
+          - /top_up
+        methods:
+          - GET
+          - POST
+          - OPTIONS
+        strip_path: false
+        preserve_host: false
+        protocols:
+          - http
+          - https
+        https_redirect_status_code: 426
+        regex_priority: 0
+        request_buffering: true
+        response_buffering: true  
+
+  - name: trainfare-service
+    host: train_fare
+    port: 5004
+    path: /train-fare
+    protocol: http
+    connect_timeout: 60000
+    read_timeout: 60000
+    write_timeout: 60000
+    retries: 5
+    routes:
+      - name: trainfare-route
+        paths:
+          - /train-fare
+        methods:
+          - GET
+        strip_path: true
+        preserve_host: false
+        protocols:
+          - http
+          - https
+        https_redirect_status_code: 426
+        regex_priority: 0
+        request_buffering: true
+        response_buffering: true
+        path_handling: v0
+
+  - name: selectedroute-service
+    url: http://selected_route:5301 
+    protocol: http
+    connect_timeout: 60000
+    read_timeout: 60000
+    write_timeout: 60000
+    retries: 5
+    routes:
+      - name: selectedroute-all
+        paths:
+          - /selectedroute$
+        methods:
+          - GET
+          - POST
+          - OPTIONS
+        strip_path: false
+        preserve_host: false
+        protocols:
+          - http
+          - https
+        https_redirect_status_code: 426
+        regex_priority: 100
+        request_buffering: true
+        response_buffering: true
+        path_handling: v1
+      - name: selectedroute-by-id
+        paths:
+          - /selectedroute/\d+$
+        methods:
+          - GET
+          - PUT
+          - DELETE
+          - OPTIONS
+        strip_path: false
+        preserve_host: false
+        protocols:
+          - http
+          - https
+        https_redirect_status_code: 426
+        regex_priority: 90
+        request_buffering: true
+        response_buffering: true
+        path_handling: v1
+      - name: selectedroute-by-user
+        paths:
+          - /selectedroute/user/
+        methods:
+          - GET
+        strip_path: false
+        preserve_host: false
+        protocols:
+          - http
+          - https
+        https_redirect_status_code: 426
+        regex_priority: 80
+        request_buffering: true
+        response_buffering: true
+        path_handling: v1
+      - name: selectedroute-by-name
+        paths:
+          - /selectedroute/route/
+        methods:
+          - GET
+        strip_path: false
+        preserve_host: false
+        protocols:
+          - http
+          - https
+        https_redirect_status_code: 426
+        regex_priority: 70
+        request_buffering: true
+        response_buffering: true
+        path_handling: v1
+
+  - name: notification-service
+    url: http://enable_notification:5302
+    protocol: http
+    connect_timeout: 60000
+    read_timeout: 60000
+    write_timeout: 60000
+    retries: 5
+    routes:
+      - name: enable-notification-route
+        paths:
+          - /enable_notification/
+        methods:
+          - GET
+        strip_path: false
+        preserve_host: false
+        protocols:
+          - http
+          - https
+        https_redirect_status_code: 426
+        regex_priority: 100
+        request_buffering: true
+        response_buffering: true
+        path_handling: v1
+
+  - name: bus-stop-lookup-service
+    url: http://bus_stop_lookup:5002
+    protocol: http
+    connect_timeout: 60000
+    read_timeout: 60000
+    write_timeout: 60000
+    retries: 5
+    plugins:
+      - name: cors
+        config:
+          methods:
+            - GET
+            - POST
+            - OPTIONS
+          headers:
+            - Content-Type
+            - Authorization
+          credentials: true
+          max_age: 3600
+          preflight_continue: false
+    routes:
+      - name: bus-stop-lookup-route
+        paths:
+          - /bus_stop_lookup
+        methods:
+          - POST
+          - OPTIONS
+        strip_path: false
+        preserve_host: false
+        protocols:
+          - http
+          - https
+        https_redirect_status_code: 426
+        regex_priority: 100
+        request_buffering: true
+        response_buffering: true
+        path_handling: v1

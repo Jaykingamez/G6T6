@@ -1,39 +1,76 @@
 <template>
   <div class="journey-planner">
     <div class="planner-header">
-      <div class="container-fluid">
-        <h1 class="text-center mb-2">Plan Your Journey</h1>
-        <p class="text-center text-white">Find the best route for your travel across Singapore</p>
+      <div class="header-background"></div>
+      <div class="header-wrapper">
+        <div class="header-content">
+          <div class="header-left">
+            <div class="header-title">
+              <h1>Journey Planner</h1>
+              <p class="subtitle">Find the best route for your travel</p>
+            </div>
+            <div class="stats-container">
+              <div class="stat-card">
+                <div class="stat-icon">
+                  <i class="bi bi-map"></i>
+                </div>
+                <div class="stat-info">
+                  <span class="stat-value">{{ journeyResults.length }}</span>
+                  <span class="stat-label">Available Routes</span>
+                </div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-icon">
+                  <i class="bi bi-clock"></i>
+                </div>
+                <div class="stat-info">
+                  <span class="stat-value">Real-time</span>
+                  <span class="stat-label">Updates</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="header-right">
+            <router-link to="/saved-journeys" class="saved-routes-btn">
+              <i class="bi bi-bookmark-check"></i>
+              <span>Saved Routes</span>
+            </router-link>
+          </div>
+        </div>
       </div>
     </div>
 
-    <div class="planner-content">
-      <div class="container-fluid">
-        <div class="row">
-          <div class="col-12">
-            <div class="journey-form-card">
-              <JourneyForm @plan-journey="handleJourneyPlan" />
-            </div>
-          </div>
+    <div class="content-wrapper">
+      <div class="journey-content">
+        <div class="journey-form-card">
+          <JourneyForm @plan-journey="handleJourneyPlan" />
         </div>
         
         <!-- Loading Indicator -->
-        <div v-if="loading" class="text-center my-5">
+        <div v-if="loading" class="loading-state">
           <div class="spinner-border text-primary" role="status">
             <span class="visually-hidden">Loading routes...</span>
           </div>
-          <p class="mt-2">Getting your journey options...</p>
+          <p>Getting your journey options...</p>
         </div>
         
         <!-- Error Display -->
-        <div v-if="error" class="alert alert-danger mx-auto mt-4" style="max-width: 800px;">
-          <i class="bi bi-exclamation-triangle-fill me-2"></i>
-          <strong>Error:</strong> {{ error }}
+        <div v-if="error" class="alert custom-alert">
+          <div class="alert-content">
+            <i class="bi bi-exclamation-circle"></i>
+            <div class="alert-text">
+              <h4>Unable to find routes</h4>
+              <p>{{ error }}</p>
+            </div>
+          </div>
+          <button class="btn btn-light" @click="retrySearch">
+            <i class="bi bi-arrow-clockwise"></i> Try Again
+          </button>
         </div>
         
         <!-- Results -->
         <div v-if="journeyResults.length > 0" class="journey-results fade-in">
-          <h2 class="text-center mb-4">Available Routes</h2>
+          <h2>Available Routes</h2>
           <div class="row g-4">
             <div v-for="(journey, index) in journeyResults" :key="index" class="col-md-4">
               <JourneyCard 
@@ -46,15 +83,18 @@
                 :arrival-time="journey.arrivalTime"
                 :steps="journey.steps"
                 :route-index="journey.routeIndex"
+                :start-point="journey.startPoint"
+                :end-point="journey.endPoint"
                 @save-journey="saveJourney"
-                @view-on-map="viewOnMap(journey)"
+                @view-on-map="viewOnMap"
+                @notification-enabled="handleNotificationEnabled"
               />
             </div>
           </div>
         </div>
         
         <div v-if="showMap" class="map-section fade-in">
-          <h2 class="text-center mb-4">Route Details</h2>
+          <h2>Route Details</h2>
           <div class="map-container">
             <SimplifiedRouteView 
               v-if="selectedJourney" 
@@ -74,7 +114,6 @@
 <script>
 import JourneyForm from '../components/JourneyComponents/JourneyForm.vue';
 import JourneyCard from '../components/JourneyComponents/JourneyCard.vue';
-
 import SimplifiedRouteView from '../components/MapComponents/SimplifiedRouteView.vue';
 
 export default {
@@ -91,6 +130,8 @@ export default {
       loading: false,
       error: null,
       rawJourneyResponse: null,
+      notificationSuccess: null,
+      activeNotifications: [] // Track active notifications
     };
   },
   computed: {
@@ -104,6 +145,7 @@ export default {
       this.error = null;
       this.journeyResults = [];
       this.showMap = false;
+      this.notificationSuccess = null;
       
       try {
         console.log('Got journey planning data:', data);
@@ -211,7 +253,8 @@ export default {
                 ...step,
                 bus_load: busInfo.load,
                 bus_load_description: this.translateBusLoad(busInfo.load),
-                next_arrival: busInfo.estimatedArrival
+                next_arrival: busInfo.estimatedArrival,
+                bus_stop_code: busInfo.busStopCode // Add bus stop code to the step
               };
             }
           }
@@ -245,7 +288,7 @@ export default {
         return null;
       }
       
-      // Extract bus service number and bus stop code if available
+      // Extract bus service number and bus stop name
       const busNumber = step.transit_details.line.short_name || step.transit_details.line.name;
       const stopName = step.transit_details.departure_stop.name;
       
@@ -255,11 +298,12 @@ export default {
           for (const service of result.arrival_data.Services) {
             // Check if this is the right bus service
             if (service.ServiceNo === busNumber) {
-              // Return data from NextBus (assuming it's the most relevant)
+              // Return data from NextBus and include bus stop code
               if (service.NextBus) {
                 return {
                   load: service.NextBus.Load,
-                  estimatedArrival: service.NextBus.EstimatedArrival
+                  estimatedArrival: service.NextBus.EstimatedArrival,
+                  busStopCode: result.arrival_data.BusStopCode // Include the bus stop code
                 };
               }
             }
@@ -345,6 +389,25 @@ export default {
           mapSection.scrollIntoView({ behavior: 'smooth' });
         }
       }, 100);
+    },
+    
+    // New method to handle notification-enabled event from JourneyCard
+    handleNotificationEnabled(notificationData) {
+      console.log('Notification enabled:', notificationData);
+      
+      // Add to active notifications
+      this.activeNotifications.push(notificationData);
+      
+      // Show success message
+      const busID = notificationData.busID;
+      this.notificationSuccess = `You will receive notifications for Bus ${busID} arrivals!`;
+      
+      // Auto-dismiss after 5 seconds
+      setTimeout(() => {
+        if (this.notificationSuccess && this.notificationSuccess.includes(`Bus ${busID}`)) {
+          this.notificationSuccess = null;
+        }
+      }, 5000);
     }
   },
 };
@@ -353,76 +416,245 @@ export default {
 <style scoped>
 .journey-planner {
   min-height: 100vh;
-  background: linear-gradient(135deg, #f8fafc 0%, #edf2f7 100%);
+  background-color: #f8fafc;
   width: 100%;
   margin: 0;
-  padding: 0px 100px 0px 100px;
+  padding: 0;
+  position: relative;
 }
 
 .planner-header {
-  background: linear-gradient(135deg, #2c5282 0%, #4299e1 100%);
-  padding: 4rem 0 8rem;
-  margin: 0;
-  margin-bottom: -4rem;
-  color: white;
   position: relative;
+  background: #1a365d;
+  color: white;
+  padding: 3rem 0;
+  margin: 0;
+  width: 100%;
   overflow: hidden;
-  width: 100vw;
-  margin-left: calc(-50vw + 50%);
-  margin-right: calc(-50vw + 50%);
 }
 
-.planner-header::before {
+.header-wrapper {
+  width: 100%;
+  padding: 0 2rem;
+  position: relative;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.header-content {
+  max-width: 1400px;
+  margin: 0 auto;
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  z-index: 1;
+}
+
+.header-background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, #1a365d 0%, #2c5282 100%);
+  opacity: 0.8;
+}
+
+.header-background::before {
   content: '';
   position: absolute;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  /* background-image: url('@/assets/pattern.png'); */
-  opacity: 0.1;
-  pointer-events: none;
+  background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
 }
 
-.planner-header h1 {
-  font-size: 2.75rem;
+.header-left {
+  flex: 1;
+}
+
+.header-title {
+  margin-bottom: 2rem;
+}
+
+.header-title h1 {
+  font-size: 2.5rem;
   font-weight: 800;
-  margin-bottom: 1rem;
+  margin: 0;
+  background: linear-gradient(to right, #ffffff, #e2e8f0);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-.planner-content {
-  position: relative;
-  padding: 0;
-  width: 100%;
+.subtitle {
+  font-size: 1.1rem;
+  color: #e2e8f0;
+  margin: 0.5rem 0 0;
+  font-weight: 400;
 }
 
-.planner-content .container-fluid {
-  padding-left: 0;
-  padding-right: 0;
+.stats-container {
+  display: flex;
+  gap: 1.5rem;
+  margin-top: 1rem;
+}
+
+.stat-card {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 12px;
+  padding: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  transition: all 0.3s ease;
+}
+
+.stat-card:hover {
+  background: rgba(255, 255, 255, 0.15);
+  transform: translateY(-2px);
+}
+
+.stat-icon {
+  width: 48px;
+  height: 48px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.stat-icon i {
+  font-size: 1.5rem;
+  color: #ffffff;
+}
+
+.stat-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.stat-value {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #ffffff;
+  line-height: 1;
+}
+
+.stat-label {
+  font-size: 0.875rem;
+  color: #e2e8f0;
+  margin-top: 0.25rem;
+}
+
+.header-right {
+  display: flex;
+  align-items: flex-start;
+}
+
+.saved-routes-btn {
+  background: #3b82f6;
+  color: white;
+  border: none;
+  border-radius: 12px;
+  padding: 1rem 1.5rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 6px rgba(59, 130, 246, 0.2);
+}
+
+.saved-routes-btn:hover {
+  background: #2563eb;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 8px rgba(59, 130, 246, 0.3);
+  color: white;
+}
+
+.content-wrapper {
+  width: 100%;
+  padding: 2rem;
+  position: relative;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.journey-content {
+  max-width: 1400px;
+  margin: 0 auto;
   width: 100%;
 }
 
 .journey-form-card {
   background: white;
-  border-radius: 0;  /* Remove border radius for full-width look */
+  border-radius: 16px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
   padding: 2rem;
   margin-bottom: 3rem;
   border: 1px solid rgba(226, 232, 240, 0.8);
-  backdrop-filter: blur(10px);
-  border-radius: 10px;
+}
+
+.loading-state {
+  text-align: center;
+  padding: 3rem 0;
+}
+
+.loading-state p {
+  margin-top: 1rem;
+  color: #64748b;
+}
+
+.custom-alert {
+  background: white;
+  border: none;
+  border-radius: 12px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.alert-content {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.alert-content i {
+  font-size: 1.5rem;
+  color: #ef4444;
+}
+
+.alert-text h4 {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.alert-text p {
+  margin: 0.25rem 0 0;
+  color: #64748b;
 }
 
 .journey-results {
-  margin-top: 4rem;
+  margin-top: 2rem;
 }
 
 .journey-results h2 {
-  font-size: 2rem;
+  font-size: 1.75rem;
   font-weight: 700;
-  color: #2d3748;
-  margin-bottom: 2rem;
+  color: #1a365d;
+  margin-bottom: 1.5rem;
 }
 
 .map-section {
@@ -431,9 +663,16 @@ export default {
   border-top: 1px solid rgba(226, 232, 240, 0.8);
 }
 
+.map-section h2 {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: #1a365d;
+  margin-bottom: 1.5rem;
+}
+
 .map-container {
   background: white;
-  border-radius: 24px;
+  border-radius: 16px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
   height: 500px;
   overflow: hidden;
@@ -472,16 +711,30 @@ export default {
 
 /* Responsive Design */
 @media (max-width: 991.98px) {
-  .planner-header {
-    padding: 3rem 0 7rem;
+  .header-wrapper {
+    padding: 1rem;
   }
-
-  .planner-header h1 {
-    font-size: 2.25rem;
+  
+  .header-content {
+    flex-direction: column;
+    gap: 1.5rem;
   }
-
+  
+  .header-right {
+    width: 100%;
+  }
+  
+  .saved-routes-btn {
+    width: 100%;
+    justify-content: center;
+  }
+  
   .journey-form-card {
     padding: 1.5rem;
+  }
+  
+  .content-wrapper {
+    padding: 1rem;
   }
 }
 </style>

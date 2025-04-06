@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <Navbar />
-    <main class="container px-0" style="width: 100%;" >
+    <main>
       <router-view />
     </main>
     <Footer/>
@@ -34,9 +34,17 @@ export default {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+  width: 100%;
+  overflow-x: hidden;
+  margin: 0;
+  padding: 0;
 }
 
 main {
   flex: 1;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
 }
 </style>

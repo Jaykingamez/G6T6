@@ -23,11 +23,13 @@ class SelectedRoute(db.Model):
     BusStopCode = db.Column(db.Integer, nullable=False)
     BusID = db.Column(db.String(11), nullable=False)
     UserID = db.Column(db.Integer, nullable=False)
+    RouteName = db.Column(db.String(30), nullable=False)
 
-    def __init__(self, BusStopCode, BusID, UserID, RouteID=None):
+    def __init__(self, BusStopCode, BusID, UserID, RouteName, RouteID=None):
         self.BusStopCode = BusStopCode
         self.BusID = BusID
         self.UserID = UserID
+        self.RouteName = RouteName
         if RouteID:
             self.RouteID = RouteID
 
@@ -36,7 +38,8 @@ class SelectedRoute(db.Model):
             "RouteID": self.RouteID,
             "BusStopCode": self.BusStopCode,
             "BusID": self.BusID,
-            "UserID": self.UserID
+            "UserID": self.UserID,
+            "RouteName": self.RouteName
         }
 
 # Get all selected routes
@@ -103,29 +106,55 @@ def find_by_userid(UserID):
         }
     ), 404
 
+# Get all routes by RouteName
+@app.route("/selectedroute/route/<string:RouteName>")
+def find_by_routename(RouteName):
+    routelist = db.session.scalars(
+        db.select(SelectedRoute).filter_by(RouteName=RouteName)
+    ).all()
+    
+    if len(routelist):
+        return jsonify({
+            "code": 200,
+            "data": {
+                "routes": [route.json() for route in routelist],
+                "count": len(routelist)
+            }
+        })
+    return jsonify({
+        "code": 404,
+        "message": f"No routes found with name {RouteName}."
+    }), 404
+
 # Create a new selected route
 @app.route("/selectedroute", methods=['POST'])
 def create_route():
     data = request.get_json()
+    
+    # Check if required fields are present
+    required_fields = ['BusStopCode', 'BusID', 'UserID', 'RouteName']
+    for field in required_fields:
+        if field not in data:
+            return jsonify({
+                "code": 400,
+                "message": f"Missing required field: {field}"
+            }), 400
+    
     route = SelectedRoute(**data)
     
     try:
         db.session.add(route)
         db.session.commit()
     except Exception as e:
-        return jsonify(
-            {
-                "code": 500,
-                "message": f"An error occurred creating the route: {str(e)}"
-            }
-        ), 500
+        return jsonify({
+            "code": 500,
+            "message": f"An error occurred creating the route: {str(e)}"
+        }), 500
     
-    return jsonify(
-        {
-            "code": 201,
-            "data": route.json()
-        }
-    ), 201
+    return jsonify({
+        "code": 201,
+        "data": route.json()
+    }), 201
 
 # Update a selected route
 @app.route("/selectedroute/<int:RouteID>", methods=['PUT'])
@@ -135,12 +164,10 @@ def update_route(RouteID):
     )
     
     if not route:
-        return jsonify(
-            {
-                "code": 404,
-                "message": "Route not found."
-            }
-        ), 404
+        return jsonify({
+            "code": 404,
+            "message": "Route not found."
+        }), 404
         
     data = request.get_json()
     
@@ -150,23 +177,21 @@ def update_route(RouteID):
         route.BusID = data['BusID']
     if 'UserID' in data:
         route.UserID = data['UserID']
+    if 'RouteName' in data:
+        route.RouteName = data['RouteName']
     
     try:
         db.session.commit()
     except Exception as e:
-        return jsonify(
-            {
-                "code": 500,
-                "message": f"An error occurred updating the route: {str(e)}"
-            }
-        ), 500
+        return jsonify({
+            "code": 500,
+            "message": f"An error occurred updating the route: {str(e)}"
+        }), 500
     
-    return jsonify(
-        {
-            "code": 200,
-            "data": route.json()
-        }
-    )
+    return jsonify({
+        "code": 200,
+        "data": route.json()
+    })
 
 # Delete a selected route
 @app.route("/selectedroute/<int:RouteID>", methods=['DELETE'])

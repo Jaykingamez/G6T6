@@ -266,13 +266,25 @@ services:
       - dbURL=mysql+mysqlconnector://is213@host.docker.internal:3306/SelectedRoute
       - PYTHONUNBUFFERED=1
 
-  enable_notification:
+  notify_me:
     build:
-      context: "./Idea3/EnableNotification/"  
+      context: "./Idea3/NotifyMe/"  
       dockerfile: Dockerfile
-    container_name: enable_notification
+    container_name: notify_me
+    networks:
+      - app-network
+    depends_on:
+      - rabbitmq
+    environment:
+      - PYTHONUNBUFFERED=1
+  
+  notify_me_starter:
+    build:
+      context: "./Idea3/NotifyMeStarter/"  
+      dockerfile: Dockerfile
+    container_name: notify_me_starter
     ports:
-      - "5302:5302"
+    - "5302:5302"
     networks:
       - app-network
     depends_on:

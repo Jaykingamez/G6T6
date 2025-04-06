@@ -26,7 +26,7 @@ Project consists of the following microservices:
 15. **Make Payment** - Orchestrator that process payment and update card balance
 16. **Notify Me Starter** - Orchestrator Starter for Notify Me service
 17. **Notify Me** - Orchestrator that process notification request
-18. **Routes** - Stores Routes data with CRUD operation
+18. **SelectedRoute** - Stores Routes data with CRUD operation
 
 
 
@@ -55,7 +55,8 @@ TWILIO_PHONE_NUMBER="YOUR_TWILIO_PHONE_NUMBER"
 
 1. Clone the repository
 2. Set up environment variables
-3. Start all services:
+3. cd into the ESD_UI directory and run npm install 
+4. Start all services:
 
 ```bash
 docker-compose up --build
@@ -77,7 +78,8 @@ The system exposes the following API endpoints:
 - **Transaction**: `GET https://personal-tkjmxw54.outsystemscloud.com/TransactionManagement/rest/TransactionsAPI/#/TransactionsAPI/GetTransactionsByCardId`
 - **Check Balance**: `GET http://localhost:5205/checkbalance`
 - **Make Payment**: `GET http://localhost:5208/makepayment`
-- **Top Up**: `http://localhost:5212/top_up`
+- **Route**: `http://localhost:5301/selectedroute`
+- **start notify me**: `http://localhost:5302/notify-me`
 
 API documentation is available at:
 - All services: `http://localhost:5000/apidocs/`

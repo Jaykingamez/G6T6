@@ -106,41 +106,106 @@ def send_payment_notification(recipient, message, notification_type="sms"):
 
 def create_transaction_in_outsystems(user_id, card_id, amount, prevBalance):
     """Create transaction in Outsystems via HTTP POST"""
-    # Get the current datetime
-    current_datetime = datetime.datetime.utcnow()
-    formatted_datetime = current_datetime.strftime('%Y-%m-%dT%H:%M:%S.%f')[:-3] + 'Z' 
-
-    amount_decimal = Decimal(amount) / 100  # Convert cents to dollars
-    prev_balance_decimal = Decimal(prevBalance)
-    new_balance_decimal = prev_balance_decimal + amount_decimal
-
-    payload = {
-        "UserId": user_id,
-        "CardId": card_id,
-        "Amount": str(amount_decimal),
-        "PreviousBalance": float(prev_balance_decimal),
-        "NewBalance": float(new_balance_decimal),
-        "CreatedAt": formatted_datetime
-    }
-
     try:
-        response = requests.post(
-            create_transaction_url,
-            json=payload,
-            headers={
-                "Content-Type": "application/json"
-            },
-            timeout=10
-        )
+        # Get the current datetime
+        current_datetime = datetime.datetime.utcnow()
+        formatted_datetime = current_datetime.strftime('%Y-%m-%dT%H:%M:%S.%f')[:-3] + 'Z'
 
+        # For new cards, ensure previous balance is 0.1
+        prev_balance_decimal = Decimal('0.1') if prevBalance is None or prevBalance == 0 else Decimal(str(prevBalance))
 
-        if response:
-            return response.json()
+        # Convert amount from cents to dollars
+        try:
+            amount_decimal = Decimal(amount) / 100
+        except (TypeError, ValueError):
+            app.logger.error(f"Invalid amount value: {amount}")
+            return {
+                "code": 400,
+                "message": "Invalid amount format"
+            }
+
+        new_balance_decimal = prev_balance_decimal + amount_decimal
+
+        # Generate a 16-digit transaction ID
+        transaction_id = str(int(datetime.datetime.now().timestamp() * 1000000))  # Using microseconds for more digits
+        while len(transaction_id) < 16:  # Pad with extra digits if needed
+            transaction_id += str(int(datetime.datetime.now().microsecond))
+        transaction_id = transaction_id[:16]  # Take first 16 digits
+
+        # Format payload exactly as per API documentation with numeric values
+        payload = {
+            "TransactionId": transaction_id,
+            "UserId": int(user_id),  # Convert to integer
+            "CardId": int(card_id),  # Convert to integer
+            "Amount": float(amount_decimal),  # Convert to float as shown in API example
+            "PreviousBalance": 0.1 if prev_balance_decimal == Decimal('0.1') else float(prev_balance_decimal),  # 0.1 for new cards
+            "NewBalance": float(new_balance_decimal),  # Convert to float as shown in API example
+            "CreatedAt": formatted_datetime
+        }
+
+        app.logger.info(f"Sending transaction to Outsystems with payload: {payload}")
+        
+        # Add retry logic
+        max_retries = 3
+        retry_count = 0
+        
+        while retry_count < max_retries:
+            try:
+                response = requests.post(
+                    create_transaction_url,
+                    json=payload,
+                    headers={
+                        "Content-Type": "application/json",
+                        "Accept": "application/json"
+                    },
+                    timeout=10
+                )
+
+                # Log the complete response for debugging
+                app.logger.info(f"Outsystems response: Status={response.status_code}, Body={response.text}")
+
+                if response.status_code == 200:  # API doc shows 200 is the success code
+                    response_data = response.json()
+                    # Check for empty status and message as shown in API doc
+                    if "Status" in response_data and "Message" in response_data:
+                        return {
+                            "code": 200,
+                            "data": response_data
+                        }
+                    
+                elif response.status_code >= 500:  # Server error, retry
+                    retry_count += 1
+                    if retry_count < max_retries:
+                        app.logger.warning(f"Retrying transaction creation (attempt {retry_count + 1}/{max_retries})")
+                        continue
+                
+                # If we get here, either we've exhausted retries or got a 4xx error
+                error_msg = f"Outsystems API error: Status {response.status_code}, Response: {response.text}"
+                app.logger.error(error_msg)
+                return {
+                    "code": response.status_code,
+                    "message": error_msg,
+                    "payload": payload  # Include payload in error response for debugging
+                }
+
+            except requests.exceptions.RequestException as e:
+                retry_count += 1
+                if retry_count < max_retries:
+                    app.logger.warning(f"Network error, retrying (attempt {retry_count + 1}/{max_retries}): {str(e)}")
+                    continue
+                error_msg = f"Error connecting to Outsystems after {max_retries} attempts: {str(e)}"
+                app.logger.error(error_msg)
+                return {
+                    "code": 500,
+                    "message": error_msg
+                }
 
     except Exception as e:
+        error_msg = f"Unexpected error in create_transaction_in_outsystems: {str(e)}"
+        app.logger.error(error_msg)
         return {
             "code": 500,
-            "message": f"Error connecting to Outsystems: {str(e)}"
+            "message": error_msg
         }
 
 def update_card_balance(card_id, amount):
@@ -211,20 +276,32 @@ def handle_success():
             update_response = update_card_balance(metadata['card_id'], session.amount_total)
             if update_response.get('code') != 200:
                 app.logger.error(f"Failed to update card balance: {update_response['message']}")
+                return redirect('http://localhost:8080/profile?status=error&message=Failed+to+update+card+balance')
 
-             # 2. Send notification via AMQP
-            send_payment_notification(
+            # 2. Send notification via AMQP
+            notification_sent = send_payment_notification(
                 recipient=metadata['phone_number'],
                 message=f"Top-up of SGD{session.amount_total/100:.2f} succeeded"
             )
+            if not notification_sent:
+                app.logger.warning("Failed to send notification, but continuing with transaction")
+
+            # Check if Balance exists in metadata - if not, this is a new card
+            is_new_card = 'Balance' not in metadata or not metadata['Balance']
+            previous_balance = Decimal('0.1') if is_new_card else Decimal(metadata['Balance'])
 
             # 3. Create transaction via HTTP POST
-            create_transaction_in_outsystems(
+            transaction_response = create_transaction_in_outsystems(
                 user_id=metadata['user_id'],
                 card_id=metadata['card_id'],
                 amount=session.amount_total,
-                prevBalance=Decimal(metadata['Balance'])  # Convert to Decimal
+                prevBalance=previous_balance  # Will be 0.1 for new cards
             )
+
+            if transaction_response.get('code') and transaction_response['code'] not in [200, 201]:
+                app.logger.error(f"Failed to create transaction: {transaction_response}")
+                # Even if transaction creation fails, we've already updated the balance
+                return redirect('http://localhost:8080/profile?status=warning&message=Balance+updated+but+transaction+record+failed')
 
             # 4. Get updated balance
             balance_response = check_balance(metadata['user_id'])
@@ -240,21 +317,13 @@ def handle_success():
                 f'message=Payment+successful'
             )
             return redirect(success_url)
-            # if not 'error' in balance_response:
-            #     success_url += f'&new_balance={balance_response.get("data", {}).get("cards", [{}])[0].get("Balance", 0)}'
-
-            # return jsonify({
-            #     "status": "success",
-            #     "new_balance": balance_response.get('data', {}).get('cards', [{}])[0].get('Balance')
-            # }), 200
 
         else:
-            # return jsonify({"status": "failed", "message": "Payment was not successful"}), 400
             return redirect('http://localhost:8080/profile?status=failed&message=Payment+was+not+successful')
 
     except Exception as e:
-        # return jsonify(error=str(e)), 500
-        return redirect(f'http://localhost:8080/profile?status=error&message={str(e)}')
+        app.logger.error(f"Error in success handler: {str(e)}")
+        return redirect(f'http://localhost:8080/profile?status=error&message=Unexpected+error+occurred')
     
 
 if __name__ == "__main__":

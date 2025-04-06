@@ -1,56 +1,87 @@
 <template>
   <div class="simplified-route-view">
     <div class="route-header">
-      <h4>{{ journey.transportMode }} Route</h4>
-      <div class="route-stats">
-        <div class="stat-item">
-          <i class="bi bi-clock"></i>
-          <span>{{ journey.travelTime }} mins</span>
+      <div class="route-summary">
+        <div class="route-time-distance">
+          <h4>Estimated time: {{ journey.travelTime }} min</h4>
+          <p v-if="journey.distance">{{ journey.distance }}</p>
         </div>
-        <div class="stat-item">
-          <i class="bi bi-cash"></i>
-          <span>${{ formattedCost }}</span>
+        <div class="route-cost">
+          <div class="cost-badge">${{ formattedCost }}</div>
+          <div v-if="journey.emission" class="emission-badge">
+            <i class="bi bi-leaf-fill"></i>
+            {{ journey.emission }} kg CO₂
+          </div>
         </div>
-        <div class="stat-item" v-if="journey.distance">
-          <i class="bi bi-signpost"></i>
-          <span>{{ journey.distance }}</span>
-        </div>
-        <div class="stat-item" v-if="journey.emission">
-          <i class="bi bi-tree"></i>
-          <span>{{ journey.emission }} kg CO₂</span>
-        </div>
+      </div>
+      <div class="departure-time" v-if="journey.departureTime">
+        <span class="time">{{ journey.departureTime }}</span>
+        <span class="arrival">Arrive at {{ journey.arrivalTime }}</span>
       </div>
     </div>
     
-    <div class="route-timeline">
-      <div class="start-point">
-        <div class="point"></div>
-        <div class="point-content">
-          <div class="label">{{ journey.startPoint }}</div>
-          <div class="time" v-if="journey.departureTime">
-            <i class="bi bi-clock me-1"></i>{{ journey.departureTime }}
+    <div class="journey-container">
+      <div class="journey-timeline">
+        <div class="start-point">
+          <div class="timeline-dot start-dot"></div>
+          <div class="timeline-content">
+            <div class="location-name">{{ journey.startPoint }}</div>
+            <div class="time-label" v-if="journey.departureTime">
+              {{ journey.departureTime }}
+            </div>
           </div>
         </div>
-      </div>
-      
-      <div class="steps">
-        <div v-for="(step, index) in formattedSteps" :key="index" class="step">
-          <div class="step-icon" :class="getStepIconClass(step)">
-            <i :class="getStepIcon(step)"></i>
-          </div>
-          <div class="step-content">
-            <div class="step-details">{{ step }}</div>
-            <div class="step-line" v-if="index < formattedSteps.length - 1"></div>
+        
+        <div class="transit-steps">
+          <div v-for="(step, index) in formattedSteps" :key="index" class="transit-step">
+            <div class="step-line" :class="getStepLineClass(step.mode)"></div>
+            
+            <div class="step-icon-container">
+              <div class="step-icon" :class="getStepIconClass(step.mode)">
+                <i :class="getStepIcon(step.mode)"></i>
+              </div>
+            </div>
+            
+            <div class="step-details">
+              <div class="step-main">
+                <template v-if="step.mode === 'MRT'">
+                  <span class="transit-badge mrt">MRT</span>
+                  <span>{{ step.text.replace('MRT ', '') }}</span>
+                </template>
+                <template v-else-if="step.mode === 'Bus'">
+                  <span class="transit-badge bus">BUS</span>
+                  <span>{{ step.text.replace('Bus ', '') }}</span>
+                </template>
+                <template v-else>
+                  <span>{{ step.text }}</span>
+                </template>
+              </div>
+              
+              <div v-if="step.from && step.to" class="step-stations">
+                <div class="station">
+                  <div class="station-marker"></div>
+                  <div class="station-name">{{ step.from }}</div>
+                </div>
+                <div class="station">
+                  <div class="station-marker"></div>
+                  <div class="station-name">{{ step.to }}</div>
+                </div>
+              </div>
+              
+              <div class="step-info">
+                {{ step.details }}
+              </div>
+            </div>
           </div>
         </div>
-      </div>
-      
-      <div class="end-point">
-        <div class="point"></div>
-        <div class="point-content">
-          <div class="label">{{ journey.endPoint }}</div>
-          <div class="time" v-if="journey.arrivalTime">
-            <i class="bi bi-clock me-1"></i>{{ journey.arrivalTime }}
+        
+        <div class="end-point">
+          <div class="timeline-dot end-dot"></div>
+          <div class="timeline-content">
+            <div class="location-name">{{ journey.endPoint }}</div>
+            <div class="time-label" v-if="journey.arrivalTime">
+              {{ journey.arrivalTime }}
+            </div>
           </div>
         </div>
       </div>
@@ -150,41 +181,321 @@ export default {
             const stops = transit.num_stops || 0;
             const duration = step.duration ? ` (${Math.round(step.duration.value / 60)} mins)` : '';
             
-            // Get departure and arrival stop names for both MRT and Bus
+            // Get departure and arrival stop names
             const departureStop = transit.departure_stop?.name || '';
             const arrivalStop = transit.arrival_stop?.name || '';
             
             // Different formatting based on transit type
             if (localizedVehicleType === 'MRT') {
-              formattedSteps.push(`${localizedVehicleType} ${routeName} to ${arrivalStop} - ${stops} stops${duration}`);
+              formattedSteps.push({
+                type: 'transit',
+                mode: 'MRT',
+                text: `${localizedVehicleType} ${routeName} to ${arrivalStop}`,
+                details: `${stops} stops${duration}`,
+                from: departureStop,
+                to: arrivalStop
+              });
             } else if (localizedVehicleType === 'Bus') {
-              formattedSteps.push(`${localizedVehicleType} ${routeName}: ${departureStop} to ${arrivalStop} - ${stops} stops${duration}`);
+              formattedSteps.push({
+                type: 'transit',
+                mode: 'Bus',
+                text: `${localizedVehicleType} ${routeName}`,
+                details: `${stops} stops${duration}`,
+                from: departureStop,
+                to: arrivalStop
+              });
             } else {
-              formattedSteps.push(`${localizedVehicleType} ${routeName} - ${stops} stops${duration}`);
+              formattedSteps.push({
+                type: 'transit',
+                mode: localizedVehicleType,
+                text: `${localizedVehicleType} ${routeName}`,
+                details: `${stops} stops${duration}`,
+                from: departureStop,
+                to: arrivalStop
+              });
             }
           }
         } else if (step.travel_mode === 'WALKING') {
           if (step.distance && step.distance.value > 100) {
             const duration = step.duration ? ` (${Math.round(step.duration.value / 60)} mins)` : '';
-            formattedSteps.push(`Walk ${step.distance.text}${duration}`);
+            formattedSteps.push({
+              type: 'walking',
+              text: `Walk ${step.distance.text}`,
+              details: duration.trim() ? duration.substring(2) : ''
+            });
           }
         }
       }
       
-      return formattedSteps.length ? formattedSteps : ['Direct route'];
+      return formattedSteps.length ? formattedSteps : [{
+        type: 'direct',
+        text: 'Direct route',
+        details: 'No detailed steps available'
+      }];
     },
-    getStepIcon(step) {
-      if (step.includes('Bus')) return 'bi bi-bus-front';
-      if (step.includes('MRT') || step.includes('Subway') || step.includes('train')) return 'bi bi-train-front';
-      if (step.includes('Walk')) return 'bi bi-person-walking';
-      if (step.includes('Direct route')) return 'bi bi-arrow-right';
-      return 'bi bi-arrow-right';
+    getStepIcon(mode) {
+      switch (mode) {
+        case 'MRT': return 'bi bi-train-front';
+        case 'Bus': return 'bi bi-bus-front';
+        case 'walking': return 'bi bi-person-walking';
+        default: return 'bi bi-arrow-right';
+      }
     },
-    getStepIconClass(step) {
-      if (step.includes('Bus')) return 'bus-icon';
-      if (step.includes('MRT') || step.includes('Subway') || step.includes('train')) return 'mrt-icon';
-      if (step.includes('Walk')) return 'walk-icon';
-      return 'default-icon';
+    getStepIconClass(mode) {
+      switch (mode) {
+        case 'Bus': return 'bus-icon';
+        case 'MRT': return 'mrt-icon';
+        case 'walking': return 'walk-icon';
+        default: return 'default-icon';
+      }
+    },
+    getStepLineClass(mode) {
+      switch (mode) {
+        case 'Bus': return 'bus-line';
+        case 'MRT': return 'mrt-line';
+        case 'walking': return 'walk-line';
+        default: return '';
+      }
+    },
+    renderRoute(route, color = '#4299E1', weight = 6) {
+      // Clear any existing route
+      if (this.routePolyline) {
+        this.map.removeLayer(this.routePolyline);
+      }
+      
+      // Create a new polyline with enhanced styling
+      this.routePolyline = L.polyline(route, {
+        color: color,
+        weight: weight,
+        opacity: 0.8,
+        lineJoin: 'round',
+        lineCap: 'round',
+        dashArray: null
+      }).addTo(this.map);
+    
+      // Add a white "glow" effect behind the route line for better visibility
+      this.routeBackgroundPolyline = L.polyline(route, {
+        color: '#ffffff',
+        weight: weight + 4,
+        opacity: 0.5,
+        lineJoin: 'round',
+        lineCap: 'round'
+      }).addTo(this.map);
+      
+      // Ensure background line is added below the main route
+      this.routeBackgroundPolyline.bringToBack();
+      
+      // Fit map to see the entire route with padding
+      this.map.fitBounds(this.routePolyline.getBounds(), {
+        padding: [50, 50],
+        maxZoom: 16
+      });
+    },
+    addTransitStops(steps) {
+      // Clear any existing transit markers
+      if (this.transitMarkers) {
+        this.transitMarkers.forEach(marker => this.map.removeLayer(marker));
+      }
+      this.transitMarkers = [];
+      
+      steps.forEach(step => {
+        if (step.travel_mode === 'TRANSIT' && step.transit_details) {
+          const transit = step.transit_details;
+          const isBus = transit.line?.vehicle?.name === 'Bus';
+          const isMRT = transit.line?.vehicle?.name === 'Subway' || transit.line?.vehicle?.name === 'MRT';
+          const routeName = transit.line?.short_name || transit.line?.name || '';
+          
+          // Add departure stop marker
+          if (transit.departure_stop && transit.departure_stop.location) {
+            const lat = transit.departure_stop.location.lat;
+            const lng = transit.departure_stop.location.lng;
+            const stopName = transit.departure_stop.name;
+            
+            const iconColor = isBus ? '#3182ce' : (isMRT ? '#38a169' : '#718096');
+            const customIcon = L.divIcon({
+              html: `
+                <div class="custom-marker" style="background-color: ${iconColor}; box-shadow: 0 0 0 4px rgba(255,255,255,0.9);">
+                  <span>${isBus ? routeName : 'M'}</span>
+                </div>
+              `,
+              className: 'custom-transit-marker',
+              iconSize: [24, 24],
+              iconAnchor: [12, 12]
+            });
+            
+            const marker = L.marker([lat, lng], { icon: customIcon })
+              .bindPopup(`
+                <div class="transit-popup">
+                  <div class="transit-type">${isBus ? 'Bus Stop' : (isMRT ? 'MRT Station' : 'Transit Stop')}</div>
+                  <div class="transit-name">${stopName}</div>
+                  <div class="transit-route">${isBus ? `Bus ${routeName}` : (isMRT ? `MRT ${routeName}` : '')}</div>
+                  <div class="transit-action">${isBus ? 'Board here' : 'Enter here'}</div>
+                </div>
+              `, { 
+                closeButton: false,
+                className: 'transit-custom-popup'
+              });
+            
+            this.transitMarkers.push(marker);
+            marker.addTo(this.map);
+          }
+          
+          // Add arrival stop marker
+          if (transit.arrival_stop && transit.arrival_stop.location) {
+            const lat = transit.arrival_stop.location.lat;
+            const lng = transit.arrival_stop.location.lng;
+            const stopName = transit.arrival_stop.name;
+            
+            const iconColor = isBus ? '#3182ce' : (isMRT ? '#38a169' : '#718096');
+            const customIcon = L.divIcon({
+              html: `
+                <div class="custom-marker" style="background-color: ${iconColor}; box-shadow: 0 0 0 4px rgba(255,255,255,0.9);">
+                  <span>${isBus ? routeName : 'M'}</span>
+                </div>
+              `,
+              className: 'custom-transit-marker',
+              iconSize: [24, 24],
+              iconAnchor: [12, 12]
+            });
+            
+            const marker = L.marker([lat, lng], { icon: customIcon })
+              .bindPopup(`
+                <div class="transit-popup">
+                  <div class="transit-type">${isBus ? 'Bus Stop' : (isMRT ? 'MRT Station' : 'Transit Stop')}</div>
+                  <div class="transit-name">${stopName}</div>
+                  <div class="transit-route">${isBus ? `Bus ${routeName}` : (isMRT ? `MRT ${routeName}` : '')}</div>
+                  <div class="transit-action">${isBus ? 'Alight here' : 'Exit here'}</div>
+                </div>
+              `, { 
+                closeButton: false,
+                className: 'transit-custom-popup'
+              });
+            
+            this.transitMarkers.push(marker);
+            marker.addTo(this.map);
+          }
+        }
+      });
+    },
+    renderCompleteRoute(steps) {
+      // Clear previous routes
+      this.clearRoutes();
+      
+      // Create a marker group to hold all the route segments
+      this.routeSegments = [];
+      
+      steps.forEach((step, index) => {
+        if (!step.polyline || !step.polyline.points) return;
+        
+        // Decode the polyline
+        const points = this.decodePolyline(step.polyline.points);
+        
+        // Determine the styling based on travel mode
+        let color, weight, dashArray = null;
+        
+        switch (step.travel_mode) {
+          case 'TRANSIT':
+            // Check if it's a bus or MRT
+            if (step.transit_details && step.transit_details.line && step.transit_details.line.vehicle) {
+              const vehicleType = step.transit_details.line.vehicle.name;
+              if (vehicleType === 'Bus') {
+                color = '#3182ce'; // Blue for buses
+              } else if (vehicleType === 'Subway' || vehicleType === 'MRT') {
+                color = '#38a169'; // Green for MRT
+              } else {
+                color = '#805AD5'; // Purple for other transit
+              }
+            } else {
+              color = '#805AD5'; // Default purple for any transit
+            }
+            weight = 6;
+            break;
+          case 'WALKING':
+            color = '#718096'; // Gray for walking
+            weight = 4;
+            dashArray = '6, 8'; // Dashed line for walking
+            break;
+          default:
+            color = '#F56565'; // Red for other modes
+            weight = 5;
+        }
+        
+        // Create and add the polyline
+        const routeSegment = L.polyline(points, {
+          color: color,
+          weight: weight,
+          opacity: 0.8,
+          dashArray: dashArray
+        }).addTo(this.map);
+        
+        // Add white background for better visibility
+        if (step.travel_mode === 'TRANSIT') {
+          const background = L.polyline(points, {
+            color: '#ffffff',
+            weight: weight + 4,
+            opacity: 0.5
+          }).addTo(this.map);
+          
+          background.bringToBack();
+          this.routeSegments.push(background);
+        }
+        
+        this.routeSegments.push(routeSegment);
+      });
+      
+      // Add transit stops
+      this.addTransitStops(steps);
+      
+      // Fit the map to the bounds of all segments
+      if (this.routeSegments.length > 0) {
+        const bounds = L.featureGroup(this.routeSegments).getBounds();
+        this.map.fitBounds(bounds, {
+          padding: [50, 50],
+          maxZoom: 16
+        });
+      }
+    },
+    addOriginDestinationMarkers(origin, destination) {
+      // Clear existing markers
+      if (this.startMarker) this.map.removeLayer(this.startMarker);
+      if (this.endMarker) this.map.removeLayer(this.endMarker);
+      
+      // Custom start marker
+      const startIcon = L.divIcon({
+        html: `
+          <div class="custom-marker origin-marker">
+            <i class="bi bi-geo-alt-fill"></i>
+          </div>
+        `,
+        className: '',
+        iconSize: [36, 36],
+        iconAnchor: [18, 36]
+      });
+      
+      // Custom end marker
+      const endIcon = L.divIcon({
+        html: `
+          <div class="custom-marker destination-marker">
+            <i class="bi bi-flag-fill"></i>
+          </div>
+        `,
+        className: '',
+        iconSize: [36, 36],
+        iconAnchor: [18, 36]
+      });
+      
+      // Add markers to the map
+      this.startMarker = L.marker([origin.lat, origin.lng], {icon: startIcon})
+        .addTo(this.map)
+        .bindPopup(`<strong>Start:</strong> ${origin.name || 'Origin'}`, {
+          closeButton: false
+        });
+      
+      this.endMarker = L.marker([destination.lat, destination.lng], {icon: endIcon})
+        .addTo(this.map)
+        .bindPopup(`<strong>End:</strong> ${destination.name || 'Destination'}`, {
+          closeButton: false
+        });
     }
   }
 };
@@ -193,182 +504,300 @@ export default {
 <style scoped>
 .simplified-route-view {
   background: white;
-  border-radius: 16px;
-  padding: 24px;
-  height: 100%;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  overflow-y: auto;
-}
-
-.route-header {
-  margin-bottom: 24px;
-  padding-bottom: 16px;
-  border-bottom: 1px solid #e2e8f0;
-}
-
-.route-header h4 {
-  font-weight: 700;
-  color: #2d3748;
-  margin-bottom: 0;
-}
-
-.route-stats {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 16px;
-  margin-top: 16px;
-}
-
-.stat-item {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  background: #f7fafc;
-  padding: 8px 12px;
   border-radius: 8px;
-}
-
-.stat-item i {
-  color: #4299e1;
-  font-size: 1.1rem;
-}
-
-.route-timeline {
-  position: relative;
-  padding-left: 40px;
-}
-
-.route-timeline::before {
-  content: '';
-  position: absolute;
-  top: 24px;
-  bottom: 24px;
-  left: 12px;
-  width: 3px;
-  background: #e2e8f0;
-}
-
-.start-point, .end-point {
-  position: relative;
-  padding: 16px 0;
-  display: flex;
-  align-items: flex-start;
-}
-
-.point {
-  position: absolute;
-  left: -40px;
-  top: 20px;
-  width: 24px;
-  height: 24px;
-  border-radius: 50%;
-  z-index: 1;
-}
-
-.start-point .point {
-  background: #4299e1;
-}
-
-.end-point .point {
-  background: #48bb78;
-}
-
-.point-content {
-  flex: 1;
-}
-
-.label {
-  font-weight: 700;
-  margin-bottom: 4px;
-  color: #2d3748;
-}
-
-.time {
-  color: #718096;
-  font-size: 0.9rem;
-  display: flex;
-  align-items: center;
-}
-
-.steps {
-  margin: 8px 0;
-}
-
-.step {
-  display: flex;
-  margin-bottom: 8px;
-  position: relative;
-}
-
-.step-icon {
-  position: absolute;
-  left: -40px;
-  top: 0;
-  width: 24px;
-  height: 24px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 0.8rem;
-  color: white;
-  z-index: 1;
-}
-
-.step-content {
-  flex: 1;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+  overflow: hidden;
+  font-family: 'Roboto', -apple-system, BlinkMacSystemFont, sans-serif;
+  height: 100%;
   display: flex;
   flex-direction: column;
 }
 
-.step-details {
-  padding: 12px 16px;
-  background: #f7fafc;
-  border-radius: 8px;
-  font-size: 0.95rem;
-  margin-bottom: 8px;
-  color: #4a5568;
+.route-header {
+  padding: 18px; /* Increased from 16px */
+  background: #fff;
+  border-bottom: 1px solid #e1e4e8;
+}
+
+.route-summary {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.route-time-distance h4 {
+  font-size: 22px; /* Increased from 20px */
+  font-weight: 500;
+  margin: 0;
+  color: #202124;
+}
+
+.route-time-distance p {
+  margin: 4px 0 0;
+  color: #5f6368;
+  font-size: 15px; /* Increased from 14px */
+}
+
+.route-cost {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.cost-badge {
+  background: #f1f3f4;
+  color: #202124;
+  padding: 4px 12px; /* Slightly wider padding */
+  border-radius: 4px;
+  font-size: 15px; /* Increased from 14px */
+  font-weight: 500;
+}
+
+.emission-badge {
+  margin-top: 6px;
+  color: #188038;
+  font-size: 14px; /* Increased from 13px */
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.emission-badge i {
+  font-size: 13px; /* Increased from 12px */
+}
+
+.departure-time {
+  margin-top: 12px;
+  display: flex;
+  flex-direction: column;
+}
+
+.time {
+  font-size: 15px; /* Increased from 14px */
+  font-weight: 500;
+  color: #202124;
+}
+
+.arrival {
+  font-size: 14px; /* Increased from 13px */
+  color: #5f6368;
+  margin-top: 2px;
+}
+
+.journey-container {
+  flex: 1;
+  overflow-y: auto;
+  padding: 0 18px 18px; /* Increased from 16px */
+}
+
+.journey-timeline {
+  position: relative;
+  padding-top: 16px;
+}
+
+.start-point, .end-point {
+  display: flex;
+  align-items: center;
+  margin-bottom: 16px;
+  position: relative;
+  min-height: 36px;
+}
+
+.end-point {
+  margin-top: 16px;
+  margin-bottom: 0;
+}
+
+.timeline-dot {
+  width: 14px; /* Increased from 12px */
+  height: 14px; /* Increased from 12px */
+  border-radius: 50%;
+  margin-right: 16px;
+  position: relative;
+  z-index: 2;
+  border: 2px solid white;
+}
+
+.start-dot {
+  background-color: #1a73e8;
+}
+
+.end-dot {
+  background-color: #ea4335;
+}
+
+.timeline-content {
+  flex: 1;
+}
+
+.location-name {
+  font-size: 16px; /* Increased from 14px */
+  font-weight: 500;
+  color: #202124;
+}
+
+.time-label {
+  font-size: 13px; /* Increased from 12px */
+  color: #5f6368;
+  margin-top: 2px;
+}
+
+.transit-steps {
+  position: relative;
+}
+
+.transit-steps::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 7px; /* Adjusted from 6px to center with larger dots */
+  width: 2px;
+  background: #e1e4e8;
+  z-index: 1;
+}
+
+.transit-step {
+  position: relative;
+  padding: 8px 0;
+  display: flex;
 }
 
 .step-line {
-  height: 12px;
+  position: absolute;
+  top: 0;
+  left: 7px; /* Adjusted from 6px to match the timeline */
+  bottom: 0;
+  width: 2px;
+  z-index: 1;
 }
 
-/* Icon styles */
+.bus-line {
+  background-color: #4285f4;
+}
+
+.mrt-line {
+  background-color: #34a853;
+}
+
+.walk-line {
+  background-color: #9aa0a6;
+  background-image: linear-gradient(to bottom, #9aa0a6 50%, transparent 50%);
+  background-size: 2px 12px;
+}
+
+.step-icon-container {
+  position: relative;
+  z-index: 2;
+  margin-right: 16px;
+}
+
+.step-icon {
+  width: 26px; /* Increased from 24px */
+  height: 26px; /* Increased from 24px */
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  background: #9aa0a6;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+  font-size: 13px; /* Increased from 12px */
+}
+
 .bus-icon {
-  background: #3182ce;
+  background-color: #4285f4;
 }
 
 .mrt-icon {
-  background: #38a169;
+  background-color: #34a853;
 }
 
 .walk-icon {
-  background: #718096;
+  background-color: #9aa0a6;
 }
 
-.default-icon {
-  background: #a0aec0;
+.step-details {
+  flex: 1;
+  padding: 0 0 12px;
+}
+
+.step-main {
+  font-size: 16px; /* Increased from 14px */
+  font-weight: 500;
+  color: #202124;
+  margin-bottom: 8px; /* Increased from 6px for better spacing */
+  display: flex;
+  align-items: center;
+}
+
+.transit-badge {
+  font-size: 11px; /* Increased from 10px */
+  padding: 2px 5px; /* Slightly more horizontal padding */
+  border-radius: 2px;
+  margin-right: 6px;
+  font-weight: 700;
+}
+
+.mrt {
+  background-color: #ceead6;
+  color: #0d652d;
+}
+
+.bus {
+  background-color: #d2e3fc;
+  color: #1967d2;
+}
+
+.step-stations {
+  margin: 8px 0;
+  padding-left: 8px;
+  border-left: 2px solid #f1f3f4;
+}
+
+.station {
+  display: flex;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.station:last-child {
+  margin-bottom: 0;
+}
+
+.station-marker {
+  width: 8px; /* Increased from 6px */
+  height: 8px; /* Increased from 6px */
+  border-radius: 50%;
+  background: #9aa0a6;
+  margin-right: 12px;
+  margin-left: -5px; /* Adjusted to accommodate larger marker */
+}
+
+.station-name {
+  font-size: 14px; /* Increased from 13px */
+  color: #5f6368;
+}
+
+.step-info {
+  font-size: 13px; /* Increased from 12px */
+  color: #5f6368;
+  margin-top: 6px;
 }
 
 @media (max-width: 768px) {
-  .route-stats {
+  .route-summary {
     flex-direction: column;
-    gap: 8px;
+    align-items: flex-start;
+  }
+  
+  .route-cost {
+    margin-top: 12px;
+    align-items: flex-start;
   }
   
   .simplified-route-view {
-    padding: 16px;
-  }
-  
-  .route-timeline {
-    padding-left: 32px;
-  }
-  
-  .point, .step-icon {
-    left: -32px;
-    width: 20px;
-    height: 20px;
+    border-radius: 0;
   }
 }
 </style>

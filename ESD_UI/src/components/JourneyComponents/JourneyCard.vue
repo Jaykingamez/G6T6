@@ -291,7 +291,22 @@ export default {
             
             const routeName = transit.line?.short_name || transit.line?.name || '';
             const stops = transit.num_stops || 0;
-            let stepText = `${vehicleType} ${routeName} (${stops} stops)`;
+            
+            // Get departure and arrival stop information
+            const departureStop = transit.departure_stop?.name || '';
+            const arrivalStop = transit.arrival_stop?.name || '';
+            const destination = transit.headsign || transit.arrival_stop?.name || '';
+            
+            // Create step text based on the type of transit
+            let stepText;
+            if (vehicleType === 'MRT') {
+              stepText = `${vehicleType} ${routeName} to ${destination} (${stops} stops)`;
+            } else if (vehicleType === 'Bus') {
+              // For buses, show both departure and arrival stops
+              stepText = `${vehicleType} ${routeName}: ${departureStop} to ${arrivalStop} (${stops} stops)`;
+            } else {
+              stepText = `${vehicleType} ${routeName} (${stops} stops)`;
+            }
             
             // Add bus load info if available and it's a bus
             let busLoad = null;

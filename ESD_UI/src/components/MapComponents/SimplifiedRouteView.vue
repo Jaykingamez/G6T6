@@ -149,7 +149,19 @@ export default {
             const routeName = transit.line?.short_name || transit.line?.name || '';
             const stops = transit.num_stops || 0;
             const duration = step.duration ? ` (${Math.round(step.duration.value / 60)} mins)` : '';
-            formattedSteps.push(`${localizedVehicleType} ${routeName} - ${stops} stops${duration}`);
+            
+            // Get departure and arrival stop names for both MRT and Bus
+            const departureStop = transit.departure_stop?.name || '';
+            const arrivalStop = transit.arrival_stop?.name || '';
+            
+            // Different formatting based on transit type
+            if (localizedVehicleType === 'MRT') {
+              formattedSteps.push(`${localizedVehicleType} ${routeName} to ${arrivalStop} - ${stops} stops${duration}`);
+            } else if (localizedVehicleType === 'Bus') {
+              formattedSteps.push(`${localizedVehicleType} ${routeName}: ${departureStop} to ${arrivalStop} - ${stops} stops${duration}`);
+            } else {
+              formattedSteps.push(`${localizedVehicleType} ${routeName} - ${stops} stops${duration}`);
+            }
           }
         } else if (step.travel_mode === 'WALKING') {
           if (step.distance && step.distance.value > 100) {

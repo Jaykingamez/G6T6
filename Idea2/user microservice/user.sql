@@ -46,8 +46,8 @@ CREATE TABLE IF NOT EXISTS `users` (
 --
 
 INSERT INTO `users` (`UserId`, `FullName`, `Email`, `Password`, `Phone`, `CreatedAt`, `UpdatedAt`) VALUES
-(1, 'John Doe', 'john@example.com', '$2b$12$LQv3c1yqBWVHxkd0LHAkCOYz6TtxMQJqhN8/LewFO5gYm/tQQh1SC', '1234567890', '2025-03-15 09:00:00', '2025-03-15 09:00:00'),
-(2, 'Jane Doe', 'jane@example.com', '$2b$12$LQv3c1yqBWVHxkd0LHAkCOYz6TtxMQJqhN8/LewFO5gYm/tQQh1SC', '9876543210', '2025-03-15 09:00:00', '2025-03-15 09:00:00');
+(1, 'John Doe', 'john@example.com', '$2b$12$LQv3c1yqBWVHxkd0LHAkCOYz6TtxMQJqhN8/LewFO5gYm/tQQh1SC', '+651234567890', '2025-03-15 09:00:00', '2025-03-15 09:00:00'),
+(2, 'Jane Doe', 'jane@example.com', '$2b$12$LQv3c1yqBWVHxkd0LHAkCOYz6TtxMQJqhN8/LewFO5gYm/tQQh1SC', '+659876543210', '2025-03-15 09:00:00', '2025-03-15 09:00:00');
 
 COMMIT;
 

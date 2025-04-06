@@ -15,7 +15,7 @@ CREATE TABLE IF NOT EXISTS `SelectedRoute` (
   PRIMARY KEY (`RouteID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- Add some sample data (optional)
+-- Add some sample data
 INSERT INTO `SelectedRoute` (`BusStopCode`, `BusID`,`UserID`, `RouteName`) VALUES
 (4121, 147,"3", "From 520817 to SMU SCIS"),
 (75209, 46,"3", "From 520817 to SMU SCIS"),

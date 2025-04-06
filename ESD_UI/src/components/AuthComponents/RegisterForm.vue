@@ -110,7 +110,17 @@ export default {
       this.error = null;
       
       try {
-        await this.$store.dispatch('auth/register', this.formData);
+        // Create a copy of the form data to avoid modifying the original input
+        const formDataToSubmit = { ...this.formData };
+        
+        // Add +65 prefix to phone number if it exists and doesn't already have it
+        if (formDataToSubmit.phone) {
+          if (!formDataToSubmit.phone.startsWith('+65')) {
+            formDataToSubmit.phone = '+65' + formDataToSubmit.phone;
+          }
+        }
+        
+        await this.$store.dispatch('auth/register', formDataToSubmit);
         this.$router.push({
           path: '/login',
           query: { registered: 'success' }

@@ -56,13 +56,12 @@ STRIPE_SECRET_KEY="YOUR_STRIPE_API_KEY"
 
 1. Clone the repository
 2. Set up environment variables
-3. cd into the ESD_UI directory and run npm install 
-4. Start all services:
+3. Start all services:
 
 ```bash
 docker-compose up --build
 ```
-
+4. cd into the ESD_UI directory and run npm install 
 
 ## API Endpoints
 

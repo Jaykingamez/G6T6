@@ -184,6 +184,31 @@ export default {
     };
   },
   computed: {
+    // Add this computed property to get the current user ID
+    currentUserId() {
+      // Get user from localStorage
+      const userStr = localStorage.getItem('user');
+      if (userStr) {
+        try {
+          const user = JSON.parse(userStr);
+          console.log('LocalStorage user object:', user);
+          return user.UserId || user.id || user.userId || user.UserID;
+        } catch (e) {
+          console.error('Error parsing user from localStorage:', e);
+        }
+      }
+      
+      // If not in localStorage, try to get from Vuex store
+      if (this.$store && this.$store.state.auth && this.$store.state.auth.user) {
+        return this.$store.state.auth.user.UserId || 
+               this.$store.state.auth.user.id || 
+               this.$store.state.auth.user.userId || 
+               this.$store.state.auth.user.UserID;
+      }
+      
+      return null;
+    },
+    
     groupedRoutes() {
       // Group routes by RouteName
       const grouped = {};
@@ -202,11 +227,22 @@ export default {
       this.error = null;
       
       try {
-        const response = await fetch('http://localhost:8000/selectedroute');
+        // Get the current user ID
+        const userId = this.currentUserId;
+        
+        // If no user ID is available, display an appropriate message
+        if (!userId) {
+          this.error = 'Please log in to view your saved routes';
+          this.loading = false;
+          return;
+        }
+        
+        // Use the user-specific endpoint with the current user ID
+        const response = await fetch(`http://localhost:8000/selectedroute/user/${userId}`);
         const data = await response.json();
         
         if (data.code === 200) {
-          this.routes = data.data.routes;
+          this.routes = data.data.routes || [];
         } else {
           throw new Error(data.message || 'Failed to fetch routes');
         }

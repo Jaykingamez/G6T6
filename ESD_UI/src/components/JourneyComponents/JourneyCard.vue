@@ -264,7 +264,7 @@ export default {
       if (this.notificationEnabled) {
         return 'Bus Notifications Enabled';
       }
-      return 'Enable Bus Notifications';
+      return 'Notify Me';
     },
     notificationIcon() {
       if (this.notificationEnabled) {

@@ -110,7 +110,7 @@
                       :disabled="isNotificationEnabled(route.RouteID)"
                     >
                       <i class="bi" :class="isNotificationEnabled(route.RouteID) ? 'bi-bell-fill' : 'bi-bell'"></i>
-                      <span>{{ isNotificationEnabled(route.RouteID) ? 'Notifications On' : 'Get Notifications' }}</span>
+                      <span>{{ isNotificationEnabled(route.RouteID) ? 'Notifications On' : 'Notify Me' }}</span>
                     </button>
                     
                     <button 

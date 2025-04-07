@@ -1,6 +1,6 @@
 # G6T6
 
-## Idea 1
+## NavSmart SG
 
 A microservices-based public transport journey planning system that provides route planning, real-time bus arrivals, fare estimation, and carbon footprint calculation.
 
@@ -49,6 +49,7 @@ LTA_API_KEY="YOUR_LTA_API_KEY"
 TWILIO_ACCOUNT_SID="YOUR_TWILIO_ACCOUNT_SID"
 TWILIO_AUTH_TOKEN="YOUR_TWILIO_AUTH_TOKEN"
 TWILIO_PHONE_NUMBER="YOUR_TWILIO_PHONE_NUMBER"
+STRIPE_SECRET_KEY="YOUR_STRIPE_API_KEY"
 ```
 
 ## Running the System

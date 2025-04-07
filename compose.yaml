@@ -201,8 +201,8 @@ services:
       - rabbitmq
     networks:
       - app-network
-    # environment:
-    #   - STRIPE_SECRET_KEY=${STRIPE_SECRET_KEY}
+    env_file:
+      - .env 
   
   top_up:
     build:

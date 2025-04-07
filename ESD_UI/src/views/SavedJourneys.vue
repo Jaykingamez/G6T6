@@ -71,7 +71,7 @@
             <h3>No Saved Routes</h3>
             <p>Save your frequently used bus routes for quick access to arrival times and notifications</p>
             <router-link to="/journey-planner" class="btn btn-primary">
-              <i class="bi bi-plus-lg"></i> Plan New Route
+              <div class="plan-btn-content"><span>Plan New Route</span></div>
             </router-link>
           </div>
         </div>
@@ -230,7 +230,6 @@ export default {
         // Get the current user ID
         const userId = this.currentUserId;
         
-        // If no user ID is available, display an appropriate message
         if (!userId) {
           this.error = 'Please log in to view your saved routes';
           this.loading = false;
@@ -243,6 +242,8 @@ export default {
         
         if (data.code === 200) {
           this.routes = data.data.routes || [];
+        } else if (data.code === 404) {
+          this.routes = [];
         } else {
           throw new Error(data.message || 'Failed to fetch routes');
         }
@@ -276,12 +277,12 @@ export default {
           this.showNotificationSuccess = true;
           this.isNotificationFading = false;
           
-          // Set timer to start fade out after 2.7 seconds (before progress bar completes)
+        
           setTimeout(() => {
             this.isNotificationFading = true;
           }, 2700);
           
-          // Hide notification after fade out animation completes
+        
           setTimeout(() => {
             this.showNotificationSuccess = false;
             this.notificationSuccess = null;
@@ -957,5 +958,23 @@ export default {
   to {
     width: 0%;
   }
+}
+
+.plan-btn-content {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem; /* Space between the icon and text */
+}
+
+.plan-btn-content i {
+  font-size: 1.25rem; /* Adjust the size of the icon */
+  line-height: 1; /* Ensure the icon is vertically centered */
+  align-content: center; /* Center the icon vertically */
+}
+
+.plan-btn-content span {
+  font-size: 1rem; /* Adjust the text size to match the button */
+  line-height: 1; /* Ensure the text is vertically centered */
 }
 </style>

@@ -182,6 +182,32 @@ export default {
     };
   },
   computed: {
+    // Add this new computed property before your existing computed properties
+    currentUserId() {
+      // Add debugging to see exactly what's in your store and localStorage
+      console.log('Store user object:', this.$store?.state?.auth?.user);
+      
+      const userStr = localStorage.getItem('user');
+      if (userStr) {
+        try {
+          const user = JSON.parse(userStr);
+          console.log('LocalStorage user object:', user);
+          return user.UserId || user.id || user.userId || user.UserID;
+        } catch (e) {
+          console.error('Error parsing user from localStorage:', e);
+        }
+      }
+      
+      if (this.$store && this.$store.state.auth && this.$store.state.auth.user) {
+        return this.$store.state.auth.user.UserId || 
+               this.$store.state.auth.user.id || 
+               this.$store.state.auth.user.userId || 
+               this.$store.state.auth.user.UserID;
+      }
+      
+      console.warn('Could not find user ID in localStorage or store. Using default value.');
+    },
+    
     hasBusTransit() {
       // Check if this journey has any bus transit steps
       if (!this.steps || this.steps.length === 0) return false;
@@ -211,7 +237,7 @@ export default {
       return {
         busID: busStep.transit_details.line.short_name || busStep.transit_details.line.name,
         busStopCode: this.getBusStopCode(busStep),
-        userID: 3 // Hardcoded for now, should be retrieved from user session/store
+        userID: this.currentUserId // Use the computed property instead of hardcoded value
       };
     },
     // Add a new computed property to get all bus services in the journey
@@ -231,7 +257,7 @@ export default {
       return busSteps.map(busStep => ({
         busID: busStep.transit_details.line.short_name || busStep.transit_details.line.name,
         transitDetails: busStep.transit_details, // Store full transit details for later use
-        userID: 3 // Hardcoded for now, should be retrieved from user session/store
+        userID: this.currentUserId // Use the computed property instead of hardcoded value
       }));
     },
     notificationButtonText() {
